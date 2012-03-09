@@ -12,6 +12,7 @@ import org.east.text.parse.ReadTextFromInputStreamAction;
 import org.east.util.ExceptionUtil;
 
 public class East extends Concept{
+  private static final long serialVersionUID = -3762372032417631327L;
   private static boolean applicationTerminating;
   private East(){}
   private static void define(){

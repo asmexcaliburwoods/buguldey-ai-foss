@@ -1,0 +1,54 @@
+;file: 1.inside
+;language: my programming language
+
+=>= 
+;SEMI-FORMAL PART
+  transclude file 2.specify_program_indirection_reference
+  <define_ref ref_label="is_eof">
+	<entity entity_type="variable">
+		<variable_type><enum>true,false,unknown</enum></variable_type>
+		<variable_initial_value>unknown</variable_initial_value>
+	</entity>
+  </define_ref>
+  <define_ref ref_label="do_exit">
+	<entity entity_type="variable">
+		<variable_type><enum>true,false,unknown</enum></variable_type>
+		<variable_initial_value>unknown</variable_initial_value>
+	</entity>
+  </define_ref>
+  <define_ref ref_label="a_part_of_a_program">
+	<entity entity_type="variable">
+		<variable_initial_value>nonread_part_of_a_program</variable_initial_value>
+	</entity>
+  </define_ref>
+  REPEAT
+
+    (* this is a formal program which reads and evaluates tertium datur programs from users *)
+    (call procedure read_part_of_program(a_part_of_a_program, is_eof) from module 2.read_part_of_program)
+
+    (if is_eof (then do_exit:=true))
+
+    (* eval should diagnose if a part of a program is formal, nonformal, or tertium datur *)
+    (* co-goal with users *)
+    (* "co-goal with users" --- это более точно означает, что пользователи --- это начальники для машины. У начальников есть свои междуначальнические (междупользовательские) отношения и обычаи и tertium datur. *)
+
+    (* this is a formal eval which evaluates a formal program which reads and evaluates tertium datur programs from users *)
+    (call procedure eval_part_of_program(a_part_of_a_program, do_exit) from module 2.eval_part_of_program)
+
+    ; ИЛИ ЛУЧШЕ НЕ ПОСЛЕДОВАТЕЛЬНО А: ON READ DO EVAL. ЭТО ДОЗВОЛЯЕТ ПАРАЛЛЕЛЬНОЕ ПРОЦЕССИРОВАНИЕ ПРОГРАММ.
+
+  UNTIL do_exit
+  transclude file 2.close_program_indirection
+
+;NONFORMAL/TERTIUM DATUR PARTS
+;  WITH
+;
+;  <aspect>
+;    <description>В формате системы на одном из главных этажей должен быть как формальный ум (т.е. формальная душа) , так и неформальный ум (т.е. неформальная душа), так и tertium datur (т.е. недоопределённое и вообще tertium datur). Такой подход разрешает многие проблемы.</description>
+;    <ul>
+;      <li>formal</li>
+;      <li>nonformal</li>
+;      <li>"tertium datur"</li>
+;    </ul>
+;  </aspect>
+=>=

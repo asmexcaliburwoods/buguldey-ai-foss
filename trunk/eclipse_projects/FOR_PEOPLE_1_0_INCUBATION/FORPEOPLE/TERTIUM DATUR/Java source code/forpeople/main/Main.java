@@ -3,9 +3,9 @@
 
 package forpeople.main;
 
-import forpeople.events.InputStreamEventGenerator;
+import forpeople.events.KeyboardsReadEventGenerator;
 import forpeople.machinebrain.CommandLineArgumentsMachineBrainImpl;
-import forpeople.machinebrain.StdInMachineBrainImpl;
+import forpeople.machinebrain.KeyboardDevicesMachineBrainImpl;
 import forpeople.processingpools.ReadEventProcessingPool;
 
 /**
@@ -21,11 +21,11 @@ public class Main {
   /** on input from all input devices, do eval(input).  this is just an aspect of the entire system, so the implementation is dispersed over all code. */
   private static void install_on_read_do_eval(String[] commandLineArgs){
     trigger_read_command_line(commandLineArgs);
-	install_stdin_read_event_generator();
+    install_keyboard_devices_read_event_generator();
   }
 
-  private static void install_stdin_read_event_generator() {
-	InputStreamEventGenerator.install(System.in, "stdin", new StdInMachineBrainImpl());	
+  private static void install_keyboard_devices_read_event_generator() {
+	KeyboardsReadEventGenerator.installAllKeyboardDevices(new KeyboardDevicesMachineBrainImpl());	
   }
 
   private static void read_command_line(final String[] args){

@@ -1,0 +1,7 @@
+;file: program
+;language: my programming language
+;aspect: normative file
+
+;"=>=" is a nonformal pipe with direction
+
+=>= transclude file "./TERTIUM DATUR/program" =>= 

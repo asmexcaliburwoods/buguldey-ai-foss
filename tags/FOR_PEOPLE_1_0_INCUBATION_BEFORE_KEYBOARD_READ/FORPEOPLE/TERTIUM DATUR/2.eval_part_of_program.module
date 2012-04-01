@@ -1,0 +1,15 @@
+IN LANGUAGE my programming language;
+MODULE 2.eval_part_of_program;
+
+(* eval should diagnose if a part of a program is formal, nonformal, or tertium datur *)
+(* co-goal with users *)
+(* "co-goal with users" --- это более точно означает, что пользователи --- это начальники для машины. У начальников есть свои междуначальнические (междупользовательские) отношения и обычаи и tertium datur. *)
+
+(* this is a formal eval which evaluates a formal program which reads and evaluates tertium datur programs from users *)
+
+PROCEDURE eval_part_of_program(VAR a_part_of_a_program: ^TYPE__PART_OF_A_PROGRAM; VAR do_exit: BOOLEAN);
+BEGIN
+  ...
+END eval_part_of_program;
+
+END 2.eval_part_of_program.

@@ -36,6 +36,11 @@ COMPILER Oberon
 	typedef wchar_t* stringRecord; 
 	typedef wchar_t* identRec; 
 
+	struct QualidentRecord{
+		identRec leftIdent;
+		identRec rightIdent; /* rightIdent==0 if not specified */
+	};
+
 #define num_int (1)
 #define num_real (2)
 	
@@ -186,9 +191,13 @@ COMPILER Oberon
 		IdentDefRecord identDef;
 		IdentListRecord* nullOrCommaIdentList;
 	};
+	struct IdentList2Record{
+		identRec ident_;
+		IdentList2Record* nullOrCommaIdentList;
+	};
 
 	struct StatementRecord{
-		virtual int getStatementType()=0; 
+		virtual int getStatementTypeNumber()=0; 
 	};
 
 	struct StatementSeqRecord{
@@ -246,9 +255,20 @@ COMPILER Oberon
 		ReceiverRecord receiver;
 	};
 
-	struct FormalParsRecord{
+	struct FPSectionRecord{
+		bool var;
+		IdentList2Record identList;
+		TypeRecord *typePtr;
 	};
-	
+	struct FPSectionsListMandatoryRecord{
+		FPSectionRecord fpSection;
+		FPSectionsListMandatoryRecord *next;
+	};
+	struct FormalParsRecord{
+		FPSectionsListMandatoryRecord *optionalFPSectionsListPtr;
+		QualidentRecord *optionalQualidentPtr;
+	}; 
+
 	struct OptionalFormalParsRecord{
 		bool formalParsSpecified;
 		FormalParsRecord formalPars;
@@ -264,6 +284,11 @@ COMPILER Oberon
 		bool fieldsPresent;
 		IdentListRecord identList;
 		TypeRecord *typePtr;
+	};
+
+	struct MandatoryFieldsListRecord{
+		FieldListRecord recordFieldsList;
+		MandatoryFieldsListRecord *next;
 	};
 
 	struct DeclSeqConstDeclListMandatoryRecord{
@@ -336,6 +361,41 @@ COMPILER Oberon
 		DeclSeqConstTypeVarListRecord ctvlist;
 		DeclSeqProcDeclFwdDeclListRecord pflist;
 	};
+
+	static const int 
+		 type_number_Qualident=1
+		,type_number_ARRAY=2
+		,type_number_RECORD=3
+		,type_number_POINTER=4
+		,type_number_PROCEDURE=5
+		;
+	
+	struct TypeQualident: public TypeRecord{
+		int getTypeNumber(){return type_number_Qualident;}
+		QualidentRecord qualident;
+	}; 
+	struct TypeArrayConstExprListMandatoryRecord{
+		ConstExprRecord dimensionConstExpr;
+		TypeArrayConstExprListMandatoryRecord *next;
+	};
+	struct TypeARRAY: public TypeRecord{
+		int getTypeNumber(){return type_number_ARRAY;}
+		TypeArrayConstExprListMandatoryRecord *dimensionsConstExprsListPtr;
+		TypeRecord *arrayElementTypePtr;
+	}; 
+	struct TypeRECORD: public TypeRecord{
+		int getTypeNumber(){return type_number_RECORD;}
+		QualidentRecord *optionalQualidentPtr;
+		MandatoryFieldsListRecord fieldsList;
+	}; 
+	struct TypePOINTER: public TypeRecord{
+		int getTypeNumber(){return type_number_POINTER;}
+		TypeRecord *pointedTypePtr;
+	}; 
+	struct TypePROCEDURE: public TypeRecord{
+		int getTypeNumber(){return type_number_PROCEDURE;}
+		FormalParsRecord *optionalFormalParsPtr;
+	}; 
 
 	struct ModuleRecord{
 		wchar_t* moduleName;
@@ -626,11 +686,37 @@ ForwardDecl<ForwardDeclRecord &r>
 	IdentDef<r.identDef>
 	OptionalFormalPars<r.optionalFormalPars>.
 
-/* FormalPars   = "(" [FPSection {";" FPSection}] ")" [":" Qualident]. */ 
-FormalPars<FormalParsRecord &r> = "(" [FPSection {";" FPSection}] ")" [":" Qualident].
+FPSectionsListMandatory<FPSectionsListMandatoryRecord &r>
+=
+	FPSection<r.fpSection>
+	( 											(. r.next=0; .)
+	|											(. r.next=new FPSectionsListMandatoryRecord(); abortIfNull(r.next); .)
+		";" FPSectionsListMandatory<*(r.next)>
+	).
+
+/* FormalPars   = "(" [FPSection {";" FPSection}] ")" [":" Qualident]. */
+FormalPars<FormalParsRecord &r>
+=
+	"(" 
+	(									(. r.optionalFPSectionsListPtr=0; .)
+	|									(. r.optionalFPSectionsListPtr=new FPSectionsListMandatoryRecord(); abortIfNull(r.optionalFPSectionsListPtr); .)
+		FPSectionsListMandatory<*(r.optionalFPSectionsListPtr)>
+	) 
+	")"
+	(									(. r.optionalQualidentPtr=0; .)
+	|									(. r.optionalQualidentPtr=new QualidentRecord(); abortIfNull(r.optionalQualidentPtr); .) 
+		":" Qualident<*(r.optionalQualidentPtr)>
+	).
 
 /* FPSection    = [VAR] ident {"," ident} ":" Type. */
-FPSection    = ["VAR"] ident {"," ident} ":" Type<type>.
+FPSection<FPSectionRecord &r>
+=
+	(	(. r.var=false; .)
+	|	(. r.var=true; .)
+		"VAR"
+	)
+	IdentList2<r.identList>
+	":" Type<r.typePtr>.
 
 /* Receiver     = "(" [VAR] ident ":" ident ")". */
 Receiver<ReceiverRecord &r>
@@ -648,19 +734,59 @@ Receiver<ReceiverRecord &r>
                | RECORD ["("Qualident")"] FieldList {";" FieldList} END
                | POINTER TO Type
                | PROCEDURE [FormalPars]. */
+               
+TypeArrayConstExprListMandatory<TypeArrayConstExprListMandatoryRecord &r>
+=
+	ConstExpr<r.dimensionConstExpr> 
+	(				(. r.next=0; .)
+	|				(. r.next=new TypeArrayConstExprListMandatoryRecord(); abortIfNull(r.next); .) 
+		"," TypeArrayConstExprListMandatory<*(r.next)>
+	).
+TypeArray<TypeARRAY &r>
+=
+	(									(. r.dimensionsConstExprsListPtr=0; .)
+	|									(. r.dimensionsConstExprsListPtr=new TypeArrayConstExprListMandatoryRecord(); abortIfNull(r.dimensionsConstExprsListPtr); .) 
+		TypeArrayConstExprListMandatory<*(r.dimensionsConstExprsListPtr)>
+	) "OF" Type<r.arrayElementTypePtr>.
+MandatoryFieldsList<MandatoryFieldsListRecord &r>
+=
+	FieldList<r.recordFieldsList>
+	(							(. r.next=0; .)
+	|							(. r.next=new MandatoryFieldsListRecord(); abortIfNull(r.next); .)
+		";" MandatoryFieldsList<*(r.next)>
+	).
+TypeRecord_<TypeRECORD &r>
+=
+	( 						(. r.optionalQualidentPtr=0; .)
+	| 						(. r.optionalQualidentPtr=new QualidentRecord(); abortIfNull(r.optionalQualidentPtr); .)
+		"(" Qualident<*(r.optionalQualidentPtr)> ")"
+	) MandatoryFieldsList<r.fieldsList>.
+TypeProcedure<TypePROCEDURE &r>
+=
+	(
+								(. r.optionalFormalParsPtr=0; .)
+	|							(. r.optionalFormalParsPtr=new FormalParsRecord(); abortIfNull(r.optionalFormalParsPtr); .)
+		FormalPars<*(r.optionalFormalParsPtr)>
+	).
 Type<TypeRecord *&ptrToTypeRecord>
-						(. ExprRecord expr; ConstExprRecord cexpr;.)
-= Qualident
-               | "ARRAY" [ConstExpr<cexpr1> {"," ConstExpr<cexprN>}] "OF" Type<type> 
-               | "RECORD" ["("Qualident")"] FieldList<recordFieldsList1> {";" FieldList<recordFieldsListN>} "END"
-               | "POINTER" "TO" Type<type>
-               | "PROCEDURE" [FormalPars<formalPars>].
-/*Type<int &type>
-=                        (. type = undef; .)
- ( "int"                 (. type = integer; .)
- | "bool"                (. type = boolean; .)
- ).
-*/
+						(. TypeQualident* ptq;  TypeARRAY* pta; TypeRECORD* ptrec; TypePOINTER* ptp; TypePROCEDURE *ptproc; .)
+= 
+(
+					(. ptrToTypeRecord=ptq=new TypeQualident(); abortIfNull(ptrToTypeRecord); .)
+	Qualident<(*ptq).qualident>
+|
+					(. ptrToTypeRecord=pta=new TypeARRAY(); abortIfNull(ptrToTypeRecord); .)
+ 	"ARRAY" TypeArray<*pta>
+|
+					(. ptrToTypeRecord=ptrec=new TypeRECORD(); abortIfNull(ptrToTypeRecord); .)
+ 	"RECORD" TypeRecord_<*ptrec> "END"
+|
+					(. ptrToTypeRecord=ptp=new TypePOINTER(); abortIfNull(ptrToTypeRecord); .)
+ 	"POINTER" "TO" Type<(*ptp).pointedTypePtr>
+|
+					(. ptrToTypeRecord=ptproc=new TypePROCEDURE(); abortIfNull(ptrToTypeRecord); .)
+ 	"PROCEDURE" TypeProcedure<*ptproc>
+).
 
 /* FieldList    = [IdentList ":" Type]. */
 FieldList<FieldListRecord &r>
@@ -673,7 +799,7 @@ FieldList<FieldListRecord &r>
 /* StatementSeq = Statement {";" Statement}. */
 StatementSeq<StatementSeqRecord &r> 
 = 
-	Statement<r.statement> 
+	Statement<r.statementPtr> 
 	(	(. r.nullOrPtrToNextStatementSeq=0; .)
 	|	(. r.nullOrPtrToNextStatementSeq=new StatementSeqRecord(); abortIfNull(r.nullOrPtrToNextStatementSeq); .) 
 		";" StatementSeq<*(r.nullOrPtrToNextStatementSeq)>
@@ -687,7 +813,7 @@ CaseLabels						(. ExprRecord e1,e2; .)
 = ConstExpr<e1> [".." ConstExpr<e2>].
 
 /* Guard        = Qualident ":" Qualident. */
-Guard        = Qualident ":" Qualident.
+Guard        = Qualident<qualident1> ":" Qualident<qualident2>.
 
 SimpleExprAddOpClause<SimpleExprAddOpRecord &r>
 = 
@@ -1003,11 +1129,18 @@ IdentList<IdentListRecord &r>
 	IdentDef<r.identDef>
 	(				(. r.nullOrCommaIdentList=0; .)
 	|				(. r.nullOrCommaIdentList=new IdentListRecord(); abortIfNull(r.nullOrCommaIdentList); .)
-		"," IdentList<*(r.nullOrCommaExprList)>
+		"," IdentList<*(r.nullOrCommaIdentList)>
+	).
+IdentList2<IdentList2Record &r> 
+=
+	Ident<r.ident_>
+	(				(. r.nullOrCommaIdentList=0; .)
+	|				(. r.nullOrCommaIdentList=new IdentList2Record(); abortIfNull(r.nullOrCommaIdentList); .)
+		"," IdentList2<*(r.nullOrCommaIdentList)>
 	).
 
 /* Qualident    = [ident "."] ident. */
-Qualident    = ident ["." ident].
+Qualident<QualidentRecord &r> = Ident<r.leftIdent> ( (.r.rightIdent=0;.) | "." Ident<r.rightIdent> ).
 
 /* IdentDef     = ident [" * " | "-"]. */
 IdentDef<IdentDefRecord &r>
@@ -1047,26 +1180,155 @@ Statement    = [ Designator ":=" Expr
                ].
 */
 
-Statement<StatementRecord*&ptrToStmtRecord>
-							(. ExprRecord expr; .)
+static const int
+	 stmtTypeNumber_EmptyStmt=0
+	,stmtTypeNumber_EXPR_OR_ASSIGN=1
+	,stmtTypeNumber_IF=2
+	,stmtTypeNumber_CASE=3
+	,stmtTypeNumber_WHILE=4
+	,stmtTypeNumber_REPEAT=5
+	,stmtTypeNumber_FOR=6
+	,stmtTypeNumber_LOOP=7
+	,stmtTypeNumber_WITH=8
+	,stmtTypeNumber_EXIT=9
+	,stmtTypeNumber_RETURN=10
+	;
+struct Stmt_EmptyStmt:public StatementRecord{
+  virtual int getStatementTypeNumber(){return stmtTypeNumber_EmptyStmt;} 
+};
+struct Stmt_EXPR_OR_ASSIGN:public StatementRecord{
+  	virtual int getStatementTypeNumber(){return stmtTypeNumber_EXPR_OR_ASSIGN;} 
+  	ExprRecord lhsExpr;
+  	bool assignment=false;
+  	ExprRecord rhsExpr; 
+};
+struct MandatoryELSIFsListRecord{
+	ExprRecord expr;
+	StatementSeqRecord thenStmtSeq; 
+	MandatoryELSIFsListRecord *optionalElsifsListPtr;
+};
+struct Stmt_IF:public StatementRecord{
+ 	virtual int getStatementTypeNumber(){return stmtTypeNumber_IF;} 
+    ExprRecord expr;
+	StatementSeqRecord thenStmtSeq;
+	MandatoryELSIFsListRecord *optionalElsifsListPtr;
+    StatementSeqRecord *optionalElsePtr;
+};
+struct CasesRecord{
+	CaseRecord caseNth;
+	CasesRecord *optionalOtherCasesPtr;
+};
+struct Stmt_CASE:public StatementRecord{
+  	virtual int getStatementTypeNumber(){return stmtTypeNumber_CASE;} 
+	ExprRecord expr;
+	CaseRecord caseFirst;
+	CasesRecord *optionalOtherCasesPtr;
+	StatementSeqRecord *optionalElsePtr;
+};
+struct Stmt_WHILE:public StatementRecord{
+	virtual int getStatementTypeNumber(){return stmtTypeNumber_WHILE;} 
+    ExprRecord expr;
+    StatementSeqRecord whileBodyStatementSeq;
+};
+struct Stmt_REPEAT:public StatementRecord{
+	virtual int getStatementTypeNumber(){return stmtTypeNumber_REPEAT;} 
+    StatementSeqRecord repeatBodyStatementSeq;
+    ExprRecord expr;
+};
+struct Stmt_FOR:public StatementRecord{
+  virtual int getStatementTypeNumber(){return stmtTypeNumber_FOR;} 
+  identRec forCounterVariableName;
+  ExprRecord forCounterVariableInitialValueExpr;
+  ExprRecord forCounterVariableToValueExpr;
+  bool bySpecified;
+  ConstExprRecord byValueConstExpr; 
+  StatementSeqRecord forStatementSeq; 
+};
+struct Stmt_LOOP:public StatementRecord{
+	virtual int getStatementTypeNumber(){return stmtTypeNumber_LOOP;} 
+    StatementSeqRecord loopStatementSeq;
+};
+struct Stmt_WITH:public StatementRecord{
+  virtual int getStatementTypeNumber(){return stmtTypeNumber_WITH;} 
+};
+struct Stmt_EXIT:public StatementRecord{
+  virtual int getStatementTypeNumber(){return stmtTypeNumber_EXIT;} 
+};
+struct Stmt_RETURN:public StatementRecord{
+  virtual int getStatementTypeNumber(){return stmtTypeNumber_RETURN;} 
+};
+MandatoryELSIFsList<MandatoryELSIFsListRecord &r>
 =
-	       	[ Expr<expr> [ ":=" Expr<expr> ] 
-            | "IF" Expr<expr> "THEN" StatementSeq<thenStmtSeq> {"ELSIF" Expr<expr> "THEN" StatementSeq<elsifThenStatementSeq>} ["ELSE" StatementSeq<statementSeqELSE>] "END"
-			| "CASE" Expr<expr> "OF" Case
-              {"|" Case}
-              ["ELSE" StatementSeq<statementSeqELSE>]
-              "END"
-            | "WHILE" Expr<expr> "DO" StatementSeq<whileBodyStatementSeq> "END"
-            | "REPEAT" StatementSeq<repeatBodyStatementSeq> "UNTIL" Expr<expr>
-            | "FOR" Ident<forCounterVariableName> ":=" Expr<expr> "TO" Expr<expr> ["BY" ConstExpr<expr>] "DO" StatementSeq<forStatementSeq> "END"
-            | "LOOP" StatementSeq<loopStatementSeq> "END"
-            | "WITH" Guard "DO" StatementSeq<statementSeq1>
-              {"|" Guard "DO" StatementSeq<statementSeqN>}
-              ["ELSE" StatementSeq<statementSeqELSE>]
-              "END"
+	"ELSIF" Expr<r.expr>
+	"THEN" StatementSeq<r.thenStmtSeq> 
+	(			(. r.optionalElsifsListPtr=0; .)
+	|			(. r.optionalElsifsListPtr=new MandatoryELSIFsListRecord(); abortIfNull(r.optionalElsifsListPtr); .)
+		MandatoryELSIFsList<*(r.optionalElsifsListPtr)>
+	).
+Cases<CasesRecord &r>
+=
+	"|" Case<r.caseNth> 
+	(				(. r.optionalOtherCasesPtr=0; .)
+	|				(. r.optionalOtherCasesPtr=new CasesRecord(); abortIfNull(r.optionalOtherCasesPtr); .)
+		Cases<*(r.optionalOtherCasesPtr)>
+	).
+Statement<StatementRecord*&ptrToStmtRecord>
+												(. Stmt_EXPR_OR_ASSIGN *psea; Stmt_IF *pif; Stmt_CASE *pcs; Stmt_WHILE *pw; Stmt_REPEAT *prpt; Stmt_FOR *pf; Stmt_LOOP *ploop; .)
+=
+	       	(
+	       				(. ptrToStmtRecord=new Stmt_EmptyStmt(); abortIfNull(ptrToStmtRecord); .)
+	       	|
+	       				(. ptrToStmtRecord=psea=new Stmt_EXPR_OR_ASSIGN(); abortIfNull(ptrToStmtRecord); .)
+	       		Expr<(*psea).lhsExpr> ( (. psea->assignment=false; .) | (. psea->assignment=true; .) ":=" Expr<(*psea).rhsExpr> ) 
+            | 
+	       				(. ptrToStmtRecord=pif=new Stmt_IF(); abortIfNull(ptrToStmtRecord); .)
+            	"IF" Expr<(*pif).expr>
+            	"THEN" StatementSeq<(*pif).thenStmtSeq>
+            	(				(. pif->optionalElsifsListPtr=0; .)
+            	|				(. pif->optionalElsifsListPtr=new MandatoryELSIFsListRecord(); abortIfNull(pif->optionalElsifsListPtr); .)
+            		MandatoryELSIFsList<*((*pif).optionalElsifsListPtr)>
+            	)
+            	(				(. pif->optionalElsePtr=0; .)
+            	|				(. pif->optionalElsePtr=new StatementSeqRecord(); abortIfNull(pif->optionalElsePtr); .)
+            		"ELSE" StatementSeq<*((*pif).optionalElsePtr)>
+            	) 
+            	"END"
+			| 
+	       				(. ptrToStmtRecord=pcs=new Stmt_CASE(); abortIfNull(ptrToStmtRecord); .)
+				"CASE" Expr<(*pcs).expr>
+				"OF" Case<(*pcs).caseFirst>
+				(				(. (*pcs).optionalOtherCasesPtr=0; .)
+				|				(. (*pcs).optionalOtherCasesPtr=new CasesRecord(); abortIfNull((*pcs).optionalOtherCasesPtr); .)
+					Cases<*((*pcs).optionalOtherCasesPtr)>
+				)
+				(				(. (*pcs).optionalElsePtr=0; .)
+				|				(. (*pcs).optionalElsePtr=new StatementSeqRecord(); abortIfNull((*pcs).optionalElsePtr); .)
+					"ELSE" StatementSeq<*((*pcs).optionalElsePtr)>
+				)
+				"END"
+            |
+	       				(. ptrToStmtRecord=pw=new Stmt_WHILE(); abortIfNull(ptrToStmtRecord); .)
+             	"WHILE" Expr<(*pw).expr> "DO" StatementSeq<(*pw).whileBodyStatementSeq> "END"
+            |
+	       				(. ptrToStmtRecord=prpt=new Stmt_REPEAT(); abortIfNull(ptrToStmtRecord); .)
+            	"REPEAT" StatementSeq<(*prpt).repeatBodyStatementSeq> "UNTIL" Expr<(*prpt).expr>
+            |
+	       				(. ptrToStmtRecord=pf=new Stmt_FOR(); abortIfNull(ptrToStmtRecord); .)
+            	"FOR"
+            	Ident<(*pf).forCounterVariableName> ":=" Expr<(*pf).forCounterVariableInitialValueExpr> "TO" Expr<(*pf).forCounterVariableToValueExpr>
+            	(			(. (*pf).bySpecified=false; .)
+            	|			(. (*pf).bySpecified=true; .)
+            		"BY" ConstExpr<(*pf).byValueConstExpr> 
+            	)
+            	"DO" StatementSeq<(*pf).forStatementSeq> 
+            	"END"
+            |	
+	       				(. ptrToStmtRecord=ploop=new Stmt_LOOP(); abortIfNull(ptrToStmtRecord); .)
+            	"LOOP" StatementSeq<(*ploop).loopStatementSeq> "END"
+            | "WITH" Guard "DO" StatementSeq<statementSeq1> {"|" Guard "DO" StatementSeq<statementSeqN>} ["ELSE" StatementSeq<statementSeqELSE>] "END"
             | "EXIT"
             | "RETURN" [Expr<expr>]
-            ].
+            ).
 /*Stat                     (. int type; wchar_t* name; Obj *obj;
                             int adr, adr2, loopstart; .)
 = Ident<name>            (. obj = tab->Find(name); .)

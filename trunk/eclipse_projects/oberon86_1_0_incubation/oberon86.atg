@@ -1,0 +1,474 @@
+/* tab width 8 */
+/*----------------------------------------------------------------------
+Oberon2 compiler for x86
+Copyright (c) 2012 Evgeniy Grigorievitch Philippov
+Distributed under the terms of GNU General Public License, v.3 or later
+----------------------------------------------------------------------*/
+#include "SymbolTable.h"
+#include "CodeGenerator.h"
+#include "wchar.h"
+
+COMPILER Oberon
+
+	int // operators
+	  illegal_operator, plus, minus, times, slash, equals, less, greater, orOperation, notEquals, lessOrEqual, greaterOrEqual, in, is, divOp, modOp, ampersand;
+
+	int // types
+	  undef, integer, boolean;
+
+	int // object kinds
+	  var, proc;
+
+	int // opcodes
+	  ADD,  SUB,   MUL,   DIV,   EQU,  LSS, GTR, NEG,
+	  LOAD, LOADG, STO,   STOG,  CONST,
+	  CALL, RET,   ENTER, LEAVE,
+	  JMP,  FJMP,  READ,  WRITE;
+	  
+	struct ExprParams{
+		int type;
+	};
+	
+	SymbolTable   *tab;
+	CodeGenerator *gen;
+
+	void Err(const wchar_t* msg) {
+		errors->Error(la->line, la->col, msg);
+	}
+
+	void InitDeclarations() { // it must exist
+		
+		// operators
+		illegal_operator = -1;
+		plus = 0; minus = 1; times = 2; slash = 3; equals = 4; less = 5; greater = 6; orOperation = 7;
+	  	notEquals = 8; lessOrEqual = 9; greaterOrEqual=10; in=11; is=12;
+	  	divOp=13; modOp=14; ampersand=15;
+		 
+		undef = 0; integer = 1; boolean = 2; // types
+		var = 0; proc = 1; // object kinds
+
+		// opcodes
+		ADD  =  0; SUB   =  1; MUL   =  2; DIV   =  3; EQU   =  4; LSS = 5; GTR = 6; NEG = 7;
+		LOAD =  8; LOADG =  9; STO   = 10; STOG  = 11; CONST = 12;
+		CALL = 13; RET   = 14; ENTER = 15; LEAVE = 16;
+		JMP  = 17; FJMP  = 18; READ  = 19; WRITE = 20;
+	}
+
+
+  
+/*--------------------------------------------------------------------------*/
+CHARACTERS
+  letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".
+  digit = "0123456789".
+  ident_symbol = letter + "_" + digit.
+  ident_symbol_first = letter + "_".
+  cr  = '\r'.
+  lf  = '\n'.
+  tab = '\t'.
+  
+  stringCh  = ANY - '"' - '\\' - cr - lf.
+  charCh    = ANY - '\'' - '\\' - cr - lf.
+  printable =  '\u0001' .. '\u007e' - '"' - '\\' - cr - lf. /*???*/
+  hexDigit       = "0123456789ABCDEF".
+
+TOKENS
+  ident  			= ident_symbol_first {ident_symbol}.
+  badString 		= '"'  { stringCh | '\\' printable | '\\' 'u' hexDigit hexDigit hexDigit hexDigit } (cr | lf)
+  					| '\'' { charCh   | '\\' printable | '\\' 'u' hexDigit hexDigit hexDigit hexDigit } (cr | lf).
+  string 			= '"'  { stringCh | '\\' printable | '\\' 'u' hexDigit hexDigit hexDigit hexDigit } '"' 
+                    | '\'' { charCh   | '\\' printable | '\\' 'u' hexDigit hexDigit hexDigit hexDigit } '\''.
+  integer     		= digit {digit} | digit {hexDigit} "H".
+  /*ScaleFactor 		= ("E" | "D") ["+" | "-"] digit {digit}.*/
+  real        		= digit {digit} "." {digit} [("E" | "D") ["+" | "-"] digit {digit}].
+  character			= digit {hexDigit} "X". 
+
+COMMENTS FROM "(*" TO "*)" NESTED
+
+IGNORE cr + lf + tab
+
+
+
+PRODUCTIONS
+
+/* number     	= integer | real. */
+number
+= integer | real.
+
+/* Relation     = "=" | "#" | "<" | "<=" | ">" | ">=" | IN | IS. */
+Relation<int &op>
+=					(. op = illegal_operator; .)
+( "="				(. op = equals; .)
+| "#" 				(. op = notEquals; .)
+| "<"				(. op = less; .)
+| "<=" 				(. op = lessOrEqual; .)
+| ">"				(. op = greater; .)
+| ">=" 				(. op = greaterOrEqual; .)
+| "IN" 				(. op = in; .)
+| "IS" 				(. op = is; .)
+).
+
+/* AddOp        = "+" | "-" | OR. */
+AddOp<int &op>
+=                       (. op = illegal_operator; .)
+( '+'	                (. op = plus; .)
+| '-'        			(. op = minus; .)
+| "OR"		 			(. op = orOperation; .)
+).
+
+/* MulOp        = " * " | "/" | DIV | MOD | "&". */
+MulOp<int &op>
+=				   			(. op = illegal_operator; .)
+( "*"						(. op = times; .)
+| "/"						(. op = slash; .)
+| "DIV" 					(. op = divOp; .)
+| "MOD"						(. op = modOp; .)
+| "&" 						(. op = ampersand; .)
+). 
+
+/* Expr         = SimpleExpr [Relation SimpleExpr]. */
+Expr<ExprParams *expr>			(. ExprParams *expr1; ExprParams *expr2; int op; int type, type1; .)
+=
+	SimpleExpr<expr1>
+	[
+		Relation<op>
+		SimpleExpr<expr2>		(. if (type != type1) Err(L"incompatible types");
+                            			   gen->Emit(op); type = boolean; /*TODO not always boolean*/ 
+                          		.)
+	].
+	
+/* ConstExpr    = Expr. */
+ConstExpr<ExprParams *expr> = Expr<expr>.
+
+/* ImportList   = IMPORT [ident ":="] ident {"," [ident ":="] ident} ";".  */
+ImportList
+=
+	"IMPORT"
+	ident [":=" ident] 
+	{ "," 
+	  ident [":=" ident]
+	} ";".
+	
+/* DeclSeq      = { CONST {ConstDecl ";" } | TYPE {TypeDecl ";"} | VAR {VarDecl ";"}} 
+               {ProcDecl ";" | ForwardDecl ";"}. */
+DeclSeq      = { "CONST" {ConstDecl ";" } | "TYPE" {TypeDecl ";"} | "VAR" {VarDecl ";"}} 
+               { "PROCEDURE" (ProcDecl|ForwardDecl) ";" }.
+
+/* ConstDecl    = IdentDef "=" ConstExpr. */
+ConstDecl						(. ExprParams *expr; .)
+= IdentDef "=" ConstExpr<expr>.
+
+/* TypeDecl     = IdentDef "=" Type. */
+TypeDecl     = IdentDef "=" Type.
+
+/* VarDecl      = IdentList ":" Type. */
+VarDecl      = IdentList ":" Type.
+/*VarDecl                  (. wchar_t* name; int type; .)
+= Type<type>
+  Ident<name>            (. tab->NewObj(name, var, type); .)
+  { ',' Ident<name>      (. tab->NewObj(name, var, type); .)
+  } ';'.
+*/
+
+/* ProcDecl     = PROCEDURE [Receiver] IdentDef [FormalPars] ";" DeclSeq 
+               [BEGIN StatementSeq] END ident. */
+ProcDecl     = /*"PROCEDURE"*/ [Receiver] IdentDef [FormalPars] ";" DeclSeq 
+               ["BEGIN" StatementSeq] "END" ident.
+/*
+ProcDecl                 (. wchar_t* name; Obj *obj; int adr; .)
+= "void"
+  Ident<name>            (. obj = tab->NewObj(name, proc, undef); obj->adr = gen->pc;
+                            if (coco_string_equal(name, L"Main")) gen->progStart = gen->pc; 
+                            tab->OpenScope(); .)
+  '(' ')'
+  '{'                    (. gen->Emit(ENTER, 0); adr = gen->pc - 2; .)
+  { VarDecl | Stat }
+  '}'                    (. gen->Emit(LEAVE); gen->Emit(RET);
+                            gen->Patch(adr, tab->topScope->nextAdr);
+                            tab->CloseScope(); .).
+*/
+
+/* ForwardDecl  = PROCEDURE "^" [Receiver] IdentDef [FormalPars]. */
+ForwardDecl  = /*"PROCEDURE"*/ "^" [Receiver] IdentDef [FormalPars].
+
+/* FormalPars   = "(" [FPSection {";" FPSection}] ")" [":" Qualident]. */ 
+FormalPars   = "(" [FPSection {";" FPSection}] ")" [":" Qualident].
+
+/* FPSection    = [VAR] ident {"," ident} ":" Type. */
+FPSection    = ["VAR"] ident {"," ident} ":" Type.
+
+/* Receiver     = "(" [VAR] ident ":" ident ")". */
+Receiver     = "(" ["VAR"] ident ":" ident ")".
+
+/* Type         = Qualident
+               | ARRAY [ConstExpr {"," ConstExpr}] OF Type 
+               | RECORD ["("Qualident")"] FieldList {";" FieldList} END
+               | POINTER TO Type
+               | PROCEDURE [FormalPars]. */
+Type						(. ExprParams* expr; .)
+= Qualident
+               | "ARRAY" [ConstExpr<expr> {"," ConstExpr<expr>}] "OF" Type 
+               | "RECORD" ["("Qualident")"] FieldList {";" FieldList} "END"
+               | "POINTER" "TO" Type
+               | "PROCEDURE" [FormalPars].
+/*Type<int &type>
+=                        (. type = undef; .)
+ ( "int"                 (. type = integer; .)
+ | "bool"                (. type = boolean; .)
+ ).
+*/
+
+/* FieldList    = [IdentList ":" Type]. */
+FieldList    = [IdentList ":" Type].
+
+/* StatementSeq = Statement {";" Statement}. */
+StatementSeq = Statement {";" Statement}.
+
+/* Case         = [CaseLabels {"," CaseLabels} ":" StatementSeq]. */
+Case         = [CaseLabels {"," CaseLabels} ":" StatementSeq].
+
+/* CaseLabels   = ConstExpr [".." ConstExpr]. */
+CaseLabels						(. ExprParams* expr; .)
+= ConstExpr<expr> [".." ConstExpr<expr>].
+
+/* Guard        = Qualident ":" Qualident. */
+Guard        = Qualident ":" Qualident.
+
+/* SimpleExpr   = ["+" | "-"] Term {AddOp Term}.  */
+SimpleExpr<ExprParams *expr>				(. int op; .)  
+= ["+" | "-"] Term {AddOp<op> Term}.
+/*SimExpr<int &type>       (. int type1, op; .)
+= Term<type>
+  { AddOp<op>
+    Term<type1>      (. if (type != integer || type1 != integer) 
+                              Err(L"integer type expected");
+                            gen->Emit(op); .)
+	}.
+*/
+
+/* Term         = Factor {MulOp Factor}. */
+Term						(. int op; .)
+         = Factor {MulOp<op> Factor}.
+/*
+Term<int &type>          (. int type1, op; .)
+= Factor<type>
+  { MulOp<op>
+    Factor<type1>        (. if (type != integer || type1 != integer) 
+                              Err(L"integer type expected");
+                            gen->Emit(op);
+                         .)
+	}.
+*/
+
+/* Factor       = Designator ["(" [ExprList] ")"] | number | character | string 
+               | NIL | Set | "(" Expr ")" | " ~ " Factor. */
+Factor						(. int type; int n; Obj *obj; wchar_t* name; ExprParams* expr; .)
+						
+=                        (. type = undef; .)
+ DesignatorMaybeWithExprList  
+| number  
+| character | string 
+| "NIL" | Set | "(" Expr<expr> ")" | "~" Factor.
+/*
+Factor<int &type>
+= ( Ident<name>          (. obj = tab->Find(name); type = obj->type;if (obj->kind == var) {if (obj->level == 0) gen->Emit(LOADG, obj->adr);else gen->Emit(LOAD, obj->adr);} else Err(L"variable expected"); .)
+  | number (. swscanf(t->val, L"%d", &n);	/*n = Convert.ToInt32(t->val);*/ gen->Emit(CONST, n); type = integer; .)
+  | '-'
+    Factor<type>         (. if (type != integer) {
+                              Err(L"integer type expected"); type = integer;
+                            }
+                            gen->Emit(NEG); .)
+  | "true"               (. gen->Emit(CONST, 1); type = boolean; .)
+  | "false"              (. gen->Emit(CONST, 0); type = boolean; .)
+  ).
+*/
+
+/* DesignatorMaybeWithExprList= Designator ["(" [ExprList] ")"]. */
+DesignatorMaybeWithExprList
+=
+(
+	ident
+	{ "." ident 
+	| "[" ExprList "]" 
+	| "^" 
+	| "(" QualidentOrOptionalExprList ")"
+	}
+).
+
+/*
+QualidentOrOptionalExprList=Qualident|[ExprList].
+Qualident    = [ident "."] ident.
+ExprList     = Expr {"," Expr}.
+*/
+QualidentOrOptionalExprList = [ExprList].
+
+/*
+Designator   = Qualident {"." ident | "[" ExprList "]" | " ^ " | "(" Qualident ")"}.
+Qualident    = [ident "."] ident.
+*/
+/*Designator
+=
+(
+	ident
+	{ "." ident 
+	| "[" ExprList "]" 
+	| "^" 
+	| "(" /*must be Qualident*/([ExprList]) ")"
+	}
+)
+. 
+*/
+
+/* Set          = "{" [Element {"," Element}] "}". */
+Set
+= "{" [Element {"," Element}] "}".
+
+/* Element      = Expr [".." Expr]. */ 
+Element							(. ExprParams* expr; .)
+= Expr<expr> [".." Expr<expr>].
+
+/* ExprList     = Expr {"," Expr}. */
+ExprList						(. ExprParams* expr; .)
+= Expr<expr> {"," Expr<expr>}.
+
+/* IdentList    = IdentDef {"," IdentDef}. */
+IdentList    = IdentDef {"," IdentDef}.
+
+/* Qualident    = [ident "."] ident. */
+Qualident    = ident ["." ident].
+
+/* IdentDef     = ident [" * " | "-"]. */
+IdentDef     = ident ["*" | "-"].
+/*Ident<wchar_t* &name>
+= ident                  (. name = coco_string_create(t->val); .)
+.
+*/
+
+/*
+Statement    = [ Designator ":=" Expr 
+               | Designator ["(" [ExprList] ")"] 
+               | IF Expr THEN StatementSeq 
+                 {ELSIF Expr THEN StatementSeq} 
+                 [ELSE StatementSeq] 
+                 END 
+               | CASE Expr OF Case 
+                 {"|" Case} 
+                 [ELSE StatementSeq] 
+                  END 
+               | WHILE Expr DO StatementSeq END 
+               | REPEAT StatementSeq UNTIL Expr 
+               | FOR ident ":=" Expr TO Expr [BY ConstExpr] DO StatementSeq END 
+               | LOOP StatementSeq END
+               | WITH Guard DO StatementSeq 
+                 {"|" Guard DO StatementSeq} 
+                 [ELSE StatementSeq] 
+                 END
+               | EXIT 
+               | RETURN [Expr]
+               ].
+*/
+Statement							(. ExprParams *expr; .)//TODO
+=
+	       	[ Expr<expr> [ ":=" Expr<expr> ] 
+            | "IF" Expr<expr> "THEN" StatementSeq {"ELSIF" Expr<expr> "THEN" StatementSeq} ["ELSE" StatementSeq] "END"
+			| "CASE" Expr<expr> "OF" Case
+              {"|" Case}
+              ["ELSE" StatementSeq]
+              "END"
+            | "WHILE" Expr<expr> "DO" StatementSeq "END"
+            | "REPEAT" StatementSeq "UNTIL" Expr<expr>
+            | "FOR" ident ":=" Expr<expr> "TO" Expr<expr> ["BY" ConstExpr<expr>] "DO" StatementSeq "END"
+            | "LOOP" StatementSeq "END"
+            | "WITH" Guard "DO" StatementSeq
+              {"|" Guard "DO" StatementSeq}
+              ["ELSE" StatementSeq]
+              "END"
+            | "EXIT"
+            | "RETURN" [Expr<expr>]
+            ].
+/*Stat                     (. int type; wchar_t* name; Obj *obj;
+                            int adr, adr2, loopstart; .)
+= Ident<name>            (. obj = tab->Find(name); .)
+  ( '='                  (. if (obj->kind != var) Err(L"cannot assign to procedure"); .)
+    Expr<type> ';'
+			 (. if (type != obj->type) Err(L"incompatible types");
+			    if (obj->level == 0) gen->Emit(STOG, obj->adr);
+			    else gen->Emit(STO, obj->adr); .)
+  | '(' ')' ';'          (. if (obj->kind != proc) Err(L"object is not a procedure");
+			    gen->Emit(CALL, obj->adr); .)
+  )
+
+| "if"
+  '(' Expr<type> ')' 	 (. if (type != boolean) Err(L"boolean type expected");
+			    gen->Emit(FJMP, 0); adr = gen->pc - 2; .)
+  Stat
+  [ "else"               (. gen->Emit(JMP, 0); adr2 = gen->pc - 2;
+			    gen->Patch(adr, gen->pc);
+			    adr = adr2; .)
+    Stat
+  ]                      (. gen->Patch(adr, gen->pc); .)
+  "end" "if"
+
+| "while"                (. loopstart = gen->pc; .)
+  '(' Expr<type> ')' 	 (. if (type != boolean) Err(L"boolean type expected");
+			    gen->Emit(FJMP, 0); adr = gen->pc - 2; .)
+  Stat                   (. gen->Emit(JMP, loopstart); gen->Patch(adr, gen->pc); .)
+
+| "read"
+  Ident<name> ';'        (. obj = tab->Find(name);
+			    if (obj->type != integer) Err(L"integer type expected");
+			    gen->Emit(READ);
+			    if (obj->level == 0) gen->Emit(STOG, obj->adr);
+			    else gen->Emit(STO, obj->adr); .)
+
+| "write"
+  Expr<type> ';'         (. if (type != integer) Err(L"integer type expected");
+			    gen->Emit(WRITE); .)
+
+| '{' { Stat | VarDecl } '}' .
+*/
+
+/*
+Module       = MODULE ident ";" [ImportList] DeclSeq [BEGIN StatementSeq] 
+               END ident ".".
+*/
+Module		(. wchar_t*name; .)
+= 	(. tab->OpenScope(); .)
+  "MODULE" Ident<name> ";"
+  [ImportList]
+  DeclSeq
+  ["BEGIN" StatementSeq]
+  "END" ident "."
+	(. tab->CloseScope(); wprintf(L"MODULE %ls\n",name); coco_string_delete(name); gen->Emit(JMP, -1); 
+	/*FILE_TYPE_ptr_address=gen->pc; gen->Emit(MODULE);*/ gen->Emit(0); .)
+.
+/*Meyrink			 (. wchar_t* name; .)
+=				 (. InitDeclarations(); .)
+ "MEYRINK"
+			 (. tab->OpenScope(); .)
+ { VarDecl
+ | ProcDecl
+ | "BEGIN" Stat {";" Stat}
+ }
+				 (. tab->CloseScope(); .)
+ "END" "."
+.
+*/
+
+/**/
+Ident<wchar_t* &name>
+= ident                  (. name = coco_string_create(t->val); .)
+.
+/*Rod			(. wchar_t*name; .)
+=
+			(. tab->OpenScope(); .)
+	"ROD" Ident<name>
+			(. /*gen->EmitString(name);*/ wprintf(L"ROD %ls\n",name); coco_string_delete(name); tab->CloseScope(); FILE_TYPE_ptr_address=gen->pc; gen->Emit(ROD); gen->Emit(0);.)
+.
+*/
+
+Oberon
+=
+			(. InitDeclarations(); .)
+Module.
+
+END Oberon.

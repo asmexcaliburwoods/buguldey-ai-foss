@@ -497,19 +497,19 @@ void Scanner::Init() {
 	keywords.set(L"PROCEDURE", 30);
 	keywords.set(L"BEGIN", 32);
 	keywords.set(L"END", 33);
-	keywords.set(L"ARRAY", 37);
-	keywords.set(L"OF", 38);
+	keywords.set(L"OF", 37);
+	keywords.set(L"ARRAY", 38);
 	keywords.set(L"RECORD", 39);
 	keywords.set(L"POINTER", 40);
 	keywords.set(L"TO", 41);
 	keywords.set(L"NIL", 43);
-	keywords.set(L"IF", 50);
+	keywords.set(L"ELSIF", 50);
 	keywords.set(L"THEN", 51);
-	keywords.set(L"ELSIF", 52);
-	keywords.set(L"ELSE", 53);
-	keywords.set(L"CASE", 54);
-	keywords.set(L"WHILE", 56);
-	keywords.set(L"DO", 57);
+	keywords.set(L"DO", 53);
+	keywords.set(L"IF", 54);
+	keywords.set(L"ELSE", 55);
+	keywords.set(L"CASE", 56);
+	keywords.set(L"WHILE", 57);
 	keywords.set(L"REPEAT", 58);
 	keywords.set(L"UNTIL", 59);
 	keywords.set(L"FOR", 60);
@@ -866,7 +866,7 @@ Token* Scanner::NextToken() {
 		case 44:
 			{t->kind = 49; break;}
 		case 45:
-			{t->kind = 55; break;}
+			{t->kind = 52; break;}
 		case 46:
 			recEnd = pos; recKind = 9;
 			if (ch == L'=') {AddCh(); goto case_26;}

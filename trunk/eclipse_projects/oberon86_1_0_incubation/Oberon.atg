@@ -1,6 +1,6 @@
 /* tab width 8 */
 /*----------------------------------------------------------------------
-Oberon2 compiler for x86
+Oberon2 compiler
 Copyright (c) 2012 Evgeniy Grigorievitch Philippov
 Distributed under the terms of GNU General Public License, v.3 or later
 ----------------------------------------------------------------------*/
@@ -436,6 +436,15 @@ COMPILER Oberon
 		bool secondConstExprPresent;
 		ConstExprRecord constExpr2;
 	};
+	struct CaseLabelsListsRecord{
+		CaseLabelsRecord caseLabelsNth;
+		CaseLabelsListsRecord *optionalFurtherCaseLabelsListsPtr;
+	};
+	struct CaseRecord{
+		bool emptyCase;
+		CaseLabelsListsRecord caseLabelsLists;
+		StatementSeqRecord stmtSeq;
+	};
 	struct CasesRecord{
 		CaseRecord caseNth;
 		CasesRecord *optionalOtherCasesPtr;
@@ -492,16 +501,6 @@ COMPILER Oberon
 		virtual int getStatementTypeNumber(){return stmtTypeNumber_RETURN;} 
 		bool exprPresent;
 		ExprRecord expr;
-	};
-
-	struct CaseLabelsListsRecord{
-		CaseLabelsRecord caseLabelsNth;
-		CaseLabelsListsRecord *optionalFurtherCaseLabelsListsPtr;
-	};
-	struct CaseRecord{
-		bool emptyCase=false;
-		CaseLabelsListsRecord caseLabelsLists;
-		StatementSeqRecord stmtSeq;
 	};
 
 	struct ModuleRecord{
@@ -1332,7 +1331,7 @@ FurtherWithClauses<FurtherWithClausesRecord &r>
 Statement<StatementRecord*&ptrToStmtRecord>
 												(. Stmt_EXPR_OR_ASSIGN *psea; Stmt_IF *pif; Stmt_CASE *pcs;
 												   Stmt_WHILE *pw; Stmt_REPEAT *prpt; Stmt_FOR *pf; Stmt_LOOP *ploop; 
-												   Stmt_WITH *pwith; 
+												   Stmt_WITH *pwith; Stmt_RETURN *preturn; 
 												.)
 =
 	       	(
@@ -1389,7 +1388,7 @@ Statement<StatementRecord*&ptrToStmtRecord>
 	       				(. ptrToStmtRecord=pwith=new Stmt_WITH(); abortIfNull(ptrToStmtRecord); .)
             	"WITH" Guard<(*pwith).firstGuard> "DO" StatementSeq<(*pwith).firstStatementSeq>
             			(	(. (*pwith).optionalFurtherWithClausesPtr=0; .)
-            			|	(. (*pwith).optionalFurtherWithClausesPtr=new FurtherWithClausesRecord(); abortIfNotNull((*pwith).optionalFurtherWithClausesPtr); .)
+            			|	(. (*pwith).optionalFurtherWithClausesPtr=new FurtherWithClausesRecord(); abortIfNull((*pwith).optionalFurtherWithClausesPtr); .)
             				FurtherWithClauses<*((*pwith).optionalFurtherWithClausesPtr)>
             			)
             			(				(. (*pwith).optionalElsePtr=0; .)
@@ -1463,13 +1462,13 @@ Module<ModuleRecord &r>								(. wchar_t *endName; .)
   	ImportList<*(r.importListPtr)>
   )
   DeclSeq<r.declSeq>
-  ["BEGIN" StatementSeq<stmtSeq>]
+  ["BEGIN" StatementSeq<r.stmtSeq>]
   "END" Ident<endName> (. if(!coco_string_equal(endName, r.moduleName)){
   							Err(L"MODULE ident ... END ident.: idents do not match.");
   						  } 
   					   .) 
   "."
-	(. tab->CloseScope(); wprintf(L"MODULE %ls\n",name); coco_string_delete(name); gen->Emit(JMP, -1); 
+	(. tab->CloseScope(); wprintf(L"MODULE %ls\n",r.moduleName); gen->Emit(JMP, -1); 
 	   /*FILE_TYPE_ptr_address=gen->pc; gen->Emit(MODULE);*/ gen->Emit(0); 
 	.)
 .

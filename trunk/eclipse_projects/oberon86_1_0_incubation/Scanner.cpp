@@ -490,7 +490,7 @@ void Scanner::Init() {
 	keywords.set(L"OR", 17);
 	keywords.set(L"DIV", 20);
 	keywords.set(L"MOD", 21);
-	keywords.set(L"IMPORT", 23);
+	keywords.set(L"IMPORT", 25);
 	keywords.set(L"CONST", 27);
 	keywords.set(L"TYPE", 28);
 	keywords.set(L"VAR", 29);
@@ -841,9 +841,9 @@ Token* Scanner::NextToken() {
 			{t->kind = 22; break;}
 		case 33:
 			case_33:
-			{t->kind = 24; break;}
+			{t->kind = 23; break;}
 		case 34:
-			{t->kind = 25; break;}
+			{t->kind = 24; break;}
 		case 35:
 			{t->kind = 26; break;}
 		case 36:

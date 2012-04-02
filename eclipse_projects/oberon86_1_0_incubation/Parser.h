@@ -89,25 +89,345 @@ public:
 	Token *t;			// last recognized token
 	Token *la;			// lookahead token
 
-int // operators
-	  illegal_operator, plus, minus, times, slash, equals, less, greater, orOperation, notEquals, lessOrEqual, greaterOrEqual, in, is, divOp, modOp, ampersand;
+void abortIfNull(void* ptr){
+		if(ptr==0){
+			wprintf(L"No memory.\n"); 
+			exit(2);
+		}
+	}
 
-	int // types
-	  undef, integer, boolean;
+	typedef bool boolean;
 
-	int // object kinds
-	  var, proc;
+	static const int // operators
+	  illegal_operator=1, plus=2, minus=3, times=4, slash=5, equals=6, less=7, greater=8,
+	  orOperation=9, notEquals=10, lessOrEqual=11, greaterOrEqual=12, in=13, is=14, divOp=15, modOp=16, ampersand=17;
 
-	int // opcodes
-	  ADD,  SUB,   MUL,   DIV,   EQU,  LSS, GTR, NEG,
-	  LOAD, LOADG, STO,   STOG,  CONST,
-	  CALL, RET,   ENTER, LEAVE,
-	  JMP,  FJMP,  READ,  WRITE;
+	static const int // object kinds
+	  var=1, proc=2;
+
+	static const int // opcodes
+	  ADD=0,  SUB=1,  MUL=2,  DIV=3,   EQU=4,  LSS=5, GTR=6, NEG=7,
+	  LOAD=8, LOADG=9, STO=10,   STOG=11,  CONST=12,
+	  CALL=13, RET=14,   ENTER=15, LEAVE=16,
+	  JMP=17,  FJMP=18,  READ=19,  WRITE=20;
+
+	typedef wchar_t* characterRecord; 
+	typedef wchar_t* stringRecord; 
+	typedef wchar_t* identRec; 
+
+#define num_int (1)
+#define num_real (2)
+	
+	struct numberRecord{
+		int numtype; //num_int or num_real
+		wchar_t* tokenString;
+	};
 	  
-	struct ExprParams{
-		int type;
+	struct identRecord{
+		wchar_t* ident_;
 	};
 	
+	static const int ft_undef=0;
+	static const int ft_DesignatorMaybeWithExprList=1;
+	static const int ft_number=2;
+	static const int ft_character=3;
+	static const int ft_string=4;
+	static const int ft_NIL=5;
+	static const int ft_Set=6;
+	static const int ft_Expr=7;
+	static const int ft_tildeFactor=8;
+
+	struct FactorRecord{
+		virtual int getFactorType()=0; //ft_*
+	};
+	
+	struct TermMulOpRecord{
+		int mulOp;
+		FactorRecord* factorPtr;
+		TermMulOpRecord* nullOrNextTermMulOpRecord;
+	} *PtrToTermMulOpRecord;
+
+	struct TermRecord{
+		FactorRecord* factorPtr;
+		TermMulOpRecord* nullOrNextTermMulOpRecord;
+	} *PtrToTermRecord;
+
+	struct SimpleExprAddOpRecord{
+		int addOp;
+	 	TermRecord term;
+	 	SimpleExprAddOpRecord* nullOrNextSimpleExprAddOpRecord;
+	} *PtrToSimpleExprAddOpRecord;
+	
+	struct SimpleExprRecord{
+		boolean minus;
+		TermRecord term;
+	 	SimpleExprAddOpRecord* nullOrNextSimpleExprAddOpRecord;
+	};
+		  
+	struct ExprRecord{
+		SimpleExprRecord lhs;
+		boolean opAndRhsPresent;
+		int op;
+		SimpleExprRecord rhs;
+	};
+
+	struct ElementRangeRecord{
+		ExprRecord expr1;
+		boolean isrange;
+		ExprRecord expr2;
+	};
+	
+	struct SetRecord{
+		boolean emptySet;
+		ElementRangeRecord range;
+		SetRecord* nullOrPtrToNextSet;
+	};
+
+	struct ExprListRecord{
+		ExprRecord expr;
+		ExprListRecord *nullOrCommaExprList;
+	};
+
+	struct QualidentOrOptionalExprListRecord{
+		boolean exprListPresent;
+		ExprListRecord exprList;
+	};
+
+	struct FactorRecord_Expr: public FactorRecord{
+		virtual int getFactorType(){return ft_Expr;}
+		ExprRecord expr;
+	};
+
+	struct DesignatorMaybeWithExprListRepeatingPartRecord{
+		int clauseNumber; //[1..4]
+		identRec clause1_identRec;
+		ExprListRecord clause2_exprList;
+		QualidentOrOptionalExprListRecord clause4_qualidentOrOptionalExprList;
+
+		DesignatorMaybeWithExprListRepeatingPartRecord* nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord;
+/*
+	("." ident 			//clauseNumber==1
+	| "[" ExprList "]" 	//clauseNumber==2
+	| "^" 				//clauseNumber==3
+	| "(" QualidentOrOptionalExprList ")" //clauseNumber==4
+	)
+*/
+	};
+
+	struct DesignatorMaybeWithExprListRecord{
+		identRecord identRec;
+		DesignatorMaybeWithExprListRepeatingPartRecord* nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord;
+	};
+
+
+	struct FactorRecord_DesignatorMaybeWithExprList: public FactorRecord{
+		virtual int getFactorType(){return ft_DesignatorMaybeWithExprList;}
+		DesignatorMaybeWithExprListRecord r; 
+	};
+  
+	struct FactorRecord_number: public FactorRecord{
+		virtual int getFactorType(){return ft_number;}
+		numberRecord num; 
+	};
+  
+	struct FactorRecord_character: public FactorRecord{
+		virtual int getFactorType(){return ft_character;}
+		characterRecord ch; 
+	};
+  
+	struct FactorRecord_string: public FactorRecord{
+		virtual int getFactorType(){return ft_string;}
+		stringRecord s; 
+	};
+  
+	struct FactorRecord_NIL: public FactorRecord{
+		virtual int getFactorType(){return ft_NIL;}
+	};
+
+	struct FactorRecord_Set: public FactorRecord{
+		virtual int getFactorType(){return ft_Set;}
+		SetRecord set;
+	};
+ 
+	struct FactorRecord_tildeFactor: public FactorRecord{
+		virtual int getFactorType(){return ft_tildeFactor;}
+		FactorRecord* factorPtr;
+	};
+
+	static const int modifier_none=0,modifier_star=1,modifier_minus=2;
+	
+	struct IdentDefRecord{
+		identRec ident_;
+		int modifier;
+	};
+
+	struct IdentListRecord{
+		IdentDefRecord identDef;
+		IdentListRecord* nullOrCommaIdentList;
+	};
+
+	struct StatementRecord{
+		virtual int getStatementType()=0; 
+	};
+
+	struct StatementSeqRecord{
+		StatementRecord *statementPtr;
+		StatementSeqRecord* nullOrPtrToNextStatementSeq;
+	};
+
+	struct TypeRecord{
+		virtual int getTypeNumber()=0;
+	};
+
+	struct VarDeclRecord{
+		IdentListRecord identList;
+		TypeRecord *typePtr;
+	};
+	
+	struct ValuePlaceholder{
+		virtual int getValueType()=0;
+	};
+	
+	struct ConstExprRecord{
+		boolean valueHasBeenCalculated;
+		ValuePlaceholder *constValuePtr;
+		ExprRecord expr;
+	};
+	
+	struct ConstDeclRecord{
+		IdentDefRecord identDef;
+		ConstExprRecord expr;
+	};
+
+	struct TypeDeclRecord{
+		IdentDefRecord identDef;
+		TypeRecord *typePtr;
+	};
+	
+	struct ModuleImportEntryRecord{
+		identRec lhs,rhs;
+		boolean rhsPresent;
+	};
+
+	struct ImportListRecord{
+		ModuleImportEntryRecord moduleImportEntry;
+		ImportListRecord *nullOrPtrToNextModuleImportEntriesList;
+	};
+
+	struct ReceiverRecord{
+		bool varSpecified;
+		identRec leftIdent;
+		identRec rightIdent;
+	};
+	
+	struct OptionalReceiverRecord{
+		bool receiverSpecified;
+		ReceiverRecord receiver;
+	};
+
+	struct FormalParsRecord{
+	};
+	
+	struct OptionalFormalParsRecord{
+		bool formalParsSpecified;
+		FormalParsRecord formalPars;
+	};
+
+	struct ForwardDeclRecord{
+		OptionalReceiverRecord optionalReceiver;
+		IdentDefRecord identDef;
+		OptionalFormalParsRecord optionalFormalPars;
+	};
+
+	struct FieldListRecord{
+		bool fieldsPresent;
+		IdentListRecord identList;
+		TypeRecord *typePtr;
+	};
+
+	struct DeclSeqConstDeclListMandatoryRecord{
+		ConstDeclRecord constDecl;
+		DeclSeqConstDeclListMandatoryRecord *nullOrPtrToNextDeclSeqConstDeclListMandatory;
+	};
+	struct DeclSeqTypeDeclListMandatoryRecord{
+		TypeDeclRecord typeDecl;
+		DeclSeqTypeDeclListMandatoryRecord *nullOrPtrToNextDeclSeqTypeDeclListMandatory;
+	};
+	struct DeclSeqVarDeclListMandatoryRecord{
+		VarDeclRecord varDecl;
+		DeclSeqVarDeclListMandatoryRecord *nullOrPtrToNextDeclSeqVarDeclListMandatory;
+	};
+	
+	struct DeclSeqConstDeclListRecord{
+		bool specified;
+		DeclSeqConstDeclListMandatoryRecord constDecls; /* undefined if specified==false*/
+	};
+	struct DeclSeqTypeDeclListRecord{
+		bool specified;
+		DeclSeqTypeDeclListMandatoryRecord typeDecls; /* undefined if specified==false*/
+	};
+	struct DeclSeqVarDeclListRecord{
+		bool specified;
+		DeclSeqVarDeclListMandatoryRecord varDecls; /* undefined if specified==false*/
+	};
+
+	static const int decl_const=1,decl_type=2,decl_var=3;
+	
+	struct DeclSeqConstTypeVarListMandatoryRecord{
+		int decl_variant; /* either decl_const, decl_type, or decl_var */
+		DeclSeqConstDeclListRecord constDeclList; /* undefined if decl_variant!=decl_const */ 
+		DeclSeqTypeDeclListRecord typeDeclList;   /* undefined if decl_variant!=decl_type  */
+		DeclSeqVarDeclListRecord varDeclList;	  /* undefined if decl_variant!=decl_var   */
+		DeclSeqConstTypeVarListMandatoryRecord *next;
+	}; 
+	
+	struct DeclSeqConstTypeVarListRecord{
+		bool specified;
+		DeclSeqConstTypeVarListMandatoryRecord constTypeVarList; /* undefined if specified==false */
+	};
+
+	struct DeclSeqRecord;
+	
+	struct ProcDeclRecord{
+		OptionalReceiverRecord optionalReceiver;
+		IdentDefRecord identDef;
+		OptionalFormalParsRecord optionalFormalPars;
+		DeclSeqRecord *declSeqPtr; 
+	    bool procBodySpecifiedHere;
+	    StatementSeqRecord procBodyStmtSeq; /* undefined if procBodySpecifiedHere==false */
+	};
+
+	static const int decl_proc=4,decl_fwd=5;
+	
+	struct DeclSeqProcDeclFwdDeclListMandatoryRecord{
+		int decl_variant; /* either decl_proc, or decl_fwd */
+		ProcDeclRecord procDecl;     /* undefined if decl_variant!=decl_proc */ 
+		ForwardDeclRecord fwdDecl;   /* undefined if decl_variant!=decl_fwd  */
+		DeclSeqProcDeclFwdDeclListMandatoryRecord *next;
+	}; 
+	
+	struct DeclSeqProcDeclFwdDeclListRecord{
+		bool specified;
+		DeclSeqProcDeclFwdDeclListMandatoryRecord procDeclFwdDeclList; /* undefined if specified==false */
+	};
+	
+	struct DeclSeqRecord{
+		DeclSeqConstTypeVarListRecord ctvlist;
+		DeclSeqProcDeclFwdDeclListRecord pflist;
+	};
+
+	struct ModuleRecord{
+		wchar_t* moduleName;
+		ImportListRecord *importListPtr;
+		DeclSeqRecord declSeq;
+		StatementSeqRecord stmtSeq;
+	};
+
+
+
+
+
+	ModuleRecord *modulePtr;
 	SymbolTable   *tab;
 	CodeGenerator *gen;
 
@@ -116,21 +436,6 @@ int // operators
 	}
 
 	void InitDeclarations() { // it must exist
-		
-		// operators
-		illegal_operator = -1;
-		plus = 0; minus = 1; times = 2; slash = 3; equals = 4; less = 5; greater = 6; orOperation = 7;
-	  	notEquals = 8; lessOrEqual = 9; greaterOrEqual=10; in=11; is=12;
-	  	divOp=13; modOp=14; ampersand=15;
-		 
-		undef = 0; integer = 1; boolean = 2; // types
-		var = 0; proc = 1; // object kinds
-
-		// opcodes
-		ADD  =  0; SUB   =  1; MUL   =  2; DIV   =  3; EQU   =  4; LSS = 5; GTR = 6; NEG = 7;
-		LOAD =  8; LOADG =  9; STO   = 10; STOG  = 11; CONST = 12;
-		CALL = 13; RET   = 14; ENTER = 15; LEAVE = 16;
-		JMP  = 17; FJMP  = 18; READ  = 19; WRITE = 20;
 	}
 
 
@@ -142,42 +447,67 @@ int // operators
 	~Parser();
 	void SemErr(const wchar_t* msg);
 
-	void number();
+	void number(numberRecord &r);
+	void IntegerRec(wchar_t* &tok);
+	void RealRec(wchar_t* &tok);
 	void Relation(int &op);
 	void AddOp(int &op);
 	void MulOp(int &op);
-	void Expr(ExprParams *expr);
-	void SimpleExpr(ExprParams *expr);
-	void ConstExpr(ExprParams *expr);
-	void ImportList();
-	void DeclSeq();
-	void ConstDecl();
-	void TypeDecl();
-	void VarDecl();
-	void ProcDecl();
-	void ForwardDecl();
-	void IdentDef();
-	void Type();
-	void IdentList();
-	void Receiver();
-	void FormalPars();
-	void StatementSeq();
+	void Expr(ExprRecord &expr);
+	void SimpleExpr(SimpleExprRecord &e);
+	void ConstExpr(ConstExprRecord &cexpr);
+	void ModuleImportEntry(ModuleImportEntryRecord &r);
+	void Ident(wchar_t* &tok);
+	void ModuleImportEntryList(ImportListRecord &r);
+	void ImportList(ImportListRecord &r);
+	void DeclSeqConstDeclListMandatory(DeclSeqConstDeclListMandatoryRecord &r);
+	void ConstDecl(ConstDeclRecord &r);
+	void DeclSeqConstDeclList(DeclSeqConstDeclListRecord &r);
+	void DeclSeqTypeDeclListMandatory(DeclSeqTypeDeclListMandatoryRecord &r);
+	void TypeDecl(TypeDeclRecord &r);
+	void DeclSeqTypeDeclList(DeclSeqTypeDeclListRecord &r);
+	void DeclSeqVarDeclListMandatory(DeclSeqVarDeclListMandatoryRecord &r);
+	void VarDecl(VarDeclRecord &r);
+	void DeclSeqVarDeclList(DeclSeqVarDeclListRecord &r);
+	void DeclSeqConstTypeVarListMandatory(DeclSeqConstTypeVarListMandatoryRecord &r);
+	void DeclSeqConstTypeVarList(DeclSeqConstTypeVarListRecord &r);
+	void DeclSeqProcDeclFwdDeclListMandatory(DeclSeqProcDeclFwdDeclListMandatoryRecord &r);
+	void ProcDecl(ProcDeclRecord &r);
+	void ForwardDecl(ForwardDeclRecord &r);
+	void DeclSeqProcDeclFwdDeclList(DeclSeqProcDeclFwdDeclListRecord &r);
+	void DeclSeq(DeclSeqRecord &r);
+	void IdentDef(IdentDefRecord &r);
+	void Type(TypeRecord *&ptrToTypeRecord);
+	void IdentList(IdentListRecord &r);
+	void OptionalReceiver(OptionalReceiverRecord &r);
+	void Receiver(ReceiverRecord &r);
+	void OptionalFormalPars(OptionalFormalParsRecord &r);
+	void FormalPars(FormalParsRecord &r);
+	void StatementSeq(StatementSeqRecord &r);
 	void FPSection();
 	void Qualident();
-	void FieldList();
-	void Statement();
+	void FieldList(FieldListRecord &r);
+	void Statement(StatementRecord*&ptrToStmtRecord);
 	void Case();
 	void CaseLabels();
 	void Guard();
-	void Term();
-	void Factor();
-	void DesignatorMaybeWithExprList();
-	void Set();
-	void ExprList();
-	void QualidentOrOptionalExprList();
-	void Element();
-	void Module();
-	void Ident(wchar_t* &name);
+	void SimpleExprAddOpClause(SimpleExprAddOpRecord &r);
+	void Term(TermRecord &t);
+	void TermMulOpClause(TermMulOpRecord &r);
+	void Factor(FactorRecord *&factorPtr);
+	void DesignatorMaybeWithExprList(DesignatorMaybeWithExprListRecord &r);
+	void Character(wchar_t* &tok);
+	void String(wchar_t* &tok);
+	void Set(SetRecord &r);
+	void DesignatorMaybeWithExprListRepeatingPartClause(DesignatorMaybeWithExprListRepeatingPartRecord &r);
+	void IdentRec(wchar_t* &tok);
+	void ExprList(ExprListRecord &r);
+	void QualidentOrOptionalExprList(QualidentOrOptionalExprListRecord &r);
+	void ElementRangeList(SetRecord &r);
+	void Element(ElementRangeRecord &r);
+	void Module(ModuleRecord &r);
+	void Integer(wchar_t* &tok);
+	void Real(wchar_t* &tok);
 	void Oberon();
 
 	void Parse();

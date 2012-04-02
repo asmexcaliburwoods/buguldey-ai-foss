@@ -8,10 +8,12 @@ Parser.h:	frames_and_grammar
 	./Coco Coco.atg -namespace Coco -trace AJ
 
 Coco:
-all:	Scanner.cpp Scanner.h Parser.cpp Parser.h
+all:	Scanner.cpp Scanner.h Parser.cpp Parser.h gpp
+
+gpp:
 	g++ *.cpp -o Coco $(CFLAGS) -g -Wall
 	@echo done.
-
+	
 clean:
 	rm -f Coco
 

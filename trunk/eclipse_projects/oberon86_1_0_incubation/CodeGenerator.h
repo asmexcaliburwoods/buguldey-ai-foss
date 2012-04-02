@@ -2,8 +2,9 @@
 #define ROD_CODEGENERATOR_H
 
 /*
-Oberon parser
+Oberon2 compiler for x86
 Copyright (c) 2012 Evgeniy Grigorievitch Philippov
+Distributed under the terms of GNU General Public License, v.3 or later
 */
 
 #include "Parser.h"

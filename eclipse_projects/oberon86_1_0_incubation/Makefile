@@ -3,7 +3,7 @@ Parser.cpp:
 Scanner.cpp:
 Scanner.h:
 coco:	Coco/Coco
-	Coco/Coco oberon86.atg -namespace Oberon
+	Coco/Coco Oberon.atg -namespace Oberon
 
 oberon86:	clean coco Parser.cpp Scanner.cpp Scanner.h Parser.h
 	g++ -g *.cpp -o oberon86 $(CFLAGS)

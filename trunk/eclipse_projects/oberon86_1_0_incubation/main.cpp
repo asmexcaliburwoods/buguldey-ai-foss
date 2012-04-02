@@ -17,17 +17,24 @@ int main (const int argc, const char *argv[]) {
 	if (argc == 2) {
 		wchar_t *fileName = coco_string_create(argv[1]);
 		Scanner *scanner = new Scanner(fileName);
+		if(scanner==0){wprintf(L"No memory.\n");exit(1);}
 		Parser *parser = new Parser(scanner);
+		if(parser==0){wprintf(L"No memory.\n");exit(1);}
 		//parser->addParserListener(ParserListener)
 		parser->tab = new SymbolTable(parser);
+		if(parser->tab==0){wprintf(L"No memory.\n");exit(1);}
+		ModuleTable *modules = new ModuleTable(parser);
+		if(modules==0){wprintf(L"No memory.\n");exit(1);}
 		parser->gen = new CodeGenerator();
+		if(parser->gen==0){wprintf(L"No memory.\n");exit(1);}
 		wprintf(L"Reading %s...\n",argv[1]);
 		parser->Parse();
 		int errorsCount=parser->errors->count;
 		if (errorsCount == 0) {
-			wprintf(L"Read success!\n");
+			wprintf(L"Read success! Generating code\n");
+			parser->gen->GenerateCodeForModule(*(parser->modulePtr), *(parser->tab));
 			parser->gen->Disassemble(parser);
-			parser->gen->Interpret();
+			//parser->gen->Interpret();
 		}else{
 			wprintf(L"Read failed: %d errors.\n",errorsCount);
 		}

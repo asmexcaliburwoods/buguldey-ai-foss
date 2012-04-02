@@ -19,6 +19,7 @@ class CodeGenerator
 {
 public:
 	// opcodes
+	//static const int
 	int
 	  ADD,  SUB,   MUL,   DIV,   EQU,  LSS, GTR, NEG,
 	  LOAD, LOADG, STO,   STOG,  CONST,
@@ -30,6 +31,7 @@ public:
 	int progStart;		// address of first instruction of main program
 	int pc;				// program counter
 	char *code;
+	int codeSize;
 
 	// data for Interpret
 	int *globals;
@@ -67,7 +69,8 @@ public:
 		opcode[19] = coco_string_create("READ ");
 		opcode[20] = coco_string_create("WRITE");
 
-		code    = new char[3000];
+		codeSize=32*1024;
+		code    = new char[codeSize];
 		globals = new int[100];
 		stack   = new int[100];
 
@@ -102,12 +105,30 @@ public:
 
 	//----- code generation methods -----
 
-	void Emit (int op) {
-		code[pc++] = (char)op;
+	void Emit (char op) {
+		code[pc++] = op;
+		if(pc==codeSize){
+			int newCodeSize=codeSize+32*1024;
+			char *newCode=new char[newCodeSize];
+			if(newCode==0){
+				wprintf(L"No memory.\n");
+				exit(1);
+			}
+			char*cp=code;
+			char*ncp=newCode;
+			int cnt=codeSize;
+			while(cnt-- > 0){
+				*ncp++=*cp++;
+			}
+			char*oldCode=code;
+			code=newCode;
+			codeSize=newCodeSize;
+			delete[] oldCode;
+		}
 	}
 
-	void Emit (int op, int val) {
-		Emit(op); Emit(val>>8); Emit(val);
+	void Emit (char op, short val) {
+		Emit(op); Emit((char)(val>>8)); Emit((char)val);
 	}
 
 	void Patch (int adr, int val) {
@@ -116,7 +137,11 @@ public:
 
 	void Disassemble(Parser* parser);
 
-	//----- interpreter methods -----
+	void GenerateCodeForModule(Oberon::Parser::ModuleRecord &moduleAST, Oberon::SymbolTable &tab);
+	//void WriteObjFile(Oberon::Parser::ModuleRecord &moduleAST);
+
+/*
+  //----- interpreter methods -----
 
 	int Next () {
 		return code[pc++];
@@ -154,7 +179,6 @@ public:
 		}
 		return n * sign;
 	}
-
 	void Interpret () {
 		int val;
 		pc = 0; stack[0] = 0; top = 1; bp = 0;
@@ -210,6 +234,7 @@ public:
 			}
 		}
 	}
+*/
 
 };
 

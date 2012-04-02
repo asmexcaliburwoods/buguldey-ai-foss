@@ -21,3 +21,29 @@ void Oberon::CodeGenerator::Disassemble(Parser* parser) {
 				wprintf(L"\n");
 	}
 }
+
+/*void Oberon::CodeGenerator::WriteObjFile(Oberon::Parser::ModuleRecord &moduleAST){
+	int len=wstrlen(moduleAST.moduleName);
+	wchar_t *objFileName=new wchar_t[4+len+4+1];
+	swprintf(objFileName, L"Obj/%ls.Obj", moduleAST.moduleName);
+	wmkdir(L"Obj");
+	FILE* objFile=wfopen(objFileName, "wb");
+	fwrite(objFile, code, pc);
+	fclose(objFile);
+}*/
+void Oberon::CodeGenerator::GenerateCodeForModule(Oberon::Parser::ModuleRecord &moduleAST, Oberon::SymbolTable &tab){
+	tab.OpenScope();
+	/*
+	  "MODULE" Ident<r.moduleName> ";"
+	  ( 					(. r.importListPtr=0; .)
+	  |						(. r.importListPtr=new ImportListRecord(); abortIfNull(r.importListPtr); .)
+		ImportList<*(r.importListPtr)>
+	  )
+	  DeclSeq<r.declSeq>
+	  ["BEGIN" StatementSeq<r.stmtSeq>]
+	  "END" ident "."
+	 */
+
+	tab.CloseScope();
+	//WriteObjFile(moduleAST);
+}

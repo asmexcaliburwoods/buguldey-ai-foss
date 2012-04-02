@@ -1455,7 +1455,7 @@ Module       = MODULE ident ";" [ImportList] DeclSeq [BEGIN StatementSeq]
                END ident ".".
 */
 Module<ModuleRecord &r>								(. wchar_t *endName; .)
-= 													(. tab->OpenScope(); .)
+= 													
   "MODULE" Ident<r.moduleName> ";"
   ( 					(. r.importListPtr=0; .)
   |						(. r.importListPtr=new ImportListRecord(); abortIfNull(r.importListPtr); .)
@@ -1468,9 +1468,7 @@ Module<ModuleRecord &r>								(. wchar_t *endName; .)
   						  } 
   					   .) 
   "."
-	(. tab->CloseScope(); wprintf(L"MODULE %ls\n",r.moduleName); gen->Emit(JMP, -1); 
-	   /*FILE_TYPE_ptr_address=gen->pc; gen->Emit(MODULE);*/ gen->Emit(0); 
-	.)
+	(. wprintf(L"MODULE %ls\n",r.moduleName); .)
 .
 /*Meyrink			 (. wchar_t* name; .)
 =				 (. InitDeclarations(); .)

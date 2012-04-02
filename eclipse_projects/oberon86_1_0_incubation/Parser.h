@@ -115,6 +115,11 @@ void abortIfNull(void* ptr){
 	typedef wchar_t* stringRecord; 
 	typedef wchar_t* identRec; 
 
+	struct QualidentRecord{
+		identRec leftIdent;
+		identRec rightIdent; /* rightIdent==0 if not specified */
+	};
+
 #define num_int (1)
 #define num_real (2)
 	
@@ -265,9 +270,13 @@ void abortIfNull(void* ptr){
 		IdentDefRecord identDef;
 		IdentListRecord* nullOrCommaIdentList;
 	};
+	struct IdentList2Record{
+		identRec ident_;
+		IdentList2Record* nullOrCommaIdentList;
+	};
 
 	struct StatementRecord{
-		virtual int getStatementType()=0; 
+		virtual int getStatementTypeNumber()=0; 
 	};
 
 	struct StatementSeqRecord{
@@ -325,9 +334,20 @@ void abortIfNull(void* ptr){
 		ReceiverRecord receiver;
 	};
 
-	struct FormalParsRecord{
+	struct FPSectionRecord{
+		bool var;
+		IdentList2Record identList;
+		TypeRecord *typePtr;
 	};
-	
+	struct FPSectionsListMandatoryRecord{
+		FPSectionRecord fpSection;
+		FPSectionsListMandatoryRecord *next;
+	};
+	struct FormalParsRecord{
+		FPSectionsListMandatoryRecord *optionalFPSectionsListPtr;
+		QualidentRecord *optionalQualidentPtr;
+	}; 
+
 	struct OptionalFormalParsRecord{
 		bool formalParsSpecified;
 		FormalParsRecord formalPars;
@@ -343,6 +363,11 @@ void abortIfNull(void* ptr){
 		bool fieldsPresent;
 		IdentListRecord identList;
 		TypeRecord *typePtr;
+	};
+
+	struct MandatoryFieldsListRecord{
+		FieldListRecord recordFieldsList;
+		MandatoryFieldsListRecord *next;
 	};
 
 	struct DeclSeqConstDeclListMandatoryRecord{
@@ -416,6 +441,147 @@ void abortIfNull(void* ptr){
 		DeclSeqProcDeclFwdDeclListRecord pflist;
 	};
 
+	static const int 
+		 type_number_Qualident=1
+		,type_number_ARRAY=2
+		,type_number_RECORD=3
+		,type_number_POINTER=4
+		,type_number_PROCEDURE=5
+		;
+	
+	struct TypeQualident: public TypeRecord{
+		int getTypeNumber(){return type_number_Qualident;}
+		QualidentRecord qualident;
+	}; 
+	struct TypeArrayConstExprListMandatoryRecord{
+		ConstExprRecord dimensionConstExpr;
+		TypeArrayConstExprListMandatoryRecord *next;
+	};
+	struct TypeARRAY: public TypeRecord{
+		int getTypeNumber(){return type_number_ARRAY;}
+		TypeArrayConstExprListMandatoryRecord *dimensionsConstExprsListPtr;
+		TypeRecord *arrayElementTypePtr;
+	}; 
+	struct TypeRECORD: public TypeRecord{
+		int getTypeNumber(){return type_number_RECORD;}
+		QualidentRecord *optionalQualidentPtr;
+		MandatoryFieldsListRecord fieldsList;
+	}; 
+	struct TypePOINTER: public TypeRecord{
+		int getTypeNumber(){return type_number_POINTER;}
+		TypeRecord *pointedTypePtr;
+	}; 
+	struct TypePROCEDURE: public TypeRecord{
+		int getTypeNumber(){return type_number_PROCEDURE;}
+		FormalParsRecord *optionalFormalParsPtr;
+	}; 
+
+	static const int
+		 stmtTypeNumber_EmptyStmt=0
+		,stmtTypeNumber_EXPR_OR_ASSIGN=1
+		,stmtTypeNumber_IF=2
+		,stmtTypeNumber_CASE=3
+		,stmtTypeNumber_WHILE=4
+		,stmtTypeNumber_REPEAT=5
+		,stmtTypeNumber_FOR=6
+		,stmtTypeNumber_LOOP=7
+		,stmtTypeNumber_WITH=8
+		,stmtTypeNumber_EXIT=9
+		,stmtTypeNumber_RETURN=10
+		;
+	struct Stmt_EmptyStmt:public StatementRecord{
+	  virtual int getStatementTypeNumber(){return stmtTypeNumber_EmptyStmt;} 
+	};
+	struct Stmt_EXPR_OR_ASSIGN:public StatementRecord{
+	  	virtual int getStatementTypeNumber(){return stmtTypeNumber_EXPR_OR_ASSIGN;} 
+	  	ExprRecord lhsExpr;
+	  	bool assignment;
+	  	ExprRecord rhsExpr; 
+	};
+	struct MandatoryELSIFsListRecord{
+		ExprRecord expr;
+		StatementSeqRecord thenStmtSeq; 
+		MandatoryELSIFsListRecord *optionalElsifsListPtr;
+	};
+	struct Stmt_IF:public StatementRecord{
+	 	virtual int getStatementTypeNumber(){return stmtTypeNumber_IF;} 
+	    ExprRecord expr;
+		StatementSeqRecord thenStmtSeq;
+		MandatoryELSIFsListRecord *optionalElsifsListPtr;
+	    StatementSeqRecord *optionalElsePtr;
+	};
+	struct CaseLabelsRecord{
+		ConstExprRecord constExpr1; 
+		bool secondConstExprPresent;
+		ConstExprRecord constExpr2;
+	};
+	struct CaseLabelsListsRecord{
+		CaseLabelsRecord caseLabelsNth;
+		CaseLabelsListsRecord *optionalFurtherCaseLabelsListsPtr;
+	};
+	struct CaseRecord{
+		bool emptyCase;
+		CaseLabelsListsRecord caseLabelsLists;
+		StatementSeqRecord stmtSeq;
+	};
+	struct CasesRecord{
+		CaseRecord caseNth;
+		CasesRecord *optionalOtherCasesPtr;
+	};
+	struct Stmt_CASE:public StatementRecord{
+	  	virtual int getStatementTypeNumber(){return stmtTypeNumber_CASE;} 
+		ExprRecord expr;
+		CaseRecord caseFirst;
+		CasesRecord *optionalOtherCasesPtr;
+		StatementSeqRecord *optionalElsePtr;
+	};
+	struct Stmt_WHILE:public StatementRecord{
+		virtual int getStatementTypeNumber(){return stmtTypeNumber_WHILE;} 
+	    ExprRecord expr;
+	    StatementSeqRecord whileBodyStatementSeq;
+	};
+	struct Stmt_REPEAT:public StatementRecord{
+		virtual int getStatementTypeNumber(){return stmtTypeNumber_REPEAT;} 
+	    StatementSeqRecord repeatBodyStatementSeq;
+	    ExprRecord expr;
+	};
+	struct Stmt_FOR:public StatementRecord{
+	  virtual int getStatementTypeNumber(){return stmtTypeNumber_FOR;} 
+	  identRec forCounterVariableName;
+	  ExprRecord forCounterVariableInitialValueExpr;
+	  ExprRecord forCounterVariableToValueExpr;
+	  bool bySpecified;
+	  ConstExprRecord byValueConstExpr; 
+	  StatementSeqRecord forStatementSeq; 
+	};
+	struct Stmt_LOOP:public StatementRecord{
+		virtual int getStatementTypeNumber(){return stmtTypeNumber_LOOP;} 
+	    StatementSeqRecord loopStatementSeq;
+	};
+	struct GuardRecord{
+		QualidentRecord qualident1, qualident2;
+	};
+	struct FurtherWithClausesRecord{
+		GuardRecord guard; 
+		StatementSeqRecord statementSeq;
+		FurtherWithClausesRecord *next;
+	};
+	struct Stmt_WITH:public StatementRecord{
+		virtual int getStatementTypeNumber(){return stmtTypeNumber_WITH;} 
+	    GuardRecord firstGuard;
+	    StatementSeqRecord firstStatementSeq;
+		FurtherWithClausesRecord *optionalFurtherWithClausesPtr;
+		StatementSeqRecord *optionalElsePtr;
+	};
+	struct Stmt_EXIT:public StatementRecord{
+		virtual int getStatementTypeNumber(){return stmtTypeNumber_EXIT;} 
+	};
+	struct Stmt_RETURN:public StatementRecord{
+		virtual int getStatementTypeNumber(){return stmtTypeNumber_RETURN;} 
+		bool exprPresent;
+		ExprRecord expr;
+	};
+
 	struct ModuleRecord{
 		wchar_t* moduleName;
 		ImportListRecord *importListPtr;
@@ -484,13 +650,21 @@ void abortIfNull(void* ptr){
 	void OptionalFormalPars(OptionalFormalParsRecord &r);
 	void FormalPars(FormalParsRecord &r);
 	void StatementSeq(StatementSeqRecord &r);
-	void FPSection();
-	void Qualident();
+	void FPSectionsListMandatory(FPSectionsListMandatoryRecord &r);
+	void FPSection(FPSectionRecord &r);
+	void Qualident(QualidentRecord &r);
+	void IdentList2(IdentList2Record &r);
+	void TypeArrayConstExprListMandatory(TypeArrayConstExprListMandatoryRecord &r);
+	void TypeArray(TypeARRAY &r);
+	void MandatoryFieldsList(MandatoryFieldsListRecord &r);
 	void FieldList(FieldListRecord &r);
+	void TypeRecord_(TypeRECORD &r);
+	void TypeProcedure(TypePROCEDURE &r);
 	void Statement(StatementRecord*&ptrToStmtRecord);
-	void Case();
-	void CaseLabels();
-	void Guard();
+	void CaseLabelsLists(CaseLabelsListsRecord &r);
+	void CaseLabels(CaseLabelsRecord &r);
+	void Case(CaseRecord &r);
+	void Guard(GuardRecord &r);
 	void SimpleExprAddOpClause(SimpleExprAddOpRecord &r);
 	void Term(TermRecord &t);
 	void TermMulOpClause(TermMulOpRecord &r);
@@ -505,6 +679,9 @@ void abortIfNull(void* ptr){
 	void QualidentOrOptionalExprList(QualidentOrOptionalExprListRecord &r);
 	void ElementRangeList(SetRecord &r);
 	void Element(ElementRangeRecord &r);
+	void MandatoryELSIFsList(MandatoryELSIFsListRecord &r);
+	void Cases(CasesRecord &r);
+	void FurtherWithClauses(FurtherWithClausesRecord &r);
 	void Module(ModuleRecord &r);
 	void Integer(wchar_t* &tok);
 	void Real(wchar_t* &tok);

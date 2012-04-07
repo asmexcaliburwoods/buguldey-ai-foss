@@ -4,7 +4,7 @@ MAKE=$(MAKE_$(OS))
 os:
 
 Coco/Coco:	os
-	cd Coco && $(MAKE) all && cd ..
+	#cd Coco && $(MAKE) all && cd ..
 	
 Parser.h:
 Parser.cpp:

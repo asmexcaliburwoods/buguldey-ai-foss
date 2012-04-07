@@ -13,7 +13,7 @@ class Parser;
 class Errors;
 
 struct Module {  // object describing a declared name
-	Parser::ModuleRecord *moduleAST;
+	Parser *moduleAST;
 	Module *next; // to next object in same scope //TODO reimplement as HashTable<wchar_t*,ModuleRecord*> name2moduleAST.
 };
 
@@ -22,10 +22,10 @@ struct ModuleTable
 	Errors *errors;
 	Module *topScope;
 
-	ModuleTable(Parser *parser);
+	ModuleTable(Errors* errors);
 	void Err(const wchar_t* msg);
-	Module* NewModule(Parser::ModuleRecord &moduleAST);
-	Parser::ModuleRecord* Find (wchar_t* name);
+	Module* NewModule(Parser &moduleAST);
+	Parser* Find (const wchar_t* const name);
 };
 
 }; // namespace

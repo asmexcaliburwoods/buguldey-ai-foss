@@ -5,11 +5,11 @@ Distributed under the terms of GNU General Public License, v.3 or later
 */
 
 #include "stdio.h"
-#include "SymbolTable.h"
 #include "Parser.h"
 #include "Scanner.h"
 #include <sys/timeb.h>
 #include <wchar.h>
+#include "Interpreter.h"
 
 using namespace Oberon;
 
@@ -21,32 +21,28 @@ int main (const int argc, const char *argv[]) {
 		Parser *parser = new Parser(scanner);
 		if(parser==0){wprintf(L"No memory.\n");exit(1);}
 		//parser->addParserListener(ParserListener)
-		parser->tab = new SymbolTable(parser);
-		if(parser->tab==0){wprintf(L"No memory.\n");exit(1);}
-		ModuleTable *modules = new ModuleTable(parser);
+		ModuleTable *modules = new ModuleTable(parser->errors);
 		if(modules==0){wprintf(L"No memory.\n");exit(1);}
-		parser->gen = new CodeGenerator();
-		if(parser->gen==0){wprintf(L"No memory.\n");exit(1);}
-		wprintf(L"Reading %s...\n",argv[1]);
+		parser->modules=modules;
+		Interpreter* interpreter = new Interpreter();
+		if(interpreter==0){wprintf(L"No memory.\n");exit(1);}
 		parser->Parse();
 		int errorsCount=parser->errors->count;
 		if (errorsCount == 0) {
-			wprintf(L"Read success! Generating code\n");
-			parser->gen->GenerateCodeForModule(*(parser->modulePtr), *(parser->tab));
-			parser->gen->Disassemble(parser);
-			//parser->gen->Interpret();
+			wprintf(L"Read success! Interpreting...\n");
+			interpreter->interpret(*parser);
 		}else{
 			wprintf(L"Read failed: %d errors.\n",errorsCount);
 		}
 
 		coco_string_delete(fileName);
-		delete parser->gen;
-		delete parser->tab;
+		delete interpreter;
+		delete modules;
 		delete parser;
 		delete scanner;
 		if (errorsCount != 0) return 2;
 	} else {
-		wprintf(L"No source file name specified.\n");
+		wprintf(L"No file name specified.\n");
 		return 1;
 	}
 

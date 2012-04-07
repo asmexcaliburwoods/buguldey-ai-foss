@@ -692,6 +692,7 @@ Scanner::Scanner(const unsigned char* buf, int len) {
 }
 
 Scanner::Scanner(const wchar_t* fileName) {
+	wprintf(L"Reading source file '%ls'... ", fileName);
 	FILE* stream;
 	char *chFileName = coco_string_create_char(fileName);
 	if ((stream = fopen(chFileName, "rb")) == NULL) {

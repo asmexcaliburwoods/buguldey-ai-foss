@@ -33,10 +33,9 @@ Coco/R itself) does not fall under the GNU General Public License.
 #if !defined(Oberon_COCO_PARSER_H)
 #define Oberon_COCO_PARSER_H
 
-namespace Oberon {class CodeGenerator;}
-#include "SymbolTable.h"
-#include "CodeGenerator.h"
 #include "wchar.h"
+#include "ModuleTable.h"
+#include "checks.h"
 
 #include "Scanner.h"
 
@@ -89,27 +88,11 @@ public:
 	Token *t;			// last recognized token
 	Token *la;			// lookahead token
 
-void abortIfNull(void* ptr){
-		if(ptr==0){
-			wprintf(L"No memory.\n"); 
-			exit(2);
-		}
-	}
-
-	typedef bool boolean;
+typedef bool boolean;
 
 	static const int // operators
 	  illegal_operator=1, plus=2, minus=3, times=4, slash=5, equals=6, less=7, greater=8,
 	  orOperation=9, notEquals=10, lessOrEqual=11, greaterOrEqual=12, in=13, is=14, divOp=15, modOp=16, ampersand=17;
-
-	static const int // object kinds
-	  var=1, proc=2;
-
-	static const int // opcodes
-	  ADD=0,  SUB=1,  MUL=2,  DIV=3,   EQU=4,  LSS=5, GTR=6, NEG=7,
-	  LOAD=8, LOADG=9, STO=10,   STOG=11,  CONST=12,
-	  CALL=13, RET=14,   ENTER=15, LEAVE=16,
-	  JMP=17,  FJMP=18,  READ=19,  WRITE=20;
 
 	typedef wchar_t* characterRecord; 
 	typedef wchar_t* stringRecord; 
@@ -277,6 +260,7 @@ void abortIfNull(void* ptr){
 
 	struct StatementRecord{
 		virtual int getStatementTypeNumber()=0; 
+		void interpret(){wprintf(L"NOT IMPL: StatementRecord::interpret()\n");}
 	};
 
 	struct StatementSeqRecord{
@@ -586,7 +570,9 @@ void abortIfNull(void* ptr){
 		wchar_t* moduleName;
 		ImportListRecord *importListPtr;
 		DeclSeqRecord declSeq;
-		StatementSeqRecord stmtSeq;
+		StatementSeqRecord *stmtSeqPtr;
+		
+		void addImportedModuleAlias(const wchar_t* const moduleAlias, Parser *parser);
 	};
 
 
@@ -594,8 +580,7 @@ void abortIfNull(void* ptr){
 
 
 	ModuleRecord *modulePtr;
-	SymbolTable   *tab;
-	CodeGenerator *gen;
+	ModuleTable *modules;
 
 	void Err(const wchar_t* msg) {
 		errors->Error(la->line, la->col, msg);

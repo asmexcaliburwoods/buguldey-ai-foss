@@ -38,7 +38,6 @@ Parser.h Specification
 #if !defined(-->prefixCOCO_PARSER_H)
 #define -->prefixCOCO_PARSER_H
 
-namespace Oberon {class CodeGenerator;}
 -->headerdef
 #include "Scanner.h"
 
@@ -329,6 +328,10 @@ void Errors::Warning(const wchar_t *s) {
 void Errors::Exception(const wchar_t* s) {
 	wprintf(L"%ls", s); 
 	exit(1);
+}
+
+void Parser::ModuleRecord::addImportedModuleAlias(const wchar_t* const moduleAlias, Parser *parser){
+    wprintf(L"NOT IMPL: Parser::ModuleRecord::addImportedModuleAlias, moduleAlias=%ls, module=%ls\n",moduleAlias, parser->modulePtr->moduleName);
 }
 
 -->namespace_close

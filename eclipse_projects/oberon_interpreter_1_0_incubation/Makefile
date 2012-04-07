@@ -5,13 +5,13 @@ Scanner.h:
 coco:	Coco/Coco
 	Coco/Coco Oberon.atg -namespace Oberon
 
-oberon86:	clean coco Parser.cpp Scanner.cpp Scanner.h Parser.h
-	g++ -g *.cpp -o oberon86 $(CFLAGS)
+oberonInterpret:	clean coco Parser.cpp Scanner.cpp Scanner.h Parser.h
+	g++ -g *.cpp -o oberon_interpret $(CFLAGS)
 	
-all:	oberon86
+all:	oberonInterpret
 
-wakeOberon:	oberon86
-	./oberon86 test.Mod 
+wakeOberon:	oberonInterpret
+	./oberon_interpret test.Mod 
 	
 clean:
 	rm -f b oberon86 Parser.cpp Parser.cpp.old Parser.h Parser.h.old Scanner.h Scanner.h.old Scanner.cpp Scanner.cpp.old

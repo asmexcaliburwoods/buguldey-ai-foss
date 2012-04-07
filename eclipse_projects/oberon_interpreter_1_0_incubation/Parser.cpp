@@ -1097,7 +1097,6 @@ void Parser::FurtherWithClauses(FurtherWithClausesRecord &r) {
 
 void Parser::Module(ModuleRecord &r) {
 		wchar_t *endName; 
-		tab->OpenScope(); 
 		Expect(66 /* "MODULE" */);
 		Ident(r.moduleName);
 		Expect(26 /* ";" */);
@@ -1108,10 +1107,13 @@ void Parser::Module(ModuleRecord &r) {
 			ImportList(*(r.importListPtr));
 		} else SynErr(138);
 		DeclSeq(r.declSeq);
-		if (la->kind == 32 /* "BEGIN" */) {
+		if (la->kind == 33 /* "END" */) {
+			r.stmtSeqPtr = 0; 
+		} else if (la->kind == 32 /* "BEGIN" */) {
+			r.stmtSeqPtr=new StatementSeqRecord(); abortIfNull(r.stmtSeqPtr); 
 			Get();
-			StatementSeq(r.stmtSeq);
-		}
+			StatementSeq(*r.stmtSeqPtr);
+		} else SynErr(139);
 		Expect(33 /* "END" */);
 		Ident(endName);
 		if(!coco_string_equal(endName, r.moduleName)){
@@ -1119,9 +1121,7 @@ void Parser::Module(ModuleRecord &r) {
 		} 
 		
 		Expect(45 /* "." */);
-		tab->CloseScope(); wprintf(L"MODULE %ls\n",r.moduleName); gen->Emit(JMP, -1); 
-		/*FILE_TYPE_ptr_address=gen->pc; gen->Emit(MODULE);*/ gen->Emit(0); 
-		
+		wprintf(L"MODULE '%ls' read success.\n",r.moduleName); 
 }
 
 void Parser::Integer(wchar_t* &tok) {
@@ -1432,6 +1432,7 @@ void Errors::SynErr(int line, int col, int n) {
 			case 136: s = coco_string_create(L"invalid Cases"); break;
 			case 137: s = coco_string_create(L"invalid FurtherWithClauses"); break;
 			case 138: s = coco_string_create(L"invalid Module"); break;
+			case 139: s = coco_string_create(L"invalid Module"); break;
 
 		default:
 		{
@@ -1462,6 +1463,10 @@ void Errors::Warning(const wchar_t *s) {
 void Errors::Exception(const wchar_t* s) {
 	wprintf(L"%ls", s); 
 	exit(1);
+}
+
+void Parser::ModuleRecord::addImportedModuleAlias(const wchar_t* const moduleAlias, Parser *parser){
+    wprintf(L"NOT IMPL: Parser::ModuleRecord::addImportedModuleAlias, moduleAlias=%ls, module=%ls\n",moduleAlias, parser->modulePtr->moduleName);
 }
 
 } // namespace

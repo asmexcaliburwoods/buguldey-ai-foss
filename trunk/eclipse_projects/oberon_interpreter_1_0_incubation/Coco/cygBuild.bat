@@ -1,1 +1,1 @@
-g++ *.cpp -o Coco.exe
+g++ *.cpp -Ic:/cygwin/usr/include -o Coco.exe

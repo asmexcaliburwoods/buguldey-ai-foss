@@ -15,7 +15,7 @@ gpp:
 	@echo done.
 	
 clean:
-	rm -f Coco
+	rm -f Coco Coco.exe
 
 install:
 	ln -s /usr/lib/coco-cpp/Coco $(DESTDIR)/usr/bin/cococpp

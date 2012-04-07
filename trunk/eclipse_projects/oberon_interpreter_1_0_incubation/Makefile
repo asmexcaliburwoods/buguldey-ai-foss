@@ -1,3 +1,11 @@
+MAKE_Windows_NT=c:/cygwin/bin/make.exe
+MAKE=$(MAKE_$(OS))
+	
+os:
+
+Coco/Coco:	os
+	cd Coco && $(MAKE) all && cd ..
+	
 Parser.h:
 Parser.cpp:
 Scanner.cpp:
@@ -13,6 +21,7 @@ all:	oberonInterpret
 wakeOberon:	oberonInterpret
 	./oberon_interpret test.Mod 
 	
-clean:
-	rm -f b oberon86 Parser.cpp Parser.cpp.old Parser.h Parser.h.old Scanner.h Scanner.h.old Scanner.cpp Scanner.cpp.old
+clean:	os
+	#cd Coco && $(MAKE) clean && cd ..
+	rm -f b oberon_interpret oberon_interpret.exe Parser.cpp Parser.cpp.old Parser.h Parser.h.old Scanner.h Scanner.h.old Scanner.cpp Scanner.cpp.old
 

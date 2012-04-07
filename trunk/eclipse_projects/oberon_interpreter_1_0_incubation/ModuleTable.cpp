@@ -5,11 +5,13 @@ Distributed under the terms of GNU General Public License, v.3 or later
 */
 #include "ModuleTable.h"
 #include "Parser.h"
+#include "stdio.h"
+#include "checks.h"
 
 namespace Oberon {
 
-ModuleTable::ModuleTable(Parser *parser) {
-	errors = parser->errors;
+ModuleTable::ModuleTable(Errors* errors) {
+	this->errors = errors;
 	topScope=0;
 }
 
@@ -17,25 +19,24 @@ void ModuleTable::Err(const wchar_t* msg) {
 	errors->Error(0, 0, msg);
 }
 
-ModuleTable::Module* ModuleTable::NewModule(Parser::ModuleRecord &moduleAST) {
+#define wstrlen(a) wcslen(a)
+#define wsprintf swprintf
+
+Module* ModuleTable::NewModule(Parser &moduleAST) {
 	Module *p = topScope; Module *last = 0;
 	while (p != 0) {
-		if (coco_string_equal(p->moduleAST->moduleName, moduleAST.moduleName)){
+		if (coco_string_equal(p->moduleAST->modulePtr->moduleName, moduleAST.modulePtr->moduleName)){
 			const wchar_t *fmt=L"name declared twice: %ls";
-			int len=wstrlen(fmt)-3+wstrlen(moduleAST.moduleName)+1;
-			wchar_t *msg=new wchar_t[len];
-			wsprintf(msg, fmt, moduleAST.moduleName);
+			size_t len=wstrlen(fmt)-3+wstrlen(moduleAST.modulePtr->moduleName)+1;
+			wchar_t *msg=new wchar_t[len];abortIfNull(msg);
+			(void)wsprintf(msg, len, fmt, moduleAST.modulePtr->moduleName);
 			Err(msg);
 			delete[] msg;
 			return 0;
 		}
 		last = p; p = p->next;
 	}
-	Module *obj = new Module();
-	if(obj==0){
-		wprintf(L"No memory.\n");
-		exit(1);
-	}
+	Module *obj = new Module();abortIfNull(obj);
 	obj->moduleAST=&moduleAST;
 	obj->next=0;
 	if (last == 0){last=topScope=obj;}
@@ -45,10 +46,10 @@ ModuleTable::Module* ModuleTable::NewModule(Parser::ModuleRecord &moduleAST) {
 
 
 // search the name in all open scopes and return its object node
-ModuleTable::Module* ModuleTable::Find (wchar_t* name) {
+Parser* ModuleTable::Find (const wchar_t* const name) {
 	Module *obj=topScope;
 	while (obj != 0) {  // for all objects in this scope
-		if (coco_string_equal(obj->moduleAST->moduleName, name)) return obj;
+		if (coco_string_equal(obj->moduleAST->modulePtr->moduleName, name)) return obj->moduleAST;
 		obj = obj->next;
 	}
 	return 0;

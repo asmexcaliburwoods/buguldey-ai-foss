@@ -260,7 +260,7 @@ typedef bool boolean;
 
 	struct StatementRecord{
 		virtual int getStatementTypeNumber()=0; 
-		void interpret(){wprintf(L"NOT IMPL: StatementRecord::interpret()\n");}
+		virtual void interpret()=0;
 	};
 
 	struct StatementSeqRecord{
@@ -474,13 +474,15 @@ typedef bool boolean;
 		,stmtTypeNumber_RETURN=10
 		;
 	struct Stmt_EmptyStmt:public StatementRecord{
-	  virtual int getStatementTypeNumber(){return stmtTypeNumber_EmptyStmt;} 
+	  virtual int getStatementTypeNumber(){return stmtTypeNumber_EmptyStmt;}
+	  virtual void interpret(){} 
 	};
 	struct Stmt_EXPR_OR_ASSIGN:public StatementRecord{
 	  	virtual int getStatementTypeNumber(){return stmtTypeNumber_EXPR_OR_ASSIGN;} 
 	  	ExprRecord lhsExpr;
 	  	bool assignment;
 	  	ExprRecord rhsExpr; 
+	    virtual void interpret(){wprintf(L"NOT IMPL: Stmt_EXPR_OR_ASSIGN::interpret()\n");} 
 	};
 	struct MandatoryELSIFsListRecord{
 		ExprRecord expr;
@@ -493,6 +495,7 @@ typedef bool boolean;
 		StatementSeqRecord thenStmtSeq;
 		MandatoryELSIFsListRecord *optionalElsifsListPtr;
 	    StatementSeqRecord *optionalElsePtr;
+	    virtual void interpret(){wprintf(L"NOT IMPL: Stmt_IF::interpret()\n");} 
 	};
 	struct CaseLabelsRecord{
 		ConstExprRecord constExpr1; 
@@ -518,16 +521,19 @@ typedef bool boolean;
 		CaseRecord caseFirst;
 		CasesRecord *optionalOtherCasesPtr;
 		StatementSeqRecord *optionalElsePtr;
+	    virtual void interpret(){wprintf(L"NOT IMPL: Stmt_CASE::interpret()\n");} 
 	};
 	struct Stmt_WHILE:public StatementRecord{
 		virtual int getStatementTypeNumber(){return stmtTypeNumber_WHILE;} 
 	    ExprRecord expr;
 	    StatementSeqRecord whileBodyStatementSeq;
+	    virtual void interpret(){wprintf(L"NOT IMPL: Stmt_WHILE::interpret()\n");} 
 	};
 	struct Stmt_REPEAT:public StatementRecord{
 		virtual int getStatementTypeNumber(){return stmtTypeNumber_REPEAT;} 
 	    StatementSeqRecord repeatBodyStatementSeq;
 	    ExprRecord expr;
+	    virtual void interpret(){wprintf(L"NOT IMPL: Stmt_RPT::interpret()\n");} 
 	};
 	struct Stmt_FOR:public StatementRecord{
 	  virtual int getStatementTypeNumber(){return stmtTypeNumber_FOR;} 
@@ -537,10 +543,12 @@ typedef bool boolean;
 	  bool bySpecified;
 	  ConstExprRecord byValueConstExpr; 
 	  StatementSeqRecord forStatementSeq; 
+	  virtual void interpret(){wprintf(L"NOT IMPL: Stmt_FOR::interpret()\n");} 
 	};
 	struct Stmt_LOOP:public StatementRecord{
 		virtual int getStatementTypeNumber(){return stmtTypeNumber_LOOP;} 
 	    StatementSeqRecord loopStatementSeq;
+	    virtual void interpret(){wprintf(L"NOT IMPL: Stmt_LOOP::interpret()\n");} 
 	};
 	struct GuardRecord{
 		QualidentRecord qualident1, qualident2;
@@ -556,14 +564,17 @@ typedef bool boolean;
 	    StatementSeqRecord firstStatementSeq;
 		FurtherWithClausesRecord *optionalFurtherWithClausesPtr;
 		StatementSeqRecord *optionalElsePtr;
+	    virtual void interpret(){wprintf(L"NOT IMPL: Stmt_WITH::interpret()\n");} 
 	};
 	struct Stmt_EXIT:public StatementRecord{
 		virtual int getStatementTypeNumber(){return stmtTypeNumber_EXIT;} 
+	    virtual void interpret(){wprintf(L"NOT IMPL: Stmt_EXIT::interpret()\n");} 
 	};
 	struct Stmt_RETURN:public StatementRecord{
 		virtual int getStatementTypeNumber(){return stmtTypeNumber_RETURN;} 
 		bool exprPresent;
 		ExprRecord expr;
+	    virtual void interpret(){wprintf(L"NOT IMPL: Stmt_RETURN::interpret()\n");} 
 	};
 
 	struct ModuleRecord{

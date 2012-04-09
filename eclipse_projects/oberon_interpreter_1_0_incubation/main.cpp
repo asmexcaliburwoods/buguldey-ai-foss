@@ -42,7 +42,7 @@ int main (const int argc, const char *argv[]) {
 		delete scanner;
 		if (errorsCount != 0) return 2;
 	} else {
-		wprintf(L"No file name specified.\n");
+		wprintf(L"No file name specified or extra parameters.\n");
 		return 1;
 	}
 

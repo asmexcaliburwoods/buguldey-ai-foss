@@ -278,6 +278,12 @@ void Parser::DeclSeqConstDeclListMandatory(DeclSeqConstDeclListMandatoryRecord &
 
 void Parser::ConstDecl(ConstDeclRecord &r) {
 		IdentDef(r.identDef);
+		if (la->kind == 7 /* "=" */) {
+			r.typePtr=0; 
+		} else if (la->kind == 31 /* ":" */) {
+			Get();
+			Type(r.typePtr);
+		} else SynErr(78);
 		Expect(7 /* "=" */);
 		ConstExpr(r.expr);
 }
@@ -288,7 +294,7 @@ void Parser::DeclSeqConstDeclList(DeclSeqConstDeclListRecord &r) {
 		} else if (la->kind == _ident) {
 			r.specified=true; 
 			DeclSeqConstDeclListMandatory(r.constDecls);
-		} else SynErr(78);
+		} else SynErr(79);
 }
 
 void Parser::DeclSeqTypeDeclListMandatory(DeclSeqTypeDeclListMandatoryRecord &r) {
@@ -301,7 +307,7 @@ void Parser::DeclSeqTypeDeclListMandatory(DeclSeqTypeDeclListMandatoryRecord &r)
 			abortIfNull(r.nullOrPtrToNextDeclSeqTypeDeclListMandatory);
 			
 			DeclSeqTypeDeclListMandatory(*(r.nullOrPtrToNextDeclSeqTypeDeclListMandatory));
-		} else SynErr(79);
+		} else SynErr(80);
 }
 
 void Parser::TypeDecl(TypeDeclRecord &r) {
@@ -316,7 +322,7 @@ void Parser::DeclSeqTypeDeclList(DeclSeqTypeDeclListRecord &r) {
 		} else if (la->kind == _ident) {
 			r.specified=true; 
 			DeclSeqTypeDeclListMandatory(r.typeDecls);
-		} else SynErr(80);
+		} else SynErr(81);
 }
 
 void Parser::DeclSeqVarDeclListMandatory(DeclSeqVarDeclListMandatoryRecord &r) {
@@ -329,7 +335,7 @@ void Parser::DeclSeqVarDeclListMandatory(DeclSeqVarDeclListMandatoryRecord &r) {
 			abortIfNull(r.nullOrPtrToNextDeclSeqVarDeclListMandatory);
 			
 			DeclSeqVarDeclListMandatory(*(r.nullOrPtrToNextDeclSeqVarDeclListMandatory));
-		} else SynErr(81);
+		} else SynErr(82);
 }
 
 void Parser::VarDecl(VarDeclRecord &r) {
@@ -344,7 +350,7 @@ void Parser::DeclSeqVarDeclList(DeclSeqVarDeclListRecord &r) {
 		} else if (la->kind == _ident) {
 			r.specified=true; 
 			DeclSeqVarDeclListMandatory(r.varDecls);
-		} else SynErr(82);
+		} else SynErr(83);
 }
 
 void Parser::DeclSeqConstTypeVarListMandatory(DeclSeqConstTypeVarListMandatoryRecord &r) {
@@ -360,13 +366,13 @@ void Parser::DeclSeqConstTypeVarListMandatory(DeclSeqConstTypeVarListMandatoryRe
 			Get();
 			DeclSeqVarDeclList(r.varDeclList);
 			r.decl_variant=decl_var; 
-		} else SynErr(83);
+		} else SynErr(84);
 		if (la->kind == 30 /* "PROCEDURE" */ || la->kind == 32 /* "BEGIN" */ || la->kind == 33 /* "END" */) {
 			r.next=0; 
 		} else if (la->kind == 27 /* "CONST" */ || la->kind == 28 /* "TYPE" */ || la->kind == 29 /* "VAR" */) {
 			r.next=new DeclSeqConstTypeVarListMandatoryRecord(); abortIfNull(r.next); 
 			DeclSeqConstTypeVarListMandatory(*(r.next));
-		} else SynErr(84);
+		} else SynErr(85);
 }
 
 void Parser::DeclSeqConstTypeVarList(DeclSeqConstTypeVarListRecord &r) {
@@ -375,7 +381,7 @@ void Parser::DeclSeqConstTypeVarList(DeclSeqConstTypeVarListRecord &r) {
 		} else if (la->kind == 27 /* "CONST" */ || la->kind == 28 /* "TYPE" */ || la->kind == 29 /* "VAR" */) {
 			r.specified=true; 
 			DeclSeqConstTypeVarListMandatory(r.constTypeVarList);
-		} else SynErr(85);
+		} else SynErr(86);
 }
 
 void Parser::DeclSeqProcDeclFwdDeclListMandatory(DeclSeqProcDeclFwdDeclListMandatoryRecord &r) {
@@ -386,14 +392,14 @@ void Parser::DeclSeqProcDeclFwdDeclListMandatory(DeclSeqProcDeclFwdDeclListManda
 		} else if (la->kind == 34 /* "^" */) {
 			ForwardDecl(r.fwdDecl);
 			r.decl_variant=decl_fwd; 
-		} else SynErr(86);
+		} else SynErr(87);
 		Expect(26 /* ";" */);
 		if (la->kind == 32 /* "BEGIN" */ || la->kind == 33 /* "END" */) {
 			r.next=0; 
 		} else if (la->kind == 30 /* "PROCEDURE" */) {
 			r.next=new DeclSeqProcDeclFwdDeclListMandatoryRecord(); abortIfNull(r.next); 
 			DeclSeqProcDeclFwdDeclListMandatory(*(r.next));
-		} else SynErr(87);
+		} else SynErr(88);
 }
 
 void Parser::ProcDecl(ProcDeclRecord &r) {
@@ -410,7 +416,7 @@ void Parser::ProcDecl(ProcDeclRecord &r) {
 			r.procBodySpecifiedHere=true; 
 			Get();
 			StatementSeq(r.procBodyStmtSeq);
-		} else SynErr(88);
+		} else SynErr(89);
 		Expect(33 /* "END" */);
 		Ident(endName);
 		if(!coco_string_equal(endName, r.identDef.ident_)){
@@ -432,7 +438,7 @@ void Parser::DeclSeqProcDeclFwdDeclList(DeclSeqProcDeclFwdDeclListRecord &r) {
 		} else if (la->kind == 30 /* "PROCEDURE" */) {
 			r.specified=true; 
 			DeclSeqProcDeclFwdDeclListMandatory(r.procDeclFwdDeclList);
-		} else SynErr(89);
+		} else SynErr(90);
 }
 
 void Parser::DeclSeq(DeclSeqRecord &r) {
@@ -450,7 +456,7 @@ void Parser::IdentDef(IdentDefRecord &r) {
 		} else if (la->kind == 16 /* "-" */) {
 			Get();
 			r.modifier=modifier_minus; 
-		} else SynErr(90);
+		} else SynErr(91);
 }
 
 void Parser::Type(TypeRecord *&ptrToTypeRecord) {
@@ -476,7 +482,7 @@ void Parser::Type(TypeRecord *&ptrToTypeRecord) {
 			ptrToTypeRecord=ptproc=new TypePROCEDURE(); abortIfNull(ptrToTypeRecord); 
 			Get();
 			TypeProcedure(*ptproc);
-		} else SynErr(91);
+		} else SynErr(92);
 }
 
 void Parser::IdentList(IdentListRecord &r) {
@@ -487,7 +493,7 @@ void Parser::IdentList(IdentListRecord &r) {
 			r.nullOrCommaIdentList=new IdentListRecord(); abortIfNull(r.nullOrCommaIdentList); 
 			Get();
 			IdentList(*(r.nullOrCommaIdentList));
-		} else SynErr(92);
+		} else SynErr(93);
 }
 
 void Parser::OptionalReceiver(OptionalReceiverRecord &r) {
@@ -496,7 +502,7 @@ void Parser::OptionalReceiver(OptionalReceiverRecord &r) {
 		} else if (la->kind == 35 /* "(" */) {
 			r.receiverSpecified=true; 
 			Receiver(r.receiver);
-		} else SynErr(93);
+		} else SynErr(94);
 }
 
 void Parser::Receiver(ReceiverRecord &r) {
@@ -506,7 +512,7 @@ void Parser::Receiver(ReceiverRecord &r) {
 		} else if (la->kind == 29 /* "VAR" */) {
 			r.varSpecified=true; 
 			Get();
-		} else SynErr(94);
+		} else SynErr(95);
 		Ident(r.leftIdent);
 		Expect(31 /* ":" */);
 		Ident(r.rightIdent);
@@ -519,7 +525,7 @@ void Parser::OptionalFormalPars(OptionalFormalParsRecord &r) {
 		} else if (la->kind == 35 /* "(" */) {
 			r.formalParsSpecified=true; 
 			FormalPars(r.formalPars);
-		} else SynErr(95);
+		} else SynErr(96);
 }
 
 void Parser::FormalPars(FormalParsRecord &r) {
@@ -529,26 +535,26 @@ void Parser::FormalPars(FormalParsRecord &r) {
 		} else if (la->kind == _ident || la->kind == 29 /* "VAR" */) {
 			r.optionalFPSectionsListPtr=new FPSectionsListMandatoryRecord(); abortIfNull(r.optionalFPSectionsListPtr); 
 			FPSectionsListMandatory(*(r.optionalFPSectionsListPtr));
-		} else SynErr(96);
+		} else SynErr(97);
 		Expect(36 /* ")" */);
-		if (la->kind == 26 /* ";" */ || la->kind == 33 /* "END" */ || la->kind == 36 /* ")" */) {
+		if (StartOf(8)) {
 			r.optionalQualidentPtr=0; 
 		} else if (la->kind == 31 /* ":" */) {
 			r.optionalQualidentPtr=new QualidentRecord(); abortIfNull(r.optionalQualidentPtr); 
 			Get();
 			Qualident(*(r.optionalQualidentPtr));
-		} else SynErr(97);
+		} else SynErr(98);
 }
 
 void Parser::StatementSeq(StatementSeqRecord &r) {
 		Statement(r.statementPtr);
-		if (StartOf(8)) {
+		if (StartOf(9)) {
 			r.nullOrPtrToNextStatementSeq=0; 
 		} else if (la->kind == 26 /* ";" */) {
 			r.nullOrPtrToNextStatementSeq=new StatementSeqRecord(); abortIfNull(r.nullOrPtrToNextStatementSeq); 
 			Get();
 			StatementSeq(*(r.nullOrPtrToNextStatementSeq));
-		} else SynErr(98);
+		} else SynErr(99);
 }
 
 void Parser::FPSectionsListMandatory(FPSectionsListMandatoryRecord &r) {
@@ -559,7 +565,7 @@ void Parser::FPSectionsListMandatory(FPSectionsListMandatoryRecord &r) {
 			r.next=new FPSectionsListMandatoryRecord(); abortIfNull(r.next); 
 			Get();
 			FPSectionsListMandatory(*(r.next));
-		} else SynErr(99);
+		} else SynErr(100);
 }
 
 void Parser::FPSection(FPSectionRecord &r) {
@@ -568,7 +574,7 @@ void Parser::FPSection(FPSectionRecord &r) {
 		} else if (la->kind == 29 /* "VAR" */) {
 			r.var=true; 
 			Get();
-		} else SynErr(100);
+		} else SynErr(101);
 		IdentList2(r.identList);
 		Expect(31 /* ":" */);
 		Type(r.typePtr);
@@ -576,12 +582,12 @@ void Parser::FPSection(FPSectionRecord &r) {
 
 void Parser::Qualident(QualidentRecord &r) {
 		Ident(r.leftIdent);
-		if (StartOf(9)) {
+		if (StartOf(10)) {
 			r.rightIdent=0;
 		} else if (la->kind == 45 /* "." */) {
 			Get();
 			Ident(r.rightIdent);
-		} else SynErr(101);
+		} else SynErr(102);
 }
 
 void Parser::IdentList2(IdentList2Record &r) {
@@ -592,7 +598,7 @@ void Parser::IdentList2(IdentList2Record &r) {
 			r.nullOrCommaIdentList=new IdentList2Record(); abortIfNull(r.nullOrCommaIdentList); 
 			Get();
 			IdentList2(*(r.nullOrCommaIdentList));
-		} else SynErr(102);
+		} else SynErr(103);
 }
 
 void Parser::TypeArrayConstExprListMandatory(TypeArrayConstExprListMandatoryRecord &r) {
@@ -603,16 +609,16 @@ void Parser::TypeArrayConstExprListMandatory(TypeArrayConstExprListMandatoryReco
 			r.next=new TypeArrayConstExprListMandatoryRecord(); abortIfNull(r.next); 
 			Get();
 			TypeArrayConstExprListMandatory(*(r.next));
-		} else SynErr(103);
+		} else SynErr(104);
 }
 
 void Parser::TypeArray(TypeARRAY &r) {
 		if (la->kind == 37 /* "OF" */) {
 			r.dimensionsConstExprsListPtr=0; 
-		} else if (StartOf(10)) {
+		} else if (StartOf(11)) {
 			r.dimensionsConstExprsListPtr=new TypeArrayConstExprListMandatoryRecord(); abortIfNull(r.dimensionsConstExprsListPtr); 
 			TypeArrayConstExprListMandatory(*(r.dimensionsConstExprsListPtr));
-		} else SynErr(104);
+		} else SynErr(105);
 		Expect(37 /* "OF" */);
 		Type(r.arrayElementTypePtr);
 }
@@ -625,7 +631,7 @@ void Parser::MandatoryFieldsList(MandatoryFieldsListRecord &r) {
 			r.next=new MandatoryFieldsListRecord(); abortIfNull(r.next); 
 			Get();
 			MandatoryFieldsList(*(r.next));
-		} else SynErr(105);
+		} else SynErr(106);
 }
 
 void Parser::FieldList(FieldListRecord &r) {
@@ -636,7 +642,7 @@ void Parser::FieldList(FieldListRecord &r) {
 			IdentList(r.identList);
 			Expect(31 /* ":" */);
 			Type(r.typePtr);
-		} else SynErr(106);
+		} else SynErr(107);
 }
 
 void Parser::TypeRecord_(TypeRECORD &r) {
@@ -647,17 +653,17 @@ void Parser::TypeRecord_(TypeRECORD &r) {
 			Get();
 			Qualident(*(r.optionalQualidentPtr));
 			Expect(36 /* ")" */);
-		} else SynErr(107);
+		} else SynErr(108);
 		MandatoryFieldsList(r.fieldsList);
 }
 
 void Parser::TypeProcedure(TypePROCEDURE &r) {
-		if (la->kind == 26 /* ";" */ || la->kind == 33 /* "END" */ || la->kind == 36 /* ")" */) {
+		if (StartOf(8)) {
 			r.optionalFormalParsPtr=0; 
 		} else if (la->kind == 35 /* "(" */) {
 			r.optionalFormalParsPtr=new FormalParsRecord(); abortIfNull(r.optionalFormalParsPtr); 
 			FormalPars(*(r.optionalFormalParsPtr));
-		} else SynErr(108);
+		} else SynErr(109);
 }
 
 void Parser::Statement(StatementRecord*&ptrToStmtRecord) {
@@ -673,13 +679,13 @@ void Parser::Statement(StatementRecord*&ptrToStmtRecord) {
 		case _ident: case _string: case _integer: case _real: case _character: case 15 /* "+" */: case 16 /* "-" */: case 35 /* "(" */: case 43 /* "NIL" */: case 44 /* "~" */: case 48 /* "{" */: {
 			ptrToStmtRecord=psea=new Stmt_EXPR_OR_ASSIGN(); abortIfNull(ptrToStmtRecord); 
 			Expr((*psea).lhsExpr);
-			if (StartOf(11)) {
+			if (StartOf(12)) {
 				psea->assignment=false; 
 			} else if (la->kind == 23 /* ":=" */) {
 				psea->assignment=true; 
 				Get();
 				Expr((*psea).rhsExpr);
-			} else SynErr(109);
+			} else SynErr(110);
 			break;
 		}
 		case 54 /* "IF" */: {
@@ -693,14 +699,14 @@ void Parser::Statement(StatementRecord*&ptrToStmtRecord) {
 			} else if (la->kind == 50 /* "ELSIF" */) {
 				pif->optionalElsifsListPtr=new MandatoryELSIFsListRecord(); abortIfNull(pif->optionalElsifsListPtr); 
 				MandatoryELSIFsList(*((*pif).optionalElsifsListPtr));
-			} else SynErr(110);
+			} else SynErr(111);
 			if (la->kind == 33 /* "END" */) {
 				pif->optionalElsePtr=0; 
 			} else if (la->kind == 55 /* "ELSE" */) {
 				pif->optionalElsePtr=new StatementSeqRecord(); abortIfNull(pif->optionalElsePtr); 
 				Get();
 				StatementSeq(*((*pif).optionalElsePtr));
-			} else SynErr(111);
+			} else SynErr(112);
 			Expect(33 /* "END" */);
 			break;
 		}
@@ -715,14 +721,14 @@ void Parser::Statement(StatementRecord*&ptrToStmtRecord) {
 			} else if (la->kind == 52 /* "|" */) {
 				(*pcs).optionalOtherCasesPtr=new CasesRecord(); abortIfNull((*pcs).optionalOtherCasesPtr); 
 				Cases(*((*pcs).optionalOtherCasesPtr));
-			} else SynErr(112);
+			} else SynErr(113);
 			if (la->kind == 33 /* "END" */) {
 				(*pcs).optionalElsePtr=0; 
 			} else if (la->kind == 55 /* "ELSE" */) {
 				(*pcs).optionalElsePtr=new StatementSeqRecord(); abortIfNull((*pcs).optionalElsePtr); 
 				Get();
 				StatementSeq(*((*pcs).optionalElsePtr));
-			} else SynErr(113);
+			} else SynErr(114);
 			Expect(33 /* "END" */);
 			break;
 		}
@@ -757,7 +763,7 @@ void Parser::Statement(StatementRecord*&ptrToStmtRecord) {
 				(*pf).bySpecified=true; 
 				Get();
 				ConstExpr((*pf).byValueConstExpr);
-			} else SynErr(114);
+			} else SynErr(115);
 			Expect(53 /* "DO" */);
 			StatementSeq((*pf).forStatementSeq);
 			Expect(33 /* "END" */);
@@ -781,14 +787,14 @@ void Parser::Statement(StatementRecord*&ptrToStmtRecord) {
 			} else if (la->kind == 52 /* "|" */) {
 				(*pwith).optionalFurtherWithClausesPtr=new FurtherWithClausesRecord(); abortIfNull((*pwith).optionalFurtherWithClausesPtr); 
 				FurtherWithClauses(*((*pwith).optionalFurtherWithClausesPtr));
-			} else SynErr(115);
+			} else SynErr(116);
 			if (la->kind == 33 /* "END" */) {
 				(*pwith).optionalElsePtr=0; 
 			} else if (la->kind == 55 /* "ELSE" */) {
 				(*pwith).optionalElsePtr=new StatementSeqRecord(); abortIfNull((*pwith).optionalElsePtr); 
 				Get();
 				StatementSeq(*((*pwith).optionalElsePtr));
-			} else SynErr(116);
+			} else SynErr(117);
 			Expect(33 /* "END" */);
 			break;
 		}
@@ -800,15 +806,15 @@ void Parser::Statement(StatementRecord*&ptrToStmtRecord) {
 		case 65 /* "RETURN" */: {
 			ptrToStmtRecord=preturn=new Stmt_RETURN(); abortIfNull(ptrToStmtRecord); 
 			Get();
-			if (StartOf(11)) {
+			if (StartOf(12)) {
 				preturn->exprPresent=false; 
-			} else if (StartOf(10)) {
+			} else if (StartOf(11)) {
 				preturn->exprPresent=true; 
 				Expr((*preturn).expr);
-			} else SynErr(117);
+			} else SynErr(118);
 			break;
 		}
-		default: SynErr(118); break;
+		default: SynErr(119); break;
 		}
 }
 
@@ -820,7 +826,7 @@ void Parser::CaseLabelsLists(CaseLabelsListsRecord &r) {
 			r.optionalFurtherCaseLabelsListsPtr=new CaseLabelsListsRecord(); abortIfNull(r.optionalFurtherCaseLabelsListsPtr); 
 			Get();
 			CaseLabelsLists(*(r.optionalFurtherCaseLabelsListsPtr));
-		} else SynErr(119);
+		} else SynErr(120);
 }
 
 void Parser::CaseLabels(CaseLabelsRecord &r) {
@@ -831,18 +837,18 @@ void Parser::CaseLabels(CaseLabelsRecord &r) {
 			r.secondConstExprPresent=true; 
 			Get();
 			ConstExpr(r.constExpr2);
-		} else SynErr(120);
+		} else SynErr(121);
 }
 
 void Parser::Case(CaseRecord &r) {
 		if (la->kind == 33 /* "END" */ || la->kind == 52 /* "|" */ || la->kind == 55 /* "ELSE" */) {
 			r.emptyCase=true; 
-		} else if (StartOf(10)) {
+		} else if (StartOf(11)) {
 			r.emptyCase=false; 
 			CaseLabelsLists(r.caseLabelsLists);
 			Expect(31 /* ":" */);
 			StatementSeq(r.stmtSeq);
-		} else SynErr(121);
+		} else SynErr(122);
 }
 
 void Parser::Guard(GuardRecord &r) {
@@ -859,30 +865,30 @@ void Parser::SimpleExprAddOpClause(SimpleExprAddOpRecord &r) {
 		} else if (la->kind == 15 /* "+" */ || la->kind == 16 /* "-" */ || la->kind == 17 /* "OR" */) {
 			r.nullOrNextSimpleExprAddOpRecord=new SimpleExprAddOpRecord(); abortIfNull(r.nullOrNextSimpleExprAddOpRecord); 
 			SimpleExprAddOpClause(*r.nullOrNextSimpleExprAddOpRecord);
-		} else SynErr(122);
+		} else SynErr(123);
 }
 
 void Parser::Term(TermRecord &t) {
 		t.factorPtr=0; 
 		Factor(t.factorPtr);
-		if (StartOf(12)) {
+		if (StartOf(13)) {
 			t.nullOrNextTermMulOpRecord=0; 
-		} else if (StartOf(13)) {
+		} else if (StartOf(14)) {
 			t.nullOrNextTermMulOpRecord=new TermMulOpRecord(); abortIfNull(t.nullOrNextTermMulOpRecord); 
 			TermMulOpClause(*t.nullOrNextTermMulOpRecord);
-		} else SynErr(123);
+		} else SynErr(124);
 }
 
 void Parser::TermMulOpClause(TermMulOpRecord &r) {
 		MulOp(r.mulOp);
 		r.factorPtr=0; 
 		Factor(r.factorPtr);
-		if (StartOf(12)) {
+		if (StartOf(13)) {
 			r.nullOrNextTermMulOpRecord=0; 
-		} else if (StartOf(13)) {
+		} else if (StartOf(14)) {
 			r.nullOrNextTermMulOpRecord=new TermMulOpRecord(); abortIfNull(r.nullOrNextTermMulOpRecord); 
 			TermMulOpClause(*r.nullOrNextTermMulOpRecord);
-		} else SynErr(124);
+		} else SynErr(125);
 }
 
 void Parser::Factor(FactorRecord *&factorPtr) {
@@ -892,6 +898,7 @@ void Parser::Factor(FactorRecord *&factorPtr) {
 		FactorRecord_string *fs;
 		FactorRecord_Set *fset;
 		FactorRecord_Expr *fexpr;
+		FactorRecord_Expr *fexpr2;
 		FactorRecord_tildeFactor *ftf;
 		
 		switch (la->kind) {
@@ -929,6 +936,11 @@ void Parser::Factor(FactorRecord *&factorPtr) {
 			factorPtr=fexpr=new FactorRecord_Expr(); abortIfNull(factorPtr); 
 			Get();
 			Expr((*fexpr).expr);
+			while (la->kind == 24 /* "," */) {
+				fexpr2=new FactorRecord_Expr(); abortIfNull(fexpr2); 
+				Get();
+				Expr((*fexpr2).expr);
+			}
 			Expect(36 /* ")" */);
 			break;
 		}
@@ -939,20 +951,20 @@ void Parser::Factor(FactorRecord *&factorPtr) {
 			Factor((*ftf).factorPtr);
 			break;
 		}
-		default: SynErr(125); break;
+		default: SynErr(126); break;
 		}
 }
 
 void Parser::DesignatorMaybeWithExprList(DesignatorMaybeWithExprListRecord &r) {
 		IdentRec(r.identRec.ident_);
-		if (StartOf(14)) {
+		if (StartOf(15)) {
 			r.nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord=0; 
-		} else if (StartOf(15)) {
+		} else if (StartOf(16)) {
 			r.nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord=new DesignatorMaybeWithExprListRepeatingPartRecord(); 
 			abortIfNull(r.nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord);
 			
 			DesignatorMaybeWithExprListRepeatingPartClause(*(r.nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord));
-		} else SynErr(126);
+		} else SynErr(127);
 }
 
 void Parser::Character(wchar_t* &tok) {
@@ -970,15 +982,15 @@ void Parser::Set(SetRecord &r) {
 		Expect(48 /* "{" */);
 		if (la->kind == 49 /* "}" */) {
 			r.emptySet=true; 
-		} else if (StartOf(10)) {
+		} else if (StartOf(11)) {
 			r.emptySet=false; 
 			Element(r.range);
 			if (la->kind == 49 /* "}" */) {
 			} else if (la->kind == 24 /* "," */) {
 				r.nullOrPtrToNextSet=new SetRecord(); abortIfNull(r.nullOrPtrToNextSet); 
 				ElementRangeList(*(r.nullOrPtrToNextSet));
-			} else SynErr(127);
-		} else SynErr(128);
+			} else SynErr(128);
+		} else SynErr(129);
 		Expect(49 /* "}" */);
 }
 
@@ -1000,15 +1012,15 @@ void Parser::DesignatorMaybeWithExprListRepeatingPartClause(DesignatorMaybeWithE
 			QualidentOrOptionalExprList(r.clause4_qualidentOrOptionalExprList);
 			Expect(36 /* ")" */);
 			r.clauseNumber=4; 
-		} else SynErr(129);
-		if (StartOf(14)) {
+		} else SynErr(130);
+		if (StartOf(15)) {
 			r.nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord=0; 
-		} else if (StartOf(15)) {
+		} else if (StartOf(16)) {
 			r.nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord=new DesignatorMaybeWithExprListRepeatingPartRecord(); 
 			abortIfNull(r.nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord); 
 			
 			DesignatorMaybeWithExprListRepeatingPartClause(*(r.nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord));
-		} else SynErr(130);
+		} else SynErr(131);
 }
 
 void Parser::IdentRec(wchar_t* &tok) {
@@ -1023,16 +1035,16 @@ void Parser::ExprList(ExprListRecord &r) {
 			r.nullOrCommaExprList=new ExprListRecord(); abortIfNull(r.nullOrCommaExprList); 
 			Get();
 			ExprList(*(r.nullOrCommaExprList));
-		} else SynErr(131);
+		} else SynErr(132);
 }
 
 void Parser::QualidentOrOptionalExprList(QualidentOrOptionalExprListRecord &r) {
 		if (la->kind == 36 /* ")" */) {
 			r.exprListPresent=false; 
-		} else if (StartOf(10)) {
+		} else if (StartOf(11)) {
 			r.exprListPresent=true; 
 			ExprList(r.exprList);
-		} else SynErr(132);
+		} else SynErr(133);
 }
 
 void Parser::ElementRangeList(SetRecord &r) {
@@ -1044,7 +1056,7 @@ void Parser::ElementRangeList(SetRecord &r) {
 		} else if (la->kind == 24 /* "," */) {
 			r.nullOrPtrToNextSet=new SetRecord(); abortIfNull(r.nullOrPtrToNextSet); 
 			ElementRangeList(*(r.nullOrPtrToNextSet));
-		} else SynErr(133);
+		} else SynErr(134);
 }
 
 void Parser::Element(ElementRangeRecord &r) {
@@ -1055,7 +1067,7 @@ void Parser::Element(ElementRangeRecord &r) {
 			r.isrange=true; 
 			Get();
 			Expr(r.expr2);
-		} else SynErr(134);
+		} else SynErr(135);
 }
 
 void Parser::MandatoryELSIFsList(MandatoryELSIFsListRecord &r) {
@@ -1068,7 +1080,7 @@ void Parser::MandatoryELSIFsList(MandatoryELSIFsListRecord &r) {
 		} else if (la->kind == 50 /* "ELSIF" */) {
 			r.optionalElsifsListPtr=new MandatoryELSIFsListRecord(); abortIfNull(r.optionalElsifsListPtr); 
 			MandatoryELSIFsList(*(r.optionalElsifsListPtr));
-		} else SynErr(135);
+		} else SynErr(136);
 }
 
 void Parser::Cases(CasesRecord &r) {
@@ -1079,7 +1091,7 @@ void Parser::Cases(CasesRecord &r) {
 		} else if (la->kind == 52 /* "|" */) {
 			r.optionalOtherCasesPtr=new CasesRecord(); abortIfNull(r.optionalOtherCasesPtr); 
 			Cases(*(r.optionalOtherCasesPtr));
-		} else SynErr(136);
+		} else SynErr(137);
 }
 
 void Parser::FurtherWithClauses(FurtherWithClausesRecord &r) {
@@ -1092,7 +1104,7 @@ void Parser::FurtherWithClauses(FurtherWithClausesRecord &r) {
 		} else if (la->kind == 52 /* "|" */) {
 			r.next=new FurtherWithClausesRecord(); abortIfNull(r.next); 
 			FurtherWithClauses(*(r.next));
-		} else SynErr(137);
+		} else SynErr(138);
 }
 
 void Parser::Module(ModuleRecord &r) {
@@ -1105,7 +1117,7 @@ void Parser::Module(ModuleRecord &r) {
 		} else if (la->kind == 25 /* "IMPORT" */) {
 			r.importListPtr=new ImportListRecord(); abortIfNull(r.importListPtr); 
 			ImportList(*(r.importListPtr));
-		} else SynErr(138);
+		} else SynErr(139);
 		DeclSeq(r.declSeq);
 		if (la->kind == 33 /* "END" */) {
 			r.stmtSeqPtr = 0; 
@@ -1113,7 +1125,7 @@ void Parser::Module(ModuleRecord &r) {
 			r.stmtSeqPtr=new StatementSeqRecord(); abortIfNull(r.stmtSeqPtr); 
 			Get();
 			StatementSeq(*r.stmtSeqPtr);
-		} else SynErr(139);
+		} else SynErr(140);
 		Expect(33 /* "END" */);
 		Ident(endName);
 		if(!coco_string_equal(endName, r.moduleName)){
@@ -1256,7 +1268,7 @@ bool Parser::StartOf(int s) {
 	const bool T = true;
 	const bool x = false;
 
-	static bool set[16][69] = {
+	static bool set[17][69] = {
 		{T,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x},
 		{x,x,x,x, x,x,x,T, T,T,T,T, T,T,T,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x},
 		{x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,T, T,x,T,x, x,x,x,T, x,T,x,x, T,T,x,x, x,T,T,x, x,x,x,T, x,T,T,T, T,T,x,T, x,x,x,T, x,T,x,x, x,x,x,x, x},
@@ -1265,8 +1277,9 @@ bool Parser::StartOf(int s) {
 		{x,x,x,x, x,x,x,T, T,T,T,T, T,T,T,x, x,x,x,x, x,x,x,T, T,x,T,x, x,x,x,T, x,T,x,x, T,T,x,x, x,T,T,x, x,x,x,T, x,T,T,T, T,T,x,T, x,x,x,T, x,T,x,x, x,x,x,x, x},
 		{x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,T, T,T,T,x, T,T,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x},
 		{x,x,x,x, x,x,x,T, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, T,x,T,x, x,x,x,T, x,x,x,T, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x},
+		{x,x,x,x, x,x,x,T, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,T,x, x,x,x,x, x,T,x,x, T,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x},
 		{x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,T,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,T,x, T,x,x,T, x,x,x,T, x,x,x,x, x,x,x,x, x},
-		{x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,T,x, x,x,x,T, x,T,x,x, T,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,T,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x},
+		{x,x,x,x, x,x,x,T, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,T,x, x,x,x,T, x,T,x,x, T,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,T,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x},
 		{x,T,x,T, T,T,T,x, x,x,x,x, x,x,x,T, T,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,T, x,x,x,x, x,x,x,T, T,x,x,x, T,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x},
 		{x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,T,x, x,x,x,x, x,T,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,T,x, T,x,x,T, x,x,x,T, x,x,x,x, x,x,x,x, x},
 		{x,x,x,x, x,x,x,T, T,T,T,T, T,T,T,T, T,T,x,x, x,x,x,T, T,x,T,x, x,x,x,T, x,T,x,x, T,T,x,x, x,T,T,x, x,x,x,T, x,T,T,T, T,T,x,T, x,x,x,T, x,T,x,x, x,x,x,x, x},
@@ -1371,38 +1384,38 @@ void Errors::SynErr(int line, int col, int n) {
 			case 75: s = coco_string_create(L"invalid ModuleImportEntry"); break;
 			case 76: s = coco_string_create(L"invalid ModuleImportEntryList"); break;
 			case 77: s = coco_string_create(L"invalid DeclSeqConstDeclListMandatory"); break;
-			case 78: s = coco_string_create(L"invalid DeclSeqConstDeclList"); break;
-			case 79: s = coco_string_create(L"invalid DeclSeqTypeDeclListMandatory"); break;
-			case 80: s = coco_string_create(L"invalid DeclSeqTypeDeclList"); break;
-			case 81: s = coco_string_create(L"invalid DeclSeqVarDeclListMandatory"); break;
-			case 82: s = coco_string_create(L"invalid DeclSeqVarDeclList"); break;
-			case 83: s = coco_string_create(L"invalid DeclSeqConstTypeVarListMandatory"); break;
+			case 78: s = coco_string_create(L"invalid ConstDecl"); break;
+			case 79: s = coco_string_create(L"invalid DeclSeqConstDeclList"); break;
+			case 80: s = coco_string_create(L"invalid DeclSeqTypeDeclListMandatory"); break;
+			case 81: s = coco_string_create(L"invalid DeclSeqTypeDeclList"); break;
+			case 82: s = coco_string_create(L"invalid DeclSeqVarDeclListMandatory"); break;
+			case 83: s = coco_string_create(L"invalid DeclSeqVarDeclList"); break;
 			case 84: s = coco_string_create(L"invalid DeclSeqConstTypeVarListMandatory"); break;
-			case 85: s = coco_string_create(L"invalid DeclSeqConstTypeVarList"); break;
-			case 86: s = coco_string_create(L"invalid DeclSeqProcDeclFwdDeclListMandatory"); break;
+			case 85: s = coco_string_create(L"invalid DeclSeqConstTypeVarListMandatory"); break;
+			case 86: s = coco_string_create(L"invalid DeclSeqConstTypeVarList"); break;
 			case 87: s = coco_string_create(L"invalid DeclSeqProcDeclFwdDeclListMandatory"); break;
-			case 88: s = coco_string_create(L"invalid ProcDecl"); break;
-			case 89: s = coco_string_create(L"invalid DeclSeqProcDeclFwdDeclList"); break;
-			case 90: s = coco_string_create(L"invalid IdentDef"); break;
-			case 91: s = coco_string_create(L"invalid Type"); break;
-			case 92: s = coco_string_create(L"invalid IdentList"); break;
-			case 93: s = coco_string_create(L"invalid OptionalReceiver"); break;
-			case 94: s = coco_string_create(L"invalid Receiver"); break;
-			case 95: s = coco_string_create(L"invalid OptionalFormalPars"); break;
-			case 96: s = coco_string_create(L"invalid FormalPars"); break;
+			case 88: s = coco_string_create(L"invalid DeclSeqProcDeclFwdDeclListMandatory"); break;
+			case 89: s = coco_string_create(L"invalid ProcDecl"); break;
+			case 90: s = coco_string_create(L"invalid DeclSeqProcDeclFwdDeclList"); break;
+			case 91: s = coco_string_create(L"invalid IdentDef"); break;
+			case 92: s = coco_string_create(L"invalid Type"); break;
+			case 93: s = coco_string_create(L"invalid IdentList"); break;
+			case 94: s = coco_string_create(L"invalid OptionalReceiver"); break;
+			case 95: s = coco_string_create(L"invalid Receiver"); break;
+			case 96: s = coco_string_create(L"invalid OptionalFormalPars"); break;
 			case 97: s = coco_string_create(L"invalid FormalPars"); break;
-			case 98: s = coco_string_create(L"invalid StatementSeq"); break;
-			case 99: s = coco_string_create(L"invalid FPSectionsListMandatory"); break;
-			case 100: s = coco_string_create(L"invalid FPSection"); break;
-			case 101: s = coco_string_create(L"invalid Qualident"); break;
-			case 102: s = coco_string_create(L"invalid IdentList2"); break;
-			case 103: s = coco_string_create(L"invalid TypeArrayConstExprListMandatory"); break;
-			case 104: s = coco_string_create(L"invalid TypeArray"); break;
-			case 105: s = coco_string_create(L"invalid MandatoryFieldsList"); break;
-			case 106: s = coco_string_create(L"invalid FieldList"); break;
-			case 107: s = coco_string_create(L"invalid TypeRecord_"); break;
-			case 108: s = coco_string_create(L"invalid TypeProcedure"); break;
-			case 109: s = coco_string_create(L"invalid Statement"); break;
+			case 98: s = coco_string_create(L"invalid FormalPars"); break;
+			case 99: s = coco_string_create(L"invalid StatementSeq"); break;
+			case 100: s = coco_string_create(L"invalid FPSectionsListMandatory"); break;
+			case 101: s = coco_string_create(L"invalid FPSection"); break;
+			case 102: s = coco_string_create(L"invalid Qualident"); break;
+			case 103: s = coco_string_create(L"invalid IdentList2"); break;
+			case 104: s = coco_string_create(L"invalid TypeArrayConstExprListMandatory"); break;
+			case 105: s = coco_string_create(L"invalid TypeArray"); break;
+			case 106: s = coco_string_create(L"invalid MandatoryFieldsList"); break;
+			case 107: s = coco_string_create(L"invalid FieldList"); break;
+			case 108: s = coco_string_create(L"invalid TypeRecord_"); break;
+			case 109: s = coco_string_create(L"invalid TypeProcedure"); break;
 			case 110: s = coco_string_create(L"invalid Statement"); break;
 			case 111: s = coco_string_create(L"invalid Statement"); break;
 			case 112: s = coco_string_create(L"invalid Statement"); break;
@@ -1412,27 +1425,28 @@ void Errors::SynErr(int line, int col, int n) {
 			case 116: s = coco_string_create(L"invalid Statement"); break;
 			case 117: s = coco_string_create(L"invalid Statement"); break;
 			case 118: s = coco_string_create(L"invalid Statement"); break;
-			case 119: s = coco_string_create(L"invalid CaseLabelsLists"); break;
-			case 120: s = coco_string_create(L"invalid CaseLabels"); break;
-			case 121: s = coco_string_create(L"invalid Case"); break;
-			case 122: s = coco_string_create(L"invalid SimpleExprAddOpClause"); break;
-			case 123: s = coco_string_create(L"invalid Term"); break;
-			case 124: s = coco_string_create(L"invalid TermMulOpClause"); break;
-			case 125: s = coco_string_create(L"invalid Factor"); break;
-			case 126: s = coco_string_create(L"invalid DesignatorMaybeWithExprList"); break;
-			case 127: s = coco_string_create(L"invalid Set"); break;
+			case 119: s = coco_string_create(L"invalid Statement"); break;
+			case 120: s = coco_string_create(L"invalid CaseLabelsLists"); break;
+			case 121: s = coco_string_create(L"invalid CaseLabels"); break;
+			case 122: s = coco_string_create(L"invalid Case"); break;
+			case 123: s = coco_string_create(L"invalid SimpleExprAddOpClause"); break;
+			case 124: s = coco_string_create(L"invalid Term"); break;
+			case 125: s = coco_string_create(L"invalid TermMulOpClause"); break;
+			case 126: s = coco_string_create(L"invalid Factor"); break;
+			case 127: s = coco_string_create(L"invalid DesignatorMaybeWithExprList"); break;
 			case 128: s = coco_string_create(L"invalid Set"); break;
-			case 129: s = coco_string_create(L"invalid DesignatorMaybeWithExprListRepeatingPartClause"); break;
+			case 129: s = coco_string_create(L"invalid Set"); break;
 			case 130: s = coco_string_create(L"invalid DesignatorMaybeWithExprListRepeatingPartClause"); break;
-			case 131: s = coco_string_create(L"invalid ExprList"); break;
-			case 132: s = coco_string_create(L"invalid QualidentOrOptionalExprList"); break;
-			case 133: s = coco_string_create(L"invalid ElementRangeList"); break;
-			case 134: s = coco_string_create(L"invalid Element"); break;
-			case 135: s = coco_string_create(L"invalid MandatoryELSIFsList"); break;
-			case 136: s = coco_string_create(L"invalid Cases"); break;
-			case 137: s = coco_string_create(L"invalid FurtherWithClauses"); break;
-			case 138: s = coco_string_create(L"invalid Module"); break;
+			case 131: s = coco_string_create(L"invalid DesignatorMaybeWithExprListRepeatingPartClause"); break;
+			case 132: s = coco_string_create(L"invalid ExprList"); break;
+			case 133: s = coco_string_create(L"invalid QualidentOrOptionalExprList"); break;
+			case 134: s = coco_string_create(L"invalid ElementRangeList"); break;
+			case 135: s = coco_string_create(L"invalid Element"); break;
+			case 136: s = coco_string_create(L"invalid MandatoryELSIFsList"); break;
+			case 137: s = coco_string_create(L"invalid Cases"); break;
+			case 138: s = coco_string_create(L"invalid FurtherWithClauses"); break;
 			case 139: s = coco_string_create(L"invalid Module"); break;
+			case 140: s = coco_string_create(L"invalid Module"); break;
 
 		default:
 		{

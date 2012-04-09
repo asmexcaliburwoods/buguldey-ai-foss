@@ -289,6 +289,7 @@ typedef bool boolean;
 	
 	struct ConstDeclRecord{
 		IdentDefRecord identDef;
+		TypeRecord *typePtr;
 		ConstExprRecord expr;
 	};
 

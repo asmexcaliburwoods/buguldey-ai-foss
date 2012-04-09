@@ -212,6 +212,7 @@ COMPILER Oberon
 	
 	struct ConstDeclRecord{
 		IdentDefRecord identDef;
+		TypeRecord *typePtr;
 		ConstExprRecord expr;
 	};
 
@@ -719,7 +720,11 @@ DeclSeq<DeclSeqRecord &r> = DeclSeqConstTypeVarList<r.ctvlist> DeclSeqProcDeclFw
 
 /* ConstDecl    = IdentDef "=" ConstExpr. */
 ConstDecl<ConstDeclRecord &r>
-= IdentDef<r.identDef> "=" ConstExpr<r.expr>.
+=
+	IdentDef<r.identDef>
+	(		(. r.typePtr=0; .)
+	| ":" Type<r.typePtr>
+	) "=" ConstExpr<r.expr>.
 
 /* TypeDecl     = IdentDef "=" Type. */
 TypeDecl<TypeDeclRecord &r> = IdentDef<r.identDef> "=" Type<r.typePtr>.
@@ -1071,6 +1076,7 @@ Factor<FactorRecord *&factorPtr>
 										FactorRecord_string *fs;
 										FactorRecord_Set *fset;
 										FactorRecord_Expr *fexpr;
+										FactorRecord_Expr *fexpr2;
 										FactorRecord_tildeFactor *ftf;
 									.)
 =
@@ -1093,7 +1099,10 @@ Factor<FactorRecord *&factorPtr>
   Set<(*fset).set>
 |
 									(. factorPtr=fexpr=new FactorRecord_Expr(); abortIfNull(factorPtr); .)
-  "(" Expr<(*fexpr).expr> ")" 
+  "(" Expr<(*fexpr).expr> {
+									(. fexpr2=new FactorRecord_Expr(); abortIfNull(fexpr2); .)
+  							"," Expr<(*fexpr2).expr>
+  						  } ")" 
 |
 									(. factorPtr=ftf=new FactorRecord_tildeFactor(); abortIfNull(factorPtr); .)
 									(. ftf->factorPtr=0; .)

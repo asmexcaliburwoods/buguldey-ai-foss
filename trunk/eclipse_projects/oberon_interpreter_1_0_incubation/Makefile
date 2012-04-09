@@ -3,15 +3,12 @@ MAKE=$(MAKE_$(OS))
 	
 os:
 
-Coco/Coco:	os
-	#cd Coco && $(MAKE) all && cd ..
-	
 Parser.h:
 Parser.cpp:
 Scanner.cpp:
 Scanner.h:
-coco:	Coco/Coco
-	Coco/Coco Oberon.atg -namespace Oberon
+coco:	./Coco/Coco
+	./Coco/Coco Oberon.atg -namespace Oberon
 
 oberonInterpret:	clean coco Parser.cpp Scanner.cpp Scanner.h Parser.h
 	g++ -g *.cpp -o oberon_interpret $(CFLAGS)

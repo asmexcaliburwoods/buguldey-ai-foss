@@ -331,7 +331,23 @@ void Errors::Exception(const wchar_t* s) {
 }
 
 void Parser::ModuleRecord::addImportedModuleAlias(const wchar_t* const moduleAlias, Parser *parser){
-    wprintf(L"NOT IMPL: Parser::ModuleRecord::addImportedModuleAlias, moduleAlias=%ls, module=%ls\n",moduleAlias, parser->modulePtr->moduleName);
+	std::pair<const wchar_t*,Parser*> newmod(moduleAlias, parser);
+
+	typedef TModuleAliasTable::iterator hmit;
+	typedef std::pair<hmit, bool> retcode;
+
+	//insert unique
+	retcode insertResult = moduleAlias2parser.insert(newmod);
+
+	if(!(insertResult.second)){
+		//output an error
+		const wchar_t *fmt=L"imported module alias/name declared twice: %ls";
+		size_t len=wstrlen(fmt)-3+wstrlen(moduleAlias)+1;
+		wchar_t *msg=new wchar_t[len];abortIfNull(msg);
+		(void)wsprintf(msg, len, fmt, moduleAlias);
+		parent->Err(msg);
+		delete[] msg;
+	}
 }
 
 -->namespace_close

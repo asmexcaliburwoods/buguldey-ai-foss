@@ -13,6 +13,9 @@ COMPILER Oberon
 
 	typedef bool boolean;
 
+#define wstrlen(a) wcslen(a)
+#define wsprintf swprintf
+
 	static const int // operators
 	  illegal_operator=1, plus=2, minus=3, times=4, slash=5, equals=6, less=7, greater=8,
 	  orOperation=9, notEquals=10, lessOrEqual=11, greaterOrEqual=12, in=13, is=14, divOp=15, modOp=16, ampersand=17;
@@ -321,12 +324,16 @@ COMPILER Oberon
 
 	struct DeclSeqRecord;
 	
+	static const int ProcNotPrim=0;
+	static const int ProcPrim_GetCommandLine=1;
+	
 	struct ProcDeclRecord{
 		OptionalReceiverRecord optionalReceiver;
 		IdentDefRecord identDef;
 		OptionalFormalParsRecord optionalFormalPars;
 		DeclSeqRecord *declSeqPtr; 
 	    bool procBodySpecifiedHere;
+		int prim;
 	    StatementSeqRecord procBodyStmtSeq; /* undefined if procBodySpecifiedHere==false */
 	};
 
@@ -355,6 +362,7 @@ COMPILER Oberon
 		,type_number_RECORD=3
 		,type_number_POINTER=4
 		,type_number_PROCEDURE=5
+		,type_number_PRIM_WCHAR=100
 		;
 	
 	struct TypeQualident: public TypeRecord{
@@ -382,6 +390,9 @@ COMPILER Oberon
 	struct TypePROCEDURE: public TypeRecord{
 		int getTypeNumber(){return type_number_PROCEDURE;}
 		FormalParsRecord *optionalFormalParsPtr;
+	}; 
+	struct TypePRIM_WCHAR: public TypeRecord{
+		int getTypeNumber(){return type_number_PRIM_WCHAR;}
 	}; 
 
 	static const int
@@ -506,6 +517,15 @@ COMPILER Oberon
 		ImportListRecord *importListPtr;
 		DeclSeqRecord declSeq;
 		StatementSeqRecord *stmtSeqPtr;
+		
+	private:
+		Parser* parent;
+		
+		typedef __gnu_cxx::hash_map<const wchar_t*,Parser*> TModuleAliasTable;
+		TModuleAliasTable moduleAlias2parser;
+	
+	public:
+		ModuleRecord(Parser* parent_):parent(parent_){}
 		
 		void addImportedModuleAlias(const wchar_t* const moduleAlias, Parser *parser);
 	};
@@ -761,11 +781,24 @@ ProcDecl<ProcDeclRecord &r>			(. identRec endName; .)
 	/*"PROCEDURE"*/
 	OptionalReceiver<r.optionalReceiver>
 	IdentDef<r.identDef>
-	OptionalFormalPars<r.optionalFormalPars> ";"
+	OptionalFormalPars<r.optionalFormalPars> 
+	(
+									(. r.prim=ProcNotPrim; .)
+	|
+       "=" 
+               		(
+									(. r.prim=ProcPrim_GetCommandLine; //TODO restrict to SYSTEM.Mod 
+									.)
+               			"PROCEDURE_PRIMITIVE_GetCommandLine"
+               		)
+	)
+	";"
 									(. r.declSeqPtr=new DeclSeqRecord(); abortIfNull(r.declSeqPtr); .)
 	DeclSeq<*(r.declSeqPtr)> 
                (					(. r.procBodySpecifiedHere=false; .)
-               |					(. r.procBodySpecifiedHere=true; .)
+               |					(. r.procBodySpecifiedHere=true; 
+									   if(r.prim!=ProcNotPrim)Err(L"PROCEDURE is a primitive, BEGIN disallowed.");
+               						.)
                		"BEGIN" StatementSeq<r.procBodyStmtSeq>
                )
                "END" Ident<endName> (. if(!coco_string_equal(endName, r.identDef.ident_)){
@@ -895,6 +928,10 @@ Type<TypeRecord *&ptrToTypeRecord>
 |
 					(. ptrToTypeRecord=ptproc=new TypePROCEDURE(); abortIfNull(ptrToTypeRecord); .)
  	"PROCEDURE" TypeProcedure<*ptproc>
+|
+					(. ptrToTypeRecord=new TypePRIM_WCHAR(); abortIfNull(ptrToTypeRecord); //TODO verify only allowed in SYSTEM.Mod 
+					.)
+	"SYSTEM_MOD_TYPE_PRIMITIVE_WCHAR" 
 ).
 
 /* FieldList    = [IdentList ":" Type]. */
@@ -1525,7 +1562,7 @@ RealRec<wchar_t* &tok> = Real<tok>.
 
 Oberon
 =
-			(. InitDeclarations(); modulePtr=new ModuleRecord(); abortIfNull(modulePtr); .)
+			(. InitDeclarations(); modulePtr=new ModuleRecord(this); abortIfNull(modulePtr); .)
 Module<*(modulePtr)>.
 
 END Oberon.

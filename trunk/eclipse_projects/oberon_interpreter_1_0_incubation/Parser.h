@@ -90,6 +90,9 @@ public:
 
 typedef bool boolean;
 
+#define wstrlen(a) wcslen(a)
+#define wsprintf swprintf
+
 	static const int // operators
 	  illegal_operator=1, plus=2, minus=3, times=4, slash=5, equals=6, less=7, greater=8,
 	  orOperation=9, notEquals=10, lessOrEqual=11, greaterOrEqual=12, in=13, is=14, divOp=15, modOp=16, ampersand=17;
@@ -398,12 +401,16 @@ typedef bool boolean;
 
 	struct DeclSeqRecord;
 	
+	static const int ProcNotPrim=0;
+	static const int ProcPrim_GetCommandLine=1;
+	
 	struct ProcDeclRecord{
 		OptionalReceiverRecord optionalReceiver;
 		IdentDefRecord identDef;
 		OptionalFormalParsRecord optionalFormalPars;
 		DeclSeqRecord *declSeqPtr; 
 	    bool procBodySpecifiedHere;
+		int prim;
 	    StatementSeqRecord procBodyStmtSeq; /* undefined if procBodySpecifiedHere==false */
 	};
 
@@ -432,6 +439,7 @@ typedef bool boolean;
 		,type_number_RECORD=3
 		,type_number_POINTER=4
 		,type_number_PROCEDURE=5
+		,type_number_PRIM_WCHAR=100
 		;
 	
 	struct TypeQualident: public TypeRecord{
@@ -459,6 +467,9 @@ typedef bool boolean;
 	struct TypePROCEDURE: public TypeRecord{
 		int getTypeNumber(){return type_number_PROCEDURE;}
 		FormalParsRecord *optionalFormalParsPtr;
+	}; 
+	struct TypePRIM_WCHAR: public TypeRecord{
+		int getTypeNumber(){return type_number_PRIM_WCHAR;}
 	}; 
 
 	static const int
@@ -583,6 +594,15 @@ typedef bool boolean;
 		ImportListRecord *importListPtr;
 		DeclSeqRecord declSeq;
 		StatementSeqRecord *stmtSeqPtr;
+		
+	private:
+		Parser* parent;
+		
+		typedef __gnu_cxx::hash_map<const wchar_t*,Parser*> TModuleAliasTable;
+		TModuleAliasTable moduleAlias2parser;
+	
+	public:
+		ModuleRecord(Parser* parent_):parent(parent_){}
 		
 		void addImportedModuleAlias(const wchar_t* const moduleAlias, Parser *parser);
 	};

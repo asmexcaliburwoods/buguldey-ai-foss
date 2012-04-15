@@ -24,6 +24,7 @@ class Interpreter
 public:
 
 	Interpreter() {
+		argc=0;
 	}
 
 	~Interpreter() {
@@ -35,6 +36,7 @@ private:
 
 	//moduleAlias can be null
 	void processImport(Parser &module, const wchar_t * const moduleAlias, const wchar_t * const moduleName){
+		wprintf(L"  %ls -> %ls\n",module.modulePtr->moduleName, moduleName);
 		Oberon::Parser *parser=modules->Find(moduleName);
 		if(parser==0){
 			const wchar_t *fmt=L"%ls%ls";
@@ -56,7 +58,10 @@ private:
 			errorsCount=parser->errors->count;
 			if (errorsCount == 0) {
 				wprintf(L"Read success! Interpreting...\n");
-				interpreter->interpret(*parser);
+				wchar_t**argv=(wchar_t**)malloc(sizeof(wchar_t**)); abortIfNull(argv);
+				*argv=0;
+				interpreter->interpret(*parser,0,argv);
+				delete[] argv;
 			}else{
 				wprintf(L"Read failed: %d errors.\n",errorsCount);
 				exit(1);
@@ -93,17 +98,27 @@ private:
 	void interpretModuleImports(Parser &module) {
 		Oberon::Parser::ModuleRecord * moduleAST=module.modulePtr;
 		Oberon::ModuleTable *modules=module.modules;
-		Oberon::Parser::ImportListRecord *imports=moduleAST->importListPtr;
 
 		this->modules = modules;
 
+		//indirectly imported into each module except for in itself
+		static wchar_t moduleName_str[]=L"SYSTEM";
+		wchar_t* moduleName=&(moduleName_str[0]);
+		wchar_t* currModuleName=moduleAST->moduleName;
+		if(!coco_string_equal(currModuleName, moduleName)){
+			wprintf(L"SYSTEM: %ls -> %ls\n",currModuleName,moduleName);
+			processImport(module,0,moduleName);
+		}
+
+		Oberon::Parser::ImportListRecord *imports=moduleAST->importListPtr;
 		enumImports(module, imports);
-		wprintf(L"NOT TESTED: Interpreter::interpretModuleImports\n");
+		wprintf(L"\n");
+		wprintf(L"%ls NOT TESTED: Interpreter::interpretModuleImports\n",module.modulePtr->moduleName);
 	}
 
 	void interpretModuleDeclarations(Parser &module) {
 		//module.modulePtr->declSeq
-		wprintf(L"NOT IMPL: Interpreter::interpretModuleDeclarations\n");
+		wprintf(L"%ls NOT IMPL: Interpreter::interpretModuleDeclarations\n",module.modulePtr->moduleName);
 	}
 
 	void interpretModuleStmtSeq(Parser &module) {
@@ -117,8 +132,17 @@ private:
 		}
 	}
 
+	int argc;
+	wchar_t **argv;
+
+	void setCommandLine(int argc, wchar_t **argv){
+		this->argc=argc;
+		this->argv=argv;
+	}
+
 public:
-	void interpret(Parser &module) {
+	void interpret(Parser &module, int argc, wchar_t *argv[]) {
+		setCommandLine(argc, argv);
 		interpretModuleImports(module);
 		interpretModuleDeclarations(module);
 		interpretModuleStmtSeq(module);

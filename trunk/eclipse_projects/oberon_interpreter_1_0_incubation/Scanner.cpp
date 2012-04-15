@@ -454,8 +454,8 @@ Scanner::~Scanner() {
 void Scanner::Init() {
 	EOL    = '\n';
 	eofSym = 0;
-	maxT = 67;
-	noSym = 67;
+	maxT = 69;
+	noSym = 69;
 	int i;
 	for (i = 65; i <= 90; ++i) start.set(i, 1);
 	for (i = 95; i <= 95; ++i) start.set(i, 1);
@@ -496,30 +496,32 @@ void Scanner::Init() {
 	keywords.set(L"TYPE", 28);
 	keywords.set(L"VAR", 29);
 	keywords.set(L"PROCEDURE", 30);
-	keywords.set(L"BEGIN", 32);
-	keywords.set(L"END", 33);
-	keywords.set(L"OF", 37);
-	keywords.set(L"ARRAY", 38);
-	keywords.set(L"RECORD", 39);
-	keywords.set(L"POINTER", 40);
-	keywords.set(L"TO", 41);
-	keywords.set(L"NIL", 43);
-	keywords.set(L"ELSIF", 50);
-	keywords.set(L"THEN", 51);
-	keywords.set(L"DO", 53);
-	keywords.set(L"IF", 54);
-	keywords.set(L"ELSE", 55);
-	keywords.set(L"CASE", 56);
-	keywords.set(L"WHILE", 57);
-	keywords.set(L"REPEAT", 58);
-	keywords.set(L"UNTIL", 59);
-	keywords.set(L"FOR", 60);
-	keywords.set(L"BY", 61);
-	keywords.set(L"LOOP", 62);
-	keywords.set(L"WITH", 63);
-	keywords.set(L"EXIT", 64);
-	keywords.set(L"RETURN", 65);
-	keywords.set(L"MODULE", 66);
+	keywords.set(L"PROCEDURE_PRIMITIVE_GetCommandLine", 32);
+	keywords.set(L"BEGIN", 33);
+	keywords.set(L"END", 34);
+	keywords.set(L"OF", 38);
+	keywords.set(L"ARRAY", 39);
+	keywords.set(L"RECORD", 40);
+	keywords.set(L"POINTER", 41);
+	keywords.set(L"TO", 42);
+	keywords.set(L"SYSTEM_MOD_TYPE_PRIMITIVE_WCHAR", 43);
+	keywords.set(L"NIL", 45);
+	keywords.set(L"ELSIF", 52);
+	keywords.set(L"THEN", 53);
+	keywords.set(L"DO", 55);
+	keywords.set(L"IF", 56);
+	keywords.set(L"ELSE", 57);
+	keywords.set(L"CASE", 58);
+	keywords.set(L"WHILE", 59);
+	keywords.set(L"REPEAT", 60);
+	keywords.set(L"UNTIL", 61);
+	keywords.set(L"FOR", 62);
+	keywords.set(L"BY", 63);
+	keywords.set(L"LOOP", 64);
+	keywords.set(L"WITH", 65);
+	keywords.set(L"EXIT", 66);
+	keywords.set(L"RETURN", 67);
+	keywords.set(L"MODULE", 68);
 
 
 	tvalLength = 128;
@@ -848,26 +850,26 @@ Token* Scanner::NextToken() {
 		case 35:
 			{t->kind = 26; break;}
 		case 36:
-			{t->kind = 34; break;}
-		case 37:
 			{t->kind = 35; break;}
-		case 38:
+		case 37:
 			{t->kind = 36; break;}
+		case 38:
+			{t->kind = 37; break;}
 		case 39:
 			case_39:
-			{t->kind = 42; break;}
-		case 40:
 			{t->kind = 44; break;}
-		case 41:
+		case 40:
 			{t->kind = 46; break;}
-		case 42:
-			{t->kind = 47; break;}
-		case 43:
+		case 41:
 			{t->kind = 48; break;}
-		case 44:
+		case 42:
 			{t->kind = 49; break;}
+		case 43:
+			{t->kind = 50; break;}
+		case 44:
+			{t->kind = 51; break;}
 		case 45:
-			{t->kind = 52; break;}
+			{t->kind = 54; break;}
 		case 46:
 			recEnd = pos; recKind = 9;
 			if (ch == L'=') {AddCh(); goto case_26;}
@@ -881,9 +883,9 @@ Token* Scanner::NextToken() {
 			if (ch == L'=') {AddCh(); goto case_33;}
 			else {t->kind = 31; break;}
 		case 49:
-			recEnd = pos; recKind = 45;
+			recEnd = pos; recKind = 47;
 			if (ch == L'.') {AddCh(); goto case_39;}
-			else {t->kind = 45; break;}
+			else {t->kind = 47; break;}
 
 	}
 	AppendVal(t);

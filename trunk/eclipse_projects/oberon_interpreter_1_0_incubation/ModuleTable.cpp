@@ -10,10 +10,7 @@ Distributed under the terms of GNU General Public License, v.3 or later
 
 namespace Oberon {
 
-ModuleTable::ModuleTable(Errors* errors) {
-	this->errors = errors;
-	topScope=0;
-}
+ModuleTable::ModuleTable(Errors* errors_): moduleName2parser(30),errors(errors_) {}
 
 void ModuleTable::Err(const wchar_t* msg) {
 	errors->Error(0, 0, msg);
@@ -22,37 +19,54 @@ void ModuleTable::Err(const wchar_t* msg) {
 #define wstrlen(a) wcslen(a)
 #define wsprintf swprintf
 
-Module* ModuleTable::NewModule(Parser &moduleAST) {
-	Module *p = topScope; Module *last = 0;
-	while (p != 0) {
-		if (coco_string_equal(p->moduleAST->modulePtr->moduleName, moduleAST.modulePtr->moduleName)){
-			const wchar_t *fmt=L"name declared twice: %ls";
-			size_t len=wstrlen(fmt)-3+wstrlen(moduleAST.modulePtr->moduleName)+1;
-			wchar_t *msg=new wchar_t[len];abortIfNull(msg);
-			(void)wsprintf(msg, len, fmt, moduleAST.modulePtr->moduleName);
-			Err(msg);
-			delete[] msg;
-			return 0;
-		}
-		last = p; p = p->next;
-	}
-	Module *obj = new Module();abortIfNull(obj);
-	obj->moduleAST=&moduleAST;
-	obj->next=0;
-	if (last == 0){last=topScope=obj;}
-	last->next=obj;
-	return obj;
+Parser* ModuleTable::NewModule(Parser & moduleAST ) {
+	std::pair<wchar_t*,Parser*> newmod(moduleAST.modulePtr->moduleName, &moduleAST);
+
+	typedef TModuleTable::iterator hmit;
+	typedef std::pair<hmit, bool> retcode;
+
+	//insert unique
+	retcode insertResult = moduleName2parser.insert(newmod);
+
+	if(insertResult.second)return &moduleAST;
+
+	//output an error
+	const wchar_t *fmt=L"name declared twice: %ls";
+	size_t len=wstrlen(fmt)-3+wstrlen(moduleAST.modulePtr->moduleName)+1;
+	wchar_t *msg=new wchar_t[len];abortIfNull(msg);
+	(void)wsprintf(msg, len, fmt, moduleAST.modulePtr->moduleName);
+	Err(msg);
+	delete[] msg;
+	return 0;
 }
 
 
 // search the name in all open scopes and return its object node
-Parser* ModuleTable::Find (const wchar_t* const name) {
-	Module *obj=topScope;
-	while (obj != 0) {  // for all objects in this scope
-		if (coco_string_equal(obj->moduleAST->modulePtr->moduleName, name)) return obj->moduleAST;
-		obj = obj->next;
+Parser* ModuleTable::Find (const wchar_t* name) {
+	typedef TModuleTable::const_iterator hmit;
+/*
+	typedef __gnu_cxx::_Hashtable_iterator<
+				std::pair<
+					const wchar_t* const,
+					Oberon::Parser*
+				>,
+				const wchar_t*,
+				__gnu_cxx::hash<const wchar_t*>,
+				std::_Select1st<
+					std::pair<
+						const wchar_t* const, Oberon::Parser*
+					>
+				>,
+				std::equal_to<const wchar_t*>,
+				std::allocator<Oberon::Parser*>
+			> findresulttype;
+*/
+	//typedef std::pair<hmit, Parser*> retcode;
+	hmit result=moduleName2parser.find(name);
+	if (result != moduleName2parser.end()) {
+		return (*result).second;
 	}
 	return 0;
 }
 
-}; // namespace
+}; // namespace Oberon

@@ -37,7 +37,7 @@ int main (const int argc, const char *argv[]) {
 			}
 			oargv[n]=0;
 
-			interpreter->interpret(*parser,oargc,oargv);
+			interpreter->interpret(*parser,oargc,oargv,0);
 
 			n=0;while(n<oargc){coco_string_delete(oargv[n]);++n;}
 		}else{

@@ -73,12 +73,14 @@ public class Parser {
 	
 -->productions
 
-	public void Parse() {
+	public DescartesParadigmFileASTImpl Parse() {
 		la = new Token();
 		la.val = "";		
 		Get();
+		DescartesParadigmFileASTImpl ast=
 -->parseRoot
 		Expect(0);
+		return ast;
 	}
 
 	private boolean[][] set = {

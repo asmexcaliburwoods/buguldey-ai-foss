@@ -43,23 +43,55 @@ PRODUCTIONS
 
 DescartesParadigm<out DescartesParadigmFileASTImpl ast> (. ast=null; .)
 =
+
+(
+
 "INNER" "←" "•" "→" "+" "1" "."
-"OUTER" "←" "•" "→" "-" "1" "."
 "ETC" "←" "•" "→" "ETC" "(" "ETC" ")" "."
- 
+"OUTER" "←" "•" "→" "-" "1" "."
+
+)
+
+(
+
 "INNER" "←" "•" "←" "ETC" "←" "•" "←" "OUTER" "."
 "INNER" "→" "•" "→" "ETC" "→" "•" "→" "OUTER" "."
- 
-"INNER" "←" "•" "→" "paradigm" "(" inner_paradigm_id_declaration ")" "."
-"OUTER" "←" "•" "→" "paradigm" "(" outer_paradigm_id_declaration ")" "."
-"ETC"   "←" "•" "→" "paradigm" "(" etc_paradigm_id_declaration ")" "."
- 
+
+)
+
 {
+
+(
+
+"INNER" "←" "•" "→" "paradigm" "(" inner_paradigm_id_declaration ")" "."
+"ETC"   "←" "•" "→" "paradigm" "(" etc_paradigm_id_declaration ")" "."
+"OUTER" "←" "•" "→" "paradigm" "(" outer_paradigm_id_declaration ")" "."
+
+)|(
+
+"weight" "(" "paradigm" "(" paradigm_id_reference ")" ")" "=" "?" "."
+
+)|(
+
+"ratio" "+" "1" "/" "ETC" "/" "-" "1" ":"
+"weight" "(" "paradigm" "(" paradigm_id_reference ")" ")"
+"/"
+"weight" "(" "paradigm" "(" paradigm_id_reference ")" ")"
+"/"
+"weight" "(" "paradigm" "(" paradigm_id_reference ")" ")"
+"=" "?" "/" "?" "/" "?" "."
+
+)|(
+
 "pair" "("
   "paradigm" "(" etc_paradigm_id_reference ")" "includes" "paradigm" "(" etc_subparadigm_id_reference ")" "."
   "paradigm" "(" outer_paradigm_id_reference ")" "includes" "paradigm" "(" outer_subparadigm_id_reference ")" "."
 ")" "."
+
+)
+
 }
+
 "(" "and" "so" "on" ")" "."
 
 "INNER" "includes" "the" "above" "and" "this" "line" "and" "the" "below" "formal" "description" "."

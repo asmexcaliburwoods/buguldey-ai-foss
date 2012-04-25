@@ -22,7 +22,7 @@ CHARACTERS
 
 TOKENS
   ident     = letter { letter | digit }.
-  number    = digit { digit }.
+  number    = digit { digit } [ ("."|",") digit { digit } ] [ ("e"|"E") digit { digit } [ ("."|",") digit { digit } ]].
   string    = '"' { stringCh | '\\' printable } '"'.
   badString = '"' { stringCh | '\\' printable } (cr | lf).
   char      = '\'' ( charCh | '\\' printable { hex } ) '\''.
@@ -46,9 +46,9 @@ DescartesParadigm<out DescartesParadigmFileASTImpl ast> (. ast=null; .)
 
 (
 
-"INNER" "←" "•" "→" "+" "1" "."
+"INNER" "←" "•" "→" "+1" "."
 "ETC" "←" "•" "→" "ETC" "(" "ETC" ")" "."
-"OUTER" "←" "•" "→" "-" "1" "."
+"OUTER" "←" "•" "→" "-1" "."
 
 )
 
@@ -69,17 +69,21 @@ DescartesParadigm<out DescartesParadigmFileASTImpl ast> (. ast=null; .)
 
 )|(
 
-"weight" "(" "paradigm" "(" paradigm_id_reference ")" ")" "=" "?" "."
+"paradigm" "(" paradigm_id_reference ")" "=" string "."
 
 )|(
 
-"ratio" "+" "1" "/" "ETC" "/" "-" "1" ":"
+"weight" "(" "paradigm" "(" paradigm_id_reference ")" ")" "=" weight "."
+
+)|(
+
+"ratio" "+1" "/" "ETC" "/" "-1" ":"
 "weight" "(" "paradigm" "(" paradigm_id_reference ")" ")"
 "/"
 "weight" "(" "paradigm" "(" paradigm_id_reference ")" ")"
 "/"
 "weight" "(" "paradigm" "(" paradigm_id_reference ")" ")"
-"=" "?" "/" "?" "/" "?" "."
+"=" weight "/" weight "/" weight "."
 
 )|(
 
@@ -115,4 +119,16 @@ paradigm_id_reference = paradigm_id.
 
 paradigm_id=string.
 
+weight
+= 
+
+(
+	"?"
+|
+	string 
+|
+	(number [string])
+) 
+
+.
 END DescartesParadigm.

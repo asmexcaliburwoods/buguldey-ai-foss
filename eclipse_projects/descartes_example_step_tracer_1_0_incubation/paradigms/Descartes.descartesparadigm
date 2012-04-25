@@ -1,14 +1,14 @@
-INNER ←•→ +1.
-OUTER ←•→ -1.
+INNER ←•→ +1 .
 ETC ←•→ ETC(ETC).
+OUTER ←•→ -1.
  
 INNER ←•← ETC ←•← OUTER.
 INNER →•→ ETC →•→ OUTER.
 
 
 INNER ←•→ paradigm("http://russellmath.org/").
-OUTER ←•→ paradigm("?").
 ETC ←•→ paradigm("input and output devices").
+OUTER ←•→ paradigm("?").
 
 INNER ←•→ paradigm("Ecological Communism at me on Earth").
 ETC ←•→ paradigm("Роза на кресте").
@@ -42,7 +42,7 @@ weight(paradigm("EGP's Ecology easy communication group"))
 weight(paradigm("Ecology work; counter-Ecology work"))
 /
 weight(paradigm("What non-Ecologists exist on Earth and on outer?"))
-=3 "человека"/"много людей; ~ 7 000 000 человек"/"~ 7 000 000 человек".
+= 3 "человека"/"много людей; ~ 7 000 000 человек"/"~ 7 000 000 человек".
 
 pair(
   paradigm("input and output devices") includes paradigm("wget program").
@@ -55,7 +55,8 @@ pair(
 pair(
   paradigm("input and output devices") includes paradigm("input and output devices").
   paradigm("?") includes paradigm("{b | b is a belief}").
-)
+).
+
 (and so on).
 
 INNER includes the above and this line and the below formal description.

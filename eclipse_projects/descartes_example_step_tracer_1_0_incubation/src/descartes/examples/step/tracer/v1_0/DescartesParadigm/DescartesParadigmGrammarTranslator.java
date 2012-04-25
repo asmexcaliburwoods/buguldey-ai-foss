@@ -73,6 +73,7 @@ public class DescartesParadigmGrammarTranslator {
 //			parser.trace.Close();
 			if (parser.errors.count!=0)throw new IllegalArgumentException("Illegal paradigm: grammar syntax and/or semantic errors detected.");
 //			System.err.println(parser.errors.count + " errors detected");
+			System.out.println("A paradigm verified Ok.");
 			
 			return dp;
 		} else {

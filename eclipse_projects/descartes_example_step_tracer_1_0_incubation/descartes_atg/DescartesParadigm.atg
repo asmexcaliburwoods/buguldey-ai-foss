@@ -43,8 +43,8 @@ PRODUCTIONS
 
 DescartesParadigm<out DescartesParadigmFileASTImpl ast> (. ast=null; .)
 =
-"INNER" "←" "•" "→" "1" "."
-"OUTER" "←" "•" "→" "-1" "."
+"INNER" "←" "•" "→" "+" "1" "."
+"OUTER" "←" "•" "→" "-" "1" "."
 "ETC" "←" "•" "→" "ETC" "(" "ETC" ")" "."
  
 "INNER" "←" "•" "←" "ETC" "←" "•" "←" "OUTER" "."

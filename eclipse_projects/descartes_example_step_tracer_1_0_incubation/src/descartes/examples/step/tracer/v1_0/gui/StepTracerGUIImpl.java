@@ -3,8 +3,10 @@ package descartes.examples.step.tracer.v1_0.gui;
 import descartes.examples.step.tracer.v1_0.DescartesParadigm.DescartesParadigm;
 
 public class StepTracerGUIImpl implements StepTracerGUI {
+	private final DescartesParadigm descartesParadigm;
+
 	public StepTracerGUIImpl(DescartesParadigm paradigm) {
-		// TODO Auto-generated constructor stub
+		this.descartesParadigm=paradigm;
 	}
 
 	@Override

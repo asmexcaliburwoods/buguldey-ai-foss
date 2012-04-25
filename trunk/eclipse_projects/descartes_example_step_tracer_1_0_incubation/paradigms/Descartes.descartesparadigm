@@ -30,7 +30,7 @@ weight(paradigm("Ecology work"))
 weight(paradigm("What non-Ecologists exist on Earth and on outer?"))
 =?/?/?.
 
-paradigm("EGP's Ecology easy communication group")="EGP, Юрий Героев, Вероника Васильева.".
+paradigm("EGP's Ecology easy communication group")="EGP (верующий), Юрий Героев (верующий), Вероника Васильева (верующая).".
 
 weight(paradigm("EGP's Ecology easy communication group"))=3 "человека".
 weight(paradigm("Ecology work; counter-Ecology work"))="Много людей; миллиарды людей".
@@ -42,7 +42,7 @@ weight(paradigm("EGP's Ecology easy communication group"))
 weight(paradigm("Ecology work; counter-Ecology work"))
 /
 weight(paradigm("What non-Ecologists exist on Earth and on outer?"))
-=3 "человека"/"много людей; 7 000 000 человек"/"7 000 000 человек".
+=3 "человека"/"много людей; ~ 7 000 000 человек"/"~ 7 000 000 человек".
 
 pair(
   paradigm("input and output devices") includes paradigm("wget program").

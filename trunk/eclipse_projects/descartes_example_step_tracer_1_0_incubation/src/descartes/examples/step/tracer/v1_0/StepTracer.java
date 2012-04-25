@@ -20,7 +20,7 @@ public class StepTracer {
 	}
 
 	protected void uncheckedLifeSource()throws Throwable {
-		DescartesParadigm paradigm=LifeSourceInfrastructure.pickDescartesParadigm(
+		DescartesParadigm paradigm=LifeSourceInfrastructure.parseDescartesParadigmFile(
 				new File("."+File.separatorChar+"paradigms"+File.separatorChar+"Descartes.descartesparadigm"));
 		StepTracerGUI gui=new StepTracerGUIImpl(paradigm);  
 		gui.stepTraceCOINTERPRET();

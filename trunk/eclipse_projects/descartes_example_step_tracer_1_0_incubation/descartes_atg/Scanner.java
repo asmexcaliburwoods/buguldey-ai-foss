@@ -128,13 +128,13 @@ public class Scanner {
 	static final char EOL = '\n';
 	static final int  eofSym = 0;
 	static final int charSetSize = 256;
-	static final int maxT = 33;
-	static final int noSym = 33;
+	static final int maxT = 40;
+	static final int noSym = 40;
 	short[] start = {
 	  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 	  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-	  0,  0, 10,  0,  0,  0,  0,  5, 19, 20,  0,  0,  0, 17, 16,  0,
-	  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  0,  0,  0,  0,  0,  0,
+	  0,  0, 10,  0,  0,  0,  0,  5, 18, 19,  0, 16,  0, 20, 17, 23,
+	  2,  2,  2,  2,  2,  2,  2,  2,  2,  2, 24,  0,  0, 21,  0, 22,
 	  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 	  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,
 	  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
@@ -145,7 +145,7 @@ public class Scanner {
 	  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 	  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 	  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-	  0,  0, 21,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	  0,  0, 25,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 	  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 	  -1};
 
@@ -253,25 +253,27 @@ public class Scanner {
 	void CheckLiteral() {
 		String lit = t.val;
 		if (lit.compareTo("INNER") == 0) t.kind = 6;
-		else if (lit.compareTo("1") == 0) t.kind = 10;
-		else if (lit.compareTo("OUTER") == 0) t.kind = 12;
-		else if (lit.compareTo("ETC") == 0) t.kind = 14;
-		else if (lit.compareTo("paradigm") == 0) t.kind = 17;
-		else if (lit.compareTo("pair") == 0) t.kind = 18;
-		else if (lit.compareTo("includes") == 0) t.kind = 19;
-		else if (lit.compareTo("and") == 0) t.kind = 20;
-		else if (lit.compareTo("so") == 0) t.kind = 21;
-		else if (lit.compareTo("on") == 0) t.kind = 22;
-		else if (lit.compareTo("the") == 0) t.kind = 23;
-		else if (lit.compareTo("above") == 0) t.kind = 24;
-		else if (lit.compareTo("this") == 0) t.kind = 25;
-		else if (lit.compareTo("line") == 0) t.kind = 26;
-		else if (lit.compareTo("below") == 0) t.kind = 27;
-		else if (lit.compareTo("formal") == 0) t.kind = 28;
-		else if (lit.compareTo("description") == 0) t.kind = 29;
-		else if (lit.compareTo("DO") == 0) t.kind = 30;
-		else if (lit.compareTo("CALL") == 0) t.kind = 31;
-		else if (lit.compareTo("COINTERPRET") == 0) t.kind = 32;
+		else if (lit.compareTo("1") == 0) t.kind = 11;
+		else if (lit.compareTo("ETC") == 0) t.kind = 13;
+		else if (lit.compareTo("OUTER") == 0) t.kind = 16;
+		else if (lit.compareTo("paradigm") == 0) t.kind = 18;
+		else if (lit.compareTo("weight") == 0) t.kind = 19;
+		else if (lit.compareTo("ratio") == 0) t.kind = 22;
+		else if (lit.compareTo("pair") == 0) t.kind = 25;
+		else if (lit.compareTo("includes") == 0) t.kind = 26;
+		else if (lit.compareTo("and") == 0) t.kind = 27;
+		else if (lit.compareTo("so") == 0) t.kind = 28;
+		else if (lit.compareTo("on") == 0) t.kind = 29;
+		else if (lit.compareTo("the") == 0) t.kind = 30;
+		else if (lit.compareTo("above") == 0) t.kind = 31;
+		else if (lit.compareTo("this") == 0) t.kind = 32;
+		else if (lit.compareTo("line") == 0) t.kind = 33;
+		else if (lit.compareTo("below") == 0) t.kind = 34;
+		else if (lit.compareTo("formal") == 0) t.kind = 35;
+		else if (lit.compareTo("description") == 0) t.kind = 36;
+		else if (lit.compareTo("DO") == 0) t.kind = 37;
+		else if (lit.compareTo("CALL") == 0) t.kind = 38;
+		else if (lit.compareTo("COINTERPRET") == 0) t.kind = 39;
 	}
 
 	Token NextToken() {
@@ -339,21 +341,28 @@ public class Scanner {
 				case 15:
 					{t.kind = 9; done = true; break;}
 				case 16:
-					{t.kind = 11; done = true; break;}
+					{t.kind = 10; done = true; break;}
 				case 17:
-					if (ch == '1') {tval[tlen++] = ch; NextCh(); state = 18; break;}
-					else {t.kind = noSym; done = true; break;}
+					{t.kind = 12; done = true; break;}
 				case 18:
-					{t.kind = 13; done = true; break;}
+					{t.kind = 14; done = true; break;}
 				case 19:
 					{t.kind = 15; done = true; break;}
 				case 20:
-					{t.kind = 16; done = true; break;}
+					{t.kind = 17; done = true; break;}
 				case 21:
-					if (ch == 134) {tval[tlen++] = ch; NextCh(); state = 22; break;}
+					{t.kind = 20; done = true; break;}
+				case 22:
+					{t.kind = 21; done = true; break;}
+				case 23:
+					{t.kind = 23; done = true; break;}
+				case 24:
+					{t.kind = 24; done = true; break;}
+				case 25:
+					if (ch == 134) {tval[tlen++] = ch; NextCh(); state = 26; break;}
 					else if (ch == 128) {tval[tlen++] = ch; NextCh(); state = 13; break;}
 					else {t.kind = noSym; done = true; break;}
-				case 22:
+				case 26:
 					if (ch == 144) {tval[tlen++] = ch; NextCh(); state = 12; break;}
 					else if (ch == 146) {tval[tlen++] = ch; NextCh(); state = 15; break;}
 					else {t.kind = noSym; done = true; break;}

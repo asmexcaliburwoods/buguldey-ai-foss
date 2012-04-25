@@ -9,7 +9,7 @@ public class Parser {
 	static final int _string = 3;
 	static final int _badString = 4;
 	static final int _char = 5;
-	static final int maxT = 33;
+	static final int maxT = 40;
 
 	static final boolean T = true;
 	static final boolean x = false;
@@ -89,128 +89,184 @@ public class Parser {
 		Expect(10);
 		Expect(11);
 		Expect(12);
+		Expect(13);
 		Expect(7);
 		Expect(8);
 		Expect(9);
 		Expect(13);
-		Expect(11);
 		Expect(14);
-		Expect(7);
-		Expect(8);
-		Expect(9);
-		Expect(14);
+		Expect(13);
 		Expect(15);
-		Expect(14);
+		Expect(12);
 		Expect(16);
-		Expect(11);
-		Expect(6);
-		Expect(7);
-		Expect(8);
-		Expect(7);
-		Expect(14);
-		Expect(7);
-		Expect(8);
-		Expect(7);
-		Expect(12);
-		Expect(11);
-		Expect(6);
-		Expect(9);
-		Expect(8);
-		Expect(9);
-		Expect(14);
-		Expect(9);
-		Expect(8);
-		Expect(9);
-		Expect(12);
-		Expect(11);
-		Expect(6);
 		Expect(7);
 		Expect(8);
 		Expect(9);
 		Expect(17);
-		Expect(15);
-		inner_paradigm_id_declaration();
-		Expect(16);
 		Expect(11);
 		Expect(12);
+		Expect(6);
 		Expect(7);
 		Expect(8);
-		Expect(9);
-		Expect(17);
-		Expect(15);
-		outer_paradigm_id_declaration();
-		Expect(16);
-		Expect(11);
-		Expect(14);
+		Expect(7);
+		Expect(13);
 		Expect(7);
 		Expect(8);
-		Expect(9);
-		Expect(17);
-		Expect(15);
-		etc_paradigm_id_declaration();
+		Expect(7);
 		Expect(16);
-		Expect(11);
-		while (la.kind == 18) {
-			Get();
-			Expect(15);
-			Expect(17);
-			Expect(15);
-			etc_paradigm_id_reference();
-			Expect(16);
-			Expect(19);
-			Expect(17);
-			Expect(15);
-			etc_subparadigm_id_reference();
-			Expect(16);
-			Expect(11);
-			Expect(17);
-			Expect(15);
-			outer_paradigm_id_reference();
-			Expect(16);
-			Expect(19);
-			Expect(17);
-			Expect(15);
-			outer_subparadigm_id_reference();
-			Expect(16);
-			Expect(11);
-			Expect(16);
-			Expect(11);
+		Expect(12);
+		Expect(6);
+		Expect(9);
+		Expect(8);
+		Expect(9);
+		Expect(13);
+		Expect(9);
+		Expect(8);
+		Expect(9);
+		Expect(16);
+		Expect(12);
+		while (StartOf(1)) {
+			if (la.kind == 6) {
+				Get();
+				Expect(7);
+				Expect(8);
+				Expect(9);
+				Expect(18);
+				Expect(14);
+				inner_paradigm_id_declaration();
+				Expect(15);
+				Expect(12);
+				Expect(13);
+				Expect(7);
+				Expect(8);
+				Expect(9);
+				Expect(18);
+				Expect(14);
+				etc_paradigm_id_declaration();
+				Expect(15);
+				Expect(12);
+				Expect(16);
+				Expect(7);
+				Expect(8);
+				Expect(9);
+				Expect(18);
+				Expect(14);
+				outer_paradigm_id_declaration();
+				Expect(15);
+				Expect(12);
+			} else if (la.kind == 19) {
+				Get();
+				Expect(14);
+				Expect(18);
+				Expect(14);
+				paradigm_id_reference();
+				Expect(15);
+				Expect(15);
+				Expect(20);
+				Expect(21);
+				Expect(12);
+			} else if (la.kind == 22) {
+				Get();
+				Expect(10);
+				Expect(11);
+				Expect(23);
+				Expect(13);
+				Expect(23);
+				Expect(17);
+				Expect(11);
+				Expect(24);
+				Expect(19);
+				Expect(14);
+				Expect(18);
+				Expect(14);
+				paradigm_id_reference();
+				Expect(15);
+				Expect(15);
+				Expect(23);
+				Expect(19);
+				Expect(14);
+				Expect(18);
+				Expect(14);
+				paradigm_id_reference();
+				Expect(15);
+				Expect(15);
+				Expect(23);
+				Expect(19);
+				Expect(14);
+				Expect(18);
+				Expect(14);
+				paradigm_id_reference();
+				Expect(15);
+				Expect(15);
+				Expect(20);
+				Expect(21);
+				Expect(23);
+				Expect(21);
+				Expect(23);
+				Expect(21);
+				Expect(12);
+			} else {
+				Get();
+				Expect(14);
+				Expect(18);
+				Expect(14);
+				etc_paradigm_id_reference();
+				Expect(15);
+				Expect(26);
+				Expect(18);
+				Expect(14);
+				etc_subparadigm_id_reference();
+				Expect(15);
+				Expect(12);
+				Expect(18);
+				Expect(14);
+				outer_paradigm_id_reference();
+				Expect(15);
+				Expect(26);
+				Expect(18);
+				Expect(14);
+				outer_subparadigm_id_reference();
+				Expect(15);
+				Expect(12);
+				Expect(15);
+				Expect(12);
+			}
 		}
-		Expect(15);
-		Expect(20);
-		Expect(21);
-		Expect(22);
-		Expect(16);
-		Expect(11);
-		Expect(6);
-		Expect(19);
-		Expect(23);
-		Expect(24);
-		Expect(20);
-		Expect(25);
-		Expect(26);
-		Expect(20);
-		Expect(23);
+		Expect(14);
 		Expect(27);
 		Expect(28);
 		Expect(29);
-		Expect(11);
+		Expect(15);
+		Expect(12);
+		Expect(6);
+		Expect(26);
 		Expect(30);
 		Expect(31);
-		Expect(32);
-		Expect(15);
-		Expect(23);
-		Expect(24);
-		Expect(20);
-		Expect(25);
-		Expect(26);
-		Expect(20);
-		Expect(23);
 		Expect(27);
-		Expect(28);
-		Expect(29);
-		Expect(16);
-		Expect(11);
+		Expect(32);
+		Expect(33);
+		Expect(27);
+		Expect(30);
+		Expect(34);
+		Expect(35);
+		Expect(36);
+		Expect(12);
+		Expect(37);
+		Expect(38);
+		Expect(39);
+		Expect(14);
+		Expect(30);
+		Expect(31);
+		Expect(27);
+		Expect(32);
+		Expect(33);
+		Expect(27);
+		Expect(30);
+		Expect(34);
+		Expect(35);
+		Expect(36);
+		Expect(15);
+		Expect(12);
 		return ast;
 	}
 
@@ -218,12 +274,16 @@ public class Parser {
 		paradigm_id_declaration();
 	}
 
+	void etc_paradigm_id_declaration() {
+		paradigm_id_declaration();
+	}
+
 	void outer_paradigm_id_declaration() {
 		paradigm_id_declaration();
 	}
 
-	void etc_paradigm_id_declaration() {
-		paradigm_id_declaration();
+	void paradigm_id_reference() {
+		paradigm_id();
 	}
 
 	void etc_paradigm_id_reference() {
@@ -246,10 +306,6 @@ public class Parser {
 		paradigm_id();
 	}
 
-	void paradigm_id_reference() {
-		paradigm_id();
-	}
-
 	void paradigm_id() {
 		Expect(3);
 	}
@@ -268,7 +324,8 @@ public class Parser {
 	}
 
 	private boolean[][] set = {
-		{T,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x}
+		{T,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x},
+		{x,x,x,x, x,x,T,x, x,x,x,x, x,x,x,x, x,x,x,T, x,x,T,x, x,T,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x}
 
 	};
 } // end Parser
@@ -302,30 +359,37 @@ class Errors {
 			case 7: s = "\"\u00e2\u0086\u0090\" expected"; break;
 			case 8: s = "\"\u00e2\u0080\u00a2\" expected"; break;
 			case 9: s = "\"\u00e2\u0086\u0092\" expected"; break;
-			case 10: s = "\"1\" expected"; break;
-			case 11: s = "\".\" expected"; break;
-			case 12: s = "\"OUTER\" expected"; break;
-			case 13: s = "\"-1\" expected"; break;
-			case 14: s = "\"ETC\" expected"; break;
-			case 15: s = "\"(\" expected"; break;
-			case 16: s = "\")\" expected"; break;
-			case 17: s = "\"paradigm\" expected"; break;
-			case 18: s = "\"pair\" expected"; break;
-			case 19: s = "\"includes\" expected"; break;
-			case 20: s = "\"and\" expected"; break;
-			case 21: s = "\"so\" expected"; break;
-			case 22: s = "\"on\" expected"; break;
-			case 23: s = "\"the\" expected"; break;
-			case 24: s = "\"above\" expected"; break;
-			case 25: s = "\"this\" expected"; break;
-			case 26: s = "\"line\" expected"; break;
-			case 27: s = "\"below\" expected"; break;
-			case 28: s = "\"formal\" expected"; break;
-			case 29: s = "\"description\" expected"; break;
-			case 30: s = "\"DO\" expected"; break;
-			case 31: s = "\"CALL\" expected"; break;
-			case 32: s = "\"COINTERPRET\" expected"; break;
-			case 33: s = "??? expected"; break;
+			case 10: s = "\"+\" expected"; break;
+			case 11: s = "\"1\" expected"; break;
+			case 12: s = "\".\" expected"; break;
+			case 13: s = "\"ETC\" expected"; break;
+			case 14: s = "\"(\" expected"; break;
+			case 15: s = "\")\" expected"; break;
+			case 16: s = "\"OUTER\" expected"; break;
+			case 17: s = "\"-\" expected"; break;
+			case 18: s = "\"paradigm\" expected"; break;
+			case 19: s = "\"weight\" expected"; break;
+			case 20: s = "\"=\" expected"; break;
+			case 21: s = "\"?\" expected"; break;
+			case 22: s = "\"ratio\" expected"; break;
+			case 23: s = "\"/\" expected"; break;
+			case 24: s = "\":\" expected"; break;
+			case 25: s = "\"pair\" expected"; break;
+			case 26: s = "\"includes\" expected"; break;
+			case 27: s = "\"and\" expected"; break;
+			case 28: s = "\"so\" expected"; break;
+			case 29: s = "\"on\" expected"; break;
+			case 30: s = "\"the\" expected"; break;
+			case 31: s = "\"above\" expected"; break;
+			case 32: s = "\"this\" expected"; break;
+			case 33: s = "\"line\" expected"; break;
+			case 34: s = "\"below\" expected"; break;
+			case 35: s = "\"formal\" expected"; break;
+			case 36: s = "\"description\" expected"; break;
+			case 37: s = "\"DO\" expected"; break;
+			case 38: s = "\"CALL\" expected"; break;
+			case 39: s = "\"COINTERPRET\" expected"; break;
+			case 40: s = "??? expected"; break;
 				default: s = "error " + n; break;
 			}
 			printMsg(line, col, s);

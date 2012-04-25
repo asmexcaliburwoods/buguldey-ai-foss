@@ -4,7 +4,8 @@ ETC ←•→ ETC(ETC).
  
 INNER ←•← ETC ←•← OUTER.
 INNER →•→ ETC →•→ OUTER.
- 
+
+
 INNER ←•→ paradigm("http://russellmath.org/").
 OUTER ←•→ paradigm("?").
 ETC ←•→ paradigm("input and output devices").
@@ -17,9 +18,9 @@ INNER ←•→ paradigm("Ecologists and supporters").
 ETC ←•→ paradigm("Ecology work").
 OUTER ←•→ paradigm("What on Earth and on outer with regard to Ecology?").
 
-weight(paradigm("Ecologists and supporters"))=?
-weight(paradigm("Ecology work"))=?
-weight(paradigm("What on Earth and on outer with regard to Ecology?"))=?
+weight(paradigm("Ecologists and supporters"))=?.
+weight(paradigm("Ecology work"))=?.
+weight(paradigm("What on Earth and on outer with regard to Ecology?"))=?.
 
 ratio +1/ETC/-1:
 weight(paradigm("Ecologists and supporters"))
@@ -27,7 +28,21 @@ weight(paradigm("Ecologists and supporters"))
 weight(paradigm("Ecology work"))
 /
 weight(paradigm("What non-Ecologists exist on Earth and on outer?"))
-=?
+=?/?/?.
+
+paradigm("EGP's Ecology easy communication group")="EGP, Юрий Героев, Вероника Васильева.".
+
+weight(paradigm("EGP's Ecology easy communication group"))=3 "человека".
+weight(paradigm("Ecology work; counter-Ecology work"))="Много людей; миллиарды людей".
+weight(paradigm("What non-Ecologists exist on Earth and on outer?"))="Миллиарды людей".
+
+ratio +1/ETC/-1:
+weight(paradigm("EGP's Ecology easy communication group"))
+/
+weight(paradigm("Ecology work; counter-Ecology work"))
+/
+weight(paradigm("What non-Ecologists exist on Earth and on outer?"))
+=3 "человека"/"много людей; 7 000 000 человек"/"7 000 000 человек".
 
 pair(
   paradigm("input and output devices") includes paradigm("wget program").

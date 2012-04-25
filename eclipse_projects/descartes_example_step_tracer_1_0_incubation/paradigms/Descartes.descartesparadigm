@@ -26,7 +26,8 @@ weight(paradigm("Ecologists and supporters"))
 /
 weight(paradigm("Ecology work"))
 /
-weight(paradigm("What non-Ecologists exist on Earth and on outer?"))=?
+weight(paradigm("What non-Ecologists exist on Earth and on outer?"))
+=?
 
 pair(
   paradigm("input and output devices") includes paradigm("wget program").

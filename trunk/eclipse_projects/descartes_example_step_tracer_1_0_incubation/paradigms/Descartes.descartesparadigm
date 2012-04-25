@@ -1,0 +1,28 @@
+INNER ←•→ 1.
+OUTER ←•→ -1.
+ETC ←•→ ETC(ETC).
+ 
+INNER ←•← ETC ←•← OUTER.
+INNER →•→ ETC →•→ OUTER.
+ 
+INNER ←•→ paradigm("http://russellmath.org/").
+OUTER ←•→ paradigm("?").
+ETC ←•→ paradigm("input and output devices").
+ 
+pair(
+  paradigm("input and output devices") "includes" paradigm("wget program").
+  paradigm("?") "includes" paradigm("{u | u is a http: or ftp: URL}").
+).
+pair(
+  paradigm("input and output devices") "includes" paradigm("text input area").
+  paradigm("?") "includes" paradigm("{u | u is an user}").
+).
+pair(
+  paradigm("input and output devices") "includes" paradigm("input and output devices").
+  paradigm("?") "includes" paradigm("{b | b is a belief}").
+)
+"(and so on)".
+
+INNER "includes" "the above and this line and the below" "formal description".
+ 
+DO CALL COINTERPRET("the above and this line and the below" "formal description").

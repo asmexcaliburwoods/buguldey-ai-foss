@@ -1,0 +1,6 @@
+09.06.2003, mm
+
+someone asked for a statistical feature in your history tool
+he talked about a miranda plugin that does it
+http://miranda-im.org/download/details.php?action=viewfile&id=646
+

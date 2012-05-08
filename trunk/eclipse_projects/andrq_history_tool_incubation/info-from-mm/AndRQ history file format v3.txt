@@ -1,0 +1,139 @@
+abstract: this document describes an &RQ history file
+
+*** DATATYPES
+
+datetime = double (1.0 = 1 day = 24h, delphi format)
+string   = int    length
+           byte   1st char
+           byte   2nd char...
+
+*** CONSTANTS
+
+* event-type
+  msg          = 01
+  url          = 02
+  contacts     = 03
+  file         = 04
+  authReq      = 05
+  AddedYou     = 06
+  oncoming     = 07
+  offgoing     = 08
+  auth         = 09
+  authDenied   = 10
+  statuschange = 11
+  automsgreq   = 12
+  gcard        = 13
+  automsg      = 14
+
+*** FILE FORMAT
+
+The history file is a sequence of CHUNKs.
+
+A CHUNK is so made:
+
+int what
+  case -1 (event)
+    byte      event-type
+    int       sender-uin
+    datetime  event-time
+    int       N
+    N byte    extra-info   
+    string    body (crypted)
+  case -2 (hashed)
+    string    hashed-password
+  case -3 (crypt-mode) 
+    int       following-data-length
+    byte      crypt-mode (0 = simple, 1 = key method #1)
+
+
+an extra-info field is a sequence of:
+  int     data-id
+  int     data-length (N)
+  N byte  data-body
+
+here is a list of defined data-id values, and associated data-body
+  data-id: 1
+  description: stores flags for the message
+  data-body: int  flags
+    bit0  multiple recipients
+    bit1  sent while you were offline
+    bit2  urgent msg
+    bit3  no-blink msg
+    
+    higher bits (starting from the top) are used internally by &RQ
+    
+*** ENCRYPTION METHODS
+
+* 0, SIMPLE
+
+The body is decrypted using sender-uin as key.
+The following is the algo used
+
+(ALGO#1)
+  
+  procedure decritt(var s:string; key:integer);
+    asm
+    mov ecx, key
+    mov dl, cl
+    shr ecx, 20
+    mov dh, cl
+  
+    mov esi, s
+    mov esi, [esi]
+    or  esi, esi    // nil string
+    jz  @OUT
+    
+    // now esi points to the first character of the string
+    
+    mov ah, 1011 1000b //0b8h
+  
+    mov ecx, length(s)
+    or  ecx, ecx
+    jz  @OUT
+  @IN:
+    mov al, [esi]
+    xor al, ah
+    rol al, 3
+    xor al, dh
+    sub al, dl
+  
+    mov [esi], al
+    inc esi
+    ror ah, 3
+    dec ecx
+    jnz @IN
+  @OUT:
+    end; // decritt
+
+* 1, KEY METHOD #1
+
+A key is supplied to the algo of method 1 different from
+sender-uin. The key is calculated trhough ALGO#2 starting
+from a string supplied by the user. An MD5 hash of the string
+should be saved in an appropriate CHUNK for password checking.
+
+(ALGO#2)
+
+  function calculate_KEY1(pwd:string):integer;
+  var
+    i,L:integer;
+    p:^integer;
+  begin
+  L:=length(pwd);
+  result:=L shl 16;
+  p:=NIL;  // shut up compiler warning
+  if pwd>'' then p:=@pwd[1];
+  i:=0;
+  while i+4 < L do
+    begin
+    inc(result, p^);
+    inc(p);
+    inc(i,4);
+    end;
+  while i < L do
+    begin
+    inc(result, ord(pwd[i]));
+    inc(i);
+    end;
+  end; // calculate_KEY1
+  

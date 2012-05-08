@@ -1,0 +1,55 @@
+&RQ history file format.txt=&RQ history file format v1.txt
+
+***** &RQ history file format.txt
+    datetime  event-time
+    string    body (crypted)
+***** &RQ HISTORY FILE FORMAT V3.TXT
+    datetime  event-time
+    int       N
+    N byte    extra-info   
+    string    body (crypted)
+*****
+
+***** &RQ history file format.txt
+    byte      crypt-mode (0 = simple, 1 = key method #1)
+    
+***** &RQ HISTORY FILE FORMAT V3.TXT
+    byte      crypt-mode (0 = simple, 1 = key method #1)
+
+an extra-info field is a sequence of:
+  int     data-id
+  int     data-length (N)
+  N byte  data-body
+
+here is a list of defined data-id values, and associated data-body
+  data-id: 1
+  description: stores flags for the message
+  data-body: int  flags
+    bit0  multiple recipients
+    bit1  sent while you were offline
+    bit2  urgent msg
+    bit3  no-blink msg
+    
+    higher bits (starting from the top) are used internally by &RQ
+    
+*****
+
+***** &RQ history file format.txt
+    jz  @OUT
+    mov ah, 10111000b
+***** &RQ HISTORY FILE FORMAT V3.TXT
+    jz  @OUT
+    // now esi points to the first character of the string
+    mov ah, 10111000b
+*****
+
+***** &RQ history file format.txt
+ 
+    mov ecx, [esi-4]
+    or  ecx, ecx
+***** &RQ HISTORY FILE FORMAT V3.TXT
+  
+    mov ecx, length(s)
+    or  ecx, ecx
+*****
+

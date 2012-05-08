@@ -1,0 +1,1314 @@
+# $Id: se.i18n,v 1.40 2005/04/24 12:01:06 kuhlmann Exp $ (Swedish)
+#  EN: __.i18n,v 1.79 2005/04/24 11:43:08 <-- NEVER TOUCH THIS - it's updated automatically
+#1000:UTF-8
+1001:sv
+1002:sv_SE
+1003:0-4-10-4
+1004:Björn Hansson / Arvid Ericsson / Sebastian Rasmussen
+1005:Sebastian Rasmussen
+1006:2003-10-11
+1008:iso-8859-1
+1010:Användaren är borta [Auto-Meddelande]
+1011:Användaren är inte tillgänglig [Auto-Meddelande]
+1012:Användaren är upptagen [Auto-Meddelande]
+1014:None
+1015:Jan
+1016:Feb
+1017:Mar
+1018:Apr
+1019:Maj
+1020:Jun
+1021:Jul
+1022:Aug
+1023:Sep
+1024:Okt
+1025:Nov
+1026:Dec
+1027:JA
+1028:NEJ
+1029:Svara JA eller NEJ!
+1030:loggade av
+1032:debug: dubbelt paket #%04lx av typ %04x (%s)\n
+1033:Inkommande v8 serverpaket:
+1034:Har försökt max antal gånger, ger upp.
+1038:Meddelandet avbrutet.\n
+1039:Servern anser inte att vi är anslutna.\n
+1043:Sökningen avslutad.
+1044:Sökningen gav för många svar.
+1045:Sökning klar.
+1046:Längd
+1047:Extra infomation
+1048:Felkod: %ld\n
+1050:Inloggning klar!
+1053:Ansluten till %s, väntar på svar\n
+1055:Anslutningen misslyckades
+1056:Ansluten, försöker logga in\n
+1060:Debugnivån är %ld.\n
+1061:%s är inte ett registrerat namn\n
+1062:Användare ignorerade:
+1063:Ange lösenord:
+1064:Ändrade automatiskt status till
+1078:Finns ingen tillgänglig översättning.
+1079:Ingen översättning, använder standardspråk.\n
+1082:Försöker återansluta... [försök %d av %d]\n
+1085:på
+1086:av
+1089:Tog bort översättning.
+1093:Lösenorden stämmer inte, försök igen!
+1094:SOCKS5 server-namn eller IP-nummer (svara 0 om du inte vill använda SOCKS):
+1095:SOCKS5 port (brukar vara 1080):
+1096:SOCKS5 användarnam (ange 0 om du inte behöver logga in):
+1097:SOCKS5 lösenord:
+1098:Visa en lista över namn du kan tabba igenom.
+1101:Arabiska
+1102:Bhojpuri
+1103:Bulgariska
+1104:Burmese
+1105:Cantonese
+1106:Katalanska
+1107:Kinesiska
+1108:Kroatiska
+1109:Tjeckiska
+1110:Danska
+1111:Nederländska
+1112:Engelska
+1113:Esperanto
+1114:Estniska
+1115:Farsi
+1116:Finska
+1117:Franska
+1118:Gaeliska
+1119:Tyska
+1120:Grekiska
+1121:Hebreiska
+1122:Hindi
+1123:Hungarian
+1124:Isländska
+1125:Indonesian
+1126:Italienska
+1127:Japanska
+1128:Khmer
+1129:Korean
+1130:Lao
+1131:Latvian
+1132:Lettiska
+1133:Malay
+1134:Norska
+1135:Polska
+1136:Portugisiska
+1137:Romanian
+1138:Ryska
+1139:Serbo-Kroatiska
+1140:Slovakiska
+1141:Slovenska
+1142:Somali
+1143:Spanska
+1144:Swahili
+1145:Svenska
+1146:Tagalog
+1147:Tartar
+1148:Thai
+1149:Turkiska
+1150:Ukrainska
+1151:Urdu
+1152:Vietnamesiska
+1153:Yiddish
+1154:Yoruba
+1155:Afrikaans
+1156:Bosniska
+1157:Persiska
+1158:Albanska
+1159:Armenska
+1161:Akademiskt
+1162:Administrativt
+1163:Konst/underhållning
+1164:Student
+1165:Datorrelaterat
+1166:Samhälle
+1167:Utbildning
+1168:Ingenjör
+1169:Finanstjänster
+1170:Staten
+1171:Student
+1172:Hem
+1173:ICQ - En hjälpande hand
+1174:Juridik
+1175:Tjänsteman
+1176:Tillverkande
+1177:Medicin/hälsa
+1178:Militär
+1179:Privat organisation
+1180:Professional
+1181:Försäljning
+1182:Pensionär
+1183:Vetenskap och Forskning
+1184:Sport
+1185:Teknisk
+1186:Högskolestuderande
+1187:Webutveckling
+#-#1188:Okänt kommando i inställningsfil '%s', ignorerad.
+#+#1188:Unrecognized command in rc file '%s', ignored.
+#1188:Unrecognized command '%s' in configuration file, ignored.
+1198:Annan tjänst
+1200:ej angivet
+1201:Afghanistan
+1202:Albanien
+1203:Algeriet
+1204:Amerikanska Samoa
+1205:Andorra
+1206:Angola
+1207:Anguilla
+1208:Antigua
+1209:Argentina
+1210:Armenien
+1211:Aruba
+1212:Ascention öarna
+1213:Australien
+1214:Australiens arktiska teritorium
+1215:Österrike
+1216:Azerbadjan
+1217:Bahamas
+1218:Bahrain
+1219:Bangladesh
+1220:Barbados
+1221:Vittrysland
+1222:Belgien
+1223:Belize
+1224:Benin
+1225:Bermuda
+1226:Bhutan
+1227:Bolivia
+1228:Bosnien & Herzegovina
+1229:Botswana
+1230:Brasilien
+1231:Jungfruöarna
+1232:Brunei
+1233:Bulgarien
+1234:Burkina Faso
+1235:Burundi
+1236:Kambodja
+1237:Cameroon
+1238:Kanada
+1239:Kap Verde öarna
+1240:Cayman öarna
+1241:Central afrikanska republiken
+1242:Chad
+1243:Jul ön
+1244:Cocos-Keeling öarna
+1245:Comoros
+1246:Kongo
+1247:Cook öarna
+1248:Chile
+1249:Kina
+1250:Colombia
+1251:Costa Rica
+1252:Kroatien
+1253:Kuba
+1254:Cypern
+1255:Tjeckien
+1256:Danmark
+1257:Diego Garcia
+1258:Djibouti
+1259:Dominika
+1260:Dominikanska Republiken
+1261:Ecuador
+1262:Egypten
+1263:El Salvador
+1264:Ekvatorial Guinea
+1265:Eritrea
+1266:Estland
+1267:Etiopien
+1268:Före detta Jugoslavien
+1269:Färöarna
+1270:Falklandsöarna
+1271:Mikronesien
+1272:Fiji
+1273:Finland
+1274:Frankrike
+1275:Franska Atillerna
+1276:Franska Atillerna
+1277:Franska Guiana
+1278:Franska Polynesien
+1279:Gabon
+1280:Gambia
+1281:Georgia
+1282:Tyskland
+1283:Ghana
+1284:Gibraltar
+1285:Grekland
+1286:Grönland
+1287:Grenada
+1288:Guadeloupe
+1289:Guam
+1290:Guantanomo viken
+1291:Guatemala
+1292:Guinea
+1293:Guinea-Bissau
+1294:Guyana
+1295:Haiti
+1296:Honduras
+1297:Hong Kong
+1298:Bulgarien
+1299:Island
+1300:Indien
+1301:Indonesien
+1302:INMARSAT
+1303:INMARSAT Öst-atlantiska
+1304:Iran
+1305:Irak
+1306:Irland
+1307:Israel
+1308:Italien
+1309:Elfenbenskusten
+1310:Japan
+1311:Jordanien
+1312:Kazakhstan
+1313:Kenya
+1314:Sydkorea
+1315:Kuwait
+1316:Liberia
+1317:Libien
+1318:Lichtenstein
+1319:Luxemburg
+1320:Malawi
+1321:Malaysia
+1322:Mali
+1323:Malta
+1324:Mexiko
+1325:Monaco
+1326:Morocco
+1327:Namibia
+1328:Nepal
+1329:Holland
+1330:Holländska Antillerna
+1331:Nya Caledonien
+1332:Nya Zealand
+1333:Nicaragua
+1334:Nigeria
+1335:Norge
+1336:Oman
+1337:Pakistan
+1338:Panama
+1339:Papua nya guinea
+1340:Paraguay
+1341:Peru
+1342:Philippinerna
+1343:Polen
+1344:Portugal
+1345:Puerto Rico
+1346:Qatar
+1347:Rumänien
+1348:Ryssland
+1349:Saipan
+1350:San Marino
+1351:Saudiarabien
+1352:Senegal
+1353:Singapore
+1354:Slovakien
+1355:Sydafrika
+1356:Spanien
+1357:Sri Lanka
+1358:Surinam
+1359:Sverige
+1360:Schweiz
+1361:Taiwan
+1362:Tanzania
+1363:Thailand
+1364:Tinian Island
+1365:Togo
+1366:Tokelau
+1367:Tonga
+1368:Trinadad och Tabago
+1369:Tunisien
+1370:Turkiet
+1371:Turkmenistan
+1372:Turks and Caicos Islands
+1373:Tuvalu
+1374:Uganda
+1375:Ukraina
+1376:Förenade arabemiraten
+1377:Storbrittanien
+1378:United States Virgin Islands
+1379:USA
+1380:Uruguay
+1381:Uzbekistan
+1382:Vanuatu
+1383:Vatikan staten
+1384:Venezuela
+1385:Vietnam
+1386:Wallis and Futuna Islands
+1387:Western Samoa
+1388:Yemen
+1389:Yugoslavien
+1390:Zaire
+1391:Zambia
+1392:Zimbabwe
+1393:lyckades
+1394:misslyckades
+1400:Visar lokal infomation om användaren, eller dig själv.
+1401:Uppdaterar information som ålder och kön.
+1402:Uppdaterar informationen om dig.
+1403:Visar det sista meddelandet du har fått från <namn>.\nNamnet måste vara med på din lista.
+1404:Väljer att ignorera/ej ignorera en användare.
+1405:Visar ignorerade användare.
+1406:Väljer om de är synlig för en användare när du är osynlig.
+1407:Visar status för användare på din lista.
+1408:Byter lösenord.
+1409:Skickar ett meddelande till uin.
+1410:Skickar en webadress och ett meddelande till uin.
+1412:Skickar ett meddelande till den du sist skickade ett meddelande till.
+1414:Svarar på det meddelande du fick sist.
+1415:Hittar en slumpmässig användare i den specificerade gruppen eller listan av grupper.
+1416:Visar nuvarande status på alla i din kontaktlista.
+1418:Ändra debug nivå (standard 0).
+1419:Rensa skärmen.
+1420:Ändrar om det piper när du får meddelande.
+1422:Loggar av och avslutar.
+1424:Ändrar om du skickar automatiska svar när du är DND, NA, och så vidare.
+1425:Ställer in dina automatiska svar för en viss status.
+1426:Skapar en ny ICQ-användare med detta lösenord.
+1427:Ändrar din status till statusnumret. Utan ett nummer listar det alternativen.
+1428:Lägg till uin till din lista.
+1429:Letar efter ICQ-användare.
+1430:Visar allmän information om ett nummer.
+1431:Ändra status till inloggad.
+1432:Ändra status till borta.
+1433:Ändra status till ej tillgänglig.
+1434:Ändra status till upptagen.
+1435:Ändra status till stör ej.
+1436:Ändra status till "Chattsugen"
+1437:Ändra status till osynlig.
+1438:Uppdaterar informationen om dig själv (e-mail, namn, etc.).
+1439:Ställer in din slumpmässiga användargrupp.
+1440:Slumpmässig användare:
+1441:IP-adress:
+1442:Vänligen välj ett ämne ur hjälpen.
+1443:Kommandon relaterade till mICQ.se's uppvisning och konfiguration.
+#-#1444:Kommandon relaterade till att hitta andra användare.
+#+#1444:Commands relating to finding and seeing other users.
+# #1444:Commands relating to seeing and finding other users.
+#1444:Commands relating to seeing and finding other users.
+1445:Kommandon relaterade till ditt ICQ konto.
+1446:Kommandon relaterade till att skicka meddelanden.
+1447:Klient
+1448:Meddelande
+1449:Användare
+1450:Konto
+1451:Lokal IP:
+1452:Status:
+1453:TCP-version:
+1454:Anslutning:
+1455:Konst
+1456:Bilar
+1457:Kändisdyrkare
+1458:Samlingar
+1459:Datorer
+1460:Litteratur och Kultur
+1461:Hälsa
+1462:Spel
+1463:Hobbies
+1465:Internet
+1466:Livstil
+1467:Film/TV
+1468:Musik
+1469:Utomhusaktiviteter
+1470:Föräldraskap
+1471:Djur/husdjur
+1472:Religion
+1473:Vetenskap/teknik
+1474:Kunskaper
+1475:Sport
+1476:Webdesign
+1477:Natur och Miljö
+1478:Nyheter & Media
+1479:Stat och myndighet
+1480:Företagande och ekonomi
+1481:Mystik
+1482:Resor
+1483:Astronomi
+1484:Rymden
+1485:Kläder
+1486:Fester
+1487:Kvinnor
+1488:Samhällsvetenskap
+1489:60-talet
+1490:70-talet
+1491:80-talet
+1492:50-talet
+1493:Direktkontakt
+1494:Server enbart
+1495:Hittade ingen slumpvis användare
+1497:misslyckades
+1499:Övrigt
+1500:ICQ-namn:
+1501:Namn:
+1505:Plats:
+1506:Telefon:
+1507:Fax:
+1508:Adress:
+1509:Mobil:
+1510:Postnummer:
+1511:Land:
+1512:Landsnummer:
+1513:Landsnummer jobb:
+1514:Landsnummer:
+1515:Hemsida jobb:
+1516:Yrke:
+1517:Tjänst:
+1518:Avdelning:
+1519:Företag:
+1520:Arbetets postnummer:
+1521:Arbetets faxnummer:
+1522:Arbetets adress:
+1523:Arbetets telefon:
+1524:Arbetets plats:
+1525:Om:
+1528:kvinna
+1529:man
+1530:ej angett
+1531:Hemsida:
+1532:Född:
+1533:Språk:
+1534:Ange språkets nummer, eller tryck L för att få en lista:
+1535:Ange ålder:
+1536:Ange kön:
+1537:Ange hemsida:
+1538:Ange födelseår (fyra siffror):
+1539:Ange födelsemånad:
+1540:Ange födelsedag:
+1544:Ange stad:
+1545:Ange stat:
+1546:Ange telefonnummer:
+1547:Ange faxnummer:
+1548:Ange gatuadress:
+1549:Ange mobiltelefonnummer:
+1550:Ange postnummer (måste vara nummer):
+1551:Ange landets landsnummer:
+1552:Ange din tidszon (+/- 0-12):
+1553:Ange ditt namn:
+1554:Ange ditt förnamn:
+1555:Ange ditt efternamn:
+1556:Ange din e-postadress:
+1557:Vill du att de som använder Mirabilis behöver din tillåtelse för att lägga till dig? (JA/NEJ)
+1564:Förnamn:
+1565:Efternamn:
+1566:E-post adress:
+1570:Stad:
+1574:State:
+1575:Ålder:
+1578:Landets landsnummer:
+1579:Ange företag:
+1587:Ange avdelning: 
+1595:\nLista.\n============================================\n%d Användare\n
+1596:[SOCKS] Kunde inte hitta namnet %s: %s.
+1597:[SOCKS] Kunde ej skapa anslutning\n
+1598:[SOCKS] Anslutning vägrades\n
+1599:[SOCKS] Felaktig inloggningsmetod\n
+1600:[SOCKS] Inloggningsfel\n
+1601:[SOCKS] Okänt SOCKS fel\n
+1602:Skriv in stat:
+1603:Skriv in arbetsbefattning:
+1604:Ska användarna vara online?
+1605:Skall din status vara synlig från webben? (JA/NEJ)
+1606:Mottog ett felaktigt sessions ID %08lx (korrekt: %08lx) med kommando %04x ignorerat.\n
+1612:Detta program har utvecklats helt utan hjälp från Mirabilis.\n
+1613:Vi har ej försökt dekompilera någon av Mirabilis källkod.\n
+1618:UIN:
+1619:Varning:
+1620:maximala antalet kontakter nått. Be en trollkarl förstora mig!
+1621:användare inte returnerade.
+1622:Vill du använda dessa ändringar? (JA/NEJ)
+#-#1623:Dubblerat paket %04X\n
+#+#1623:Doubled packet %04X\n
+#-#1632:\nAnslutningen instabil. Avbryter...
+#+#1632:\nConnection unstable. Exiting....
+#1623:Double packet %04x.\n
+#1632:\nConnection unstable. Exiting....
+1634:ok.\n
+1637:Kan inte binda socket till ledig port\n
+1638:Kunde inte skapa socket
+1639:Det nya ICQ-nummret är %ld!\n
+1640:Misslyckades med att uppdatera informationen.\n
+1641:Informationen uppdaterad.\n
+1642:IP:
+1643:Bekräftad SRV_X1 0x021C Klar Kontaktlista?\n
+#-#1644:Bekräftad SRV_X2 0x00E6 Klar gamla meddelanden?\n
+#+#1644:Acknowleged SRV_X2 0x00E6 Done old messages?\n
+#1644:Acknowledged SRV_X2 0x00E6 Done old messages?\n
+1645:Felaktigt lösenord.\n
+1646:Servern är överbelastad.\n
+1648: Svaret var %04x	
+1649:Versionen var %x	
+1650:\nSEQ var %04lx
+1651:Storleken var %d\n
+1653:Ej inloggad
+1654:Inloggad
+1655:Ange e-post adress:
+1656:Ange namn:
+1657:Ange förnamn:
+1658:Ange efternamn:
+#-#1659:Okänt avsnitt %s i konfigurationsfilen.
+#+#1659:Unknown section %s in configuration file.
+#1659:Unknown section '%s' in configuration file.
+1660:Felaktigt kommando: %s\n
+1661:Skalkommandor är avstängda.\n
+1666:Slutar ignornera %s.\n
+1667:Ignorerar %s.\n
+1670:Normalt synlig för %s nu.\n
+1671:Alltid synlig för %s nu.\n
+1675:Ignorerad rad:
+#-#1678:Ange URL.\n
+#+#1678:Need URL please.\n
+#1678:No URL given.\n
+1679:Tyvärr, kunde ej spara ditt svarsmeddelande!\n
+1680:Dina inställningar är sparade!\n
+1682:Du har mottagit meddelanden från:\n
+1687:Micq har varit igång i
+1688: dagar
+1689: timmar
+1690: minuter
+1691: sekunder
+1696:Kön:
+1703:Status moder:\n
+1704:Grupper:\n
+1705:Allmänt                    1\n
+1706:Kärlek                     2\n
+1707:Spel                       3\n
+1708:Studenter                  4\n
+1709:20                         6\n
+1710:30                         7\n
+1711:40                         8\n
+1712:50+                        9\n
+1713:Söker kvinnor
+1714:Söker män
+1715:mICQ
+1716:Ingen
+#-#1717:! som det första tecknet av ett kommando kommer köra ett skalkommando (t.ex. "!ls"  "!dir" "!mkdir temp").
+#+#1717:'!' as the first character of a command will execute a shell command (e.g. '!ls', '!dir', '!mkdir temp')
+# #1717:Execute shell command <cmd> (e.g. '!ls', '!dir', '!mkdir temp').
+#1717:Execute shell command <cmd> (e.g. '!ls', '!dir', '!mkdir temp').
+1719:Visar hur länge micq varit igång samt lite statistik.
+#-#1720:<kontakter> är en kommaseparerad lista på UINs och psuedonymer/alias.
+#+#1720:<contacts> is a comma seperated list of UINs and nick names of users.
+1721:Att skicka ett tomt meddeleande försätter klienten i multiradsläget.\nSkriv . på en en i övrigt tom rad för att avsluta ett meddelande.\nSkriv # på en en i övrigt tom rad för att annulera ett meddelande.
+1741:Måste mottaga ett meddelande först.\n
+1742:Måste skriva ett meddelande först.\n
+1743:Diskrepans mellan paketens längd.\n
+1744:server (v5)
+1745:Lista
+1746:Osynlig lista
+1747:Synlig lista
+1754: OBS: Du måste skriva 'save' för att spara din nya lista.\n
+1755:har lagts till i din lista.\n
+1762:Ditt nya UIN är: %ld.\n
+1766:Byter status till borta/ej tillgänglig pga %s%ld%s sekunders inaktivitet.\n
+1767:Aktiver autobyte till borta/ej tillgänglig.
+1770:Återsänd ditt senaste meddelande till <kontakter>.
+1771:Du har inte skickat ett enda meddelande till någon än!\n
+1774:Inkommande paket:
+1775:Utgående paket:
+1781:Ditt lösenord för UIN %ld:\n
+1782:Du behöver ett lösenord till ditt nya UIN.\n
+1783:För att undvika stavfel, var vänlig ange lösenord en gång till.\n
+1784:Om du är bakom en brandväg, kan du behöva använda en SOCKS5-server. Om du för det, var vänlig fyll i dess värdnamn eller IP-adress. Om inte, eller om osäker, tryck bara enter.\n
+1785:framgång.\n
+1786:Jag kan också behöve portnummret som socks-servern lyssnar på. Om dy är osäker, tryck enter så används standardporten.\n
+1787:Du behöver antagligen identifiera dig själv för socks-servern. Om så är fallet, fyll i det användarnamn, socks-serverns administratör gav dig. Om inte, tryck bara enter.\n
+1788:Nu behöver jag också lösenordet för den angivna användaren.\n
+1789:Mottog felformat paket: (%d)
+1790:Setupguiden klar. Grattis till ditt nya UIN!\n
+1791:Setupguiden klar. Grattis!\n
+1792:Jag är ledsen, men AOL vill inte ge oss ett nytt UIN, antagligen på grund av att det skapats för många från det här IP-nummret. Försök igen lite senare.\n
+1793:Inget giltigt UIN hittat. Setupguiden kommer att guida dig genom processen att skapa ett nytt.\n
+1794:Om du redan har ett UIN, var snäll och fyll i det. Om inte, skriv bara 0, så ska vi fixa ett till dig.\n
+1795:Lösenord:
+1796:Setupguiden klar. Var vänlig vänta tills registreringen har slutförts.\n
+1797:Företag och Finans
+1798:Låg-/mellanstadiet
+1799:Högstadiet/gymnasiet
+#-#1800:Ändra språk till <språk> eller visa sträng <nr>.
+#+#1800:Change the working language to <lang> or display string <nr>.
+# #1800:Change the working language (and encoding) to <lang> or display string <nr>.
+#1800:Change the working language (and encoding) to <lang> or display string <nr>.
+1801:Visar en lista på folk från din kontaktlista i ett skärmbrett format.
+1807:Avbröt inkommande meddelande (seq %04x) från %s\n
+1808:Högskola
+1810:Universitet
+1812:Tidigare arbetsplats
+1813:Tidigare organisationer
+1814:Autosvaret är satt till %s%s%s.\n
+1815:    skoj:      använd skojiga meddelanden.\n
+1817:Händelseskriptfunktionen är inaktiverad.\n
+#-#1818:Varning: Obsolet syntax funnen i rc-filen!\n Var gullig och uppdatera eller spara (save) din rc-fil och kolla i den efter ändringar.\n
+#+#1818:Warning: Deprecated syntax found in rc file!\n    Please update or "save" the rc file and check for changes.\n
+#1818:Warning: Deprecated syntax found in configuration file '%s'!\n    Please update or "save" the configuration file and check for changes.\n
+1820:%s <option> [på|av|<värde>] - kontrollera enkla inställningar.\n
+1822:    färg:      använd färgtext.\n
+1823:Inkommande partiellt paket:
+1825:Kasserade ett %04x (%s)-paket
+1826:Återsänder meddelande %04x (%s) sekvens %04lx (försök #%ld, len %d).\n
+1830:Kasserar meddelande %s efter %ld misslyckade sändförsök. Meddelandetext:\n
+1833:Peer-to-peer TCP-anslutning etablerad.\n
+1842:Stänger socket %d till %s.\n
+1843:Stänge socket %d.\n
+1844:TCP-meddelande %04x kasserat pga timeout.\n
+1846:Öppnar och stänger direkt-anslutningar (partner-till-partner):\n
+1847:peer open  <namn> - Öppnar direkt-anslutning.\n
+1848:peer close <namn> - Stänger/startar om direkt-anslutning(ar).\n
+1849:Fel vid val: %s (%d)\n
+1850:Avbrott vid anslutning med %s vid %s:%ld\n
+1855:TCP-anslutning till %s vid %s:%ld misslyckades.\n
+1856:Kastade bort ett %04x (%s) paket från den gamla sessionen %08lx (aktiv: %08lx).\n
+1857:Vill du gömma ditt IP från de på din kontaktlista (JA/NEJ)
+1867:Mottog ett felformaat (för kort) paket - ignorerat.\n
+1868:Mottog ett felformaat (för långt delpaket) multi-paket - resten ignoreras.\n
+1869:Protokoll versioner mindre än 5 supportas inte längre.\n
+1870:peer off   <namn> - Stänger direkt-anslutning(ar) och försök inte igen.\n
+1872:misslyckades: %s (%d)\n
+1873:Arbetsstad:
+1874:Arbetsstat:
+1875:Egna intressen:
+1876:Tidigare bakgrund:
+1877:ok.\n
+1878:Fel vid läsning från socket: %s (%d)\n
+1879:Medlemsskap:
+1881:FLAP kanal 1 slut på data.\n
+1882:FLAP kanal 1 kommando 1 extra data:\n
+1883:FLAP kanel 1 okänt kommando %d.\n
+1884:FLAP med okänd kanal %ld mottaget.\n
+1885:Anslutning v8 avbröts.\n
+1887:Anslutningar:
+1888:inte webmedveten
+1889:server
+1890:partner-till-partner
+1891:Anslutning %ld är redan öppen.\n
+1892:conn               Lista tillgänglia anslutningar.\n
+1893:conn login <nr>    Öppna anslutning <nr>.\n
+1894:Det finns ingen anslutning med nummer %ld.\n
+1895:Inloggning misslyckades:\n
+1896:Servern stängde anslutningen:\n
+#-#1897:Ofullständig TLV %d, längd %ld av %d - ignorerar.\n
+#+#1897:Incomplete TLV %d, len %ld of %d - ignoring.\n
+#1897:Incomplete TLV %d, len %ld of %ld - ignoring.\n
+1899:Okänd familj begärd: %d\n
+1900:Den är endast läsbar.
+1901:har tillåtit dig att lägga till henne/honom till din kontaktlista. \n
+1903:Utgående v8 serverpaket:
+1904:Servern förstår inte ver %d (enbart %d) för familj %d!\n
+#1907:Warning: Server thinks our UIN is %ld, when it is %ld.\n
+1911:ansluter
+1912:stängd
+1914:Kan ej allokera anslutnings struktur.\n
+1915:Server säger att vi är på %s.\n
+1918:Ignorerade serverbegärna om ett minsta rapporteringsintervall %d.\n
+1919:UIN stämmer ej: %ld versus %ld.\n
+1920:Registrering av nytt UIN avslagen.\n
+1921:inloggad
+1922:stör ej
+1923:ej här
+1924:ej tillgänglig
+1925:upptagen
+1926:osynlig
+1927:Tillgänglig för chat
+1929:Användaren är "stör ej" [Auto-Meddelande]
+1931:Aktiv session är avslutad. Försök med en annan eller öppna denna.\n
+1934:ansluten
+1935:    typ %d socket %d ip %s (%d) på [%s, %s] id %lx/%x/%x\n
+1936:Ange minimiålder (18-22,23-29,30-39,40-49,50-59,60-120):
+1937:Ange maxålder (22,29,39,49,59,120):
+1938:Ange kön:
+1939:Ange en stad:
+1940:Okänt metaanvändarresultat: %lx.\n
+1942:Ytterligare email-adresser:
+1943:(ingen tillåtelse nödvändig)
+1944:(måste begära tillåtelse)
+1945:Okänt metaanvändarsvar
+1947:lyssnare
+1948:Kan ej hitta värdnamn %s: %s.
+1949:misslycakdes:\n
+1950:Kunde ej sätta socket icke-blockerande
+1951:Kan ej hitta värdnamn %s: %s (%d).
+1952:Kunde ej öppna anslutning
+1953:kunde ej binda socket till en ledig port
+1954:kunde ej lyssna på socket
+1955:Anslutning misslyckades
+1958:[SOCKS] Begärd anslutning avslagen (%d)
+1960:Skriv in data för använding vid sökning av användare. Skriv '.' för att påbörja sökningen.\n
+1961:URL: %s\n
+1966: Anslutning avslagen via port %ld på %s\n
+1967:Mer information om
+1968:Användare hittad:\n
+1969:ej inloggad
+1970:inloggad
+1971:stör ej
+1972:ej här
+1973:upptagen
+1974:ej tillgänglig
+1975:osynlig
+1976:tillgänglig för chat
+1977:Audio och visuell
+1978:Sport och idrott
+1979:Förlag
+1980:Hem-automation
+1981:Alumni org.
+1982:Välgörenhetsorganisation
+1983:Klubb/social org.
+1984:Gemenskaps org.
+1985:Kulturell org.
+1986:Fanklubbar
+1987:Studentförening
+1988:Hobbyist org.
+1989:Internationell org.
+1990:Natur och miljö org.
+1991:Professionell org.
+1992:Vetnskaplig/teknisk org.
+1993:Självförbättringsgrupp
+1994:Spirituell/religös organisation
+1995:Sportklubb
+1996:Stöd org.
+1997:Handels och affärs org.
+1998:Fackförening
+1999:Frivilligorganisation
+2000:Underhållning
+2001:Hemelektronik
+2002:Försäljning
+2003:Skönhet och hälsa
+2004:Media
+2005:Hushållsprodukter
+2006:Postorderkatalog
+2007:Affärstjänster
+2009:Hittade slumpmässig chat partner UIN %ld i chat grupp %d.\n
+2011:Du har inte en lyssnande partner-till-partner-anslutning.\n
+2012:Inget lösenord angett.\n
+2013:Detta kommandot fungerar enbart i v8.\n
+2014:Inget nummer angivet.\n
+2015:Inget meddelande angivet.\n
+2017:Användaren är online, men eventuellt osynlig.\n
+2020:Är nu synlig för %s.\n
+2021:Är nu osynlig för %s.\n
+2022:Användaren är nedkopplad.\n
+2023:Direkt-anslutning stängd av mottagaren.\n
+2024:Okänd protokollversion %d för ICQ partner-till-partner-protokoll.\n
+2026:TCP-kaka:
+2029:Protokollfal vid partner-till-partner-anslutning
+2031:Anslutningsförsök misslyckats för många gåner. Ger upp. \n
+2032:Schemalägger v8 återuppkoppling om %d sekunder.\n
+2033:född idag
+2036:Spara aktiva inställningar till disk.
+2037:Öppna eller stäng en partner-till-partner-anslutning, eller slå av användning av partner-till-partner-anslutningar för <uin> eller <namn>.
+#-#2038:Öppnar anslutning nummer <nr>, eller den första server-anslutningen.
+#+#2038:Opens connection number <nr>, or the first server connection.
+# #2038:Opens connection number <nr> or connection for uin <uin>, or the first server connection.
+#2038:Opens connection number <nr> or connection for uin <uin>, or the first server connection.
+2039:Sänder ett meddelande till en (<namn>'s) <mobil> mobiltelefon.
+2042:Visar en lista över de på din kontaktlista som är online i brett format.
+2043:Tar gort alla kontakter i <kontakter> från kontaktgrupp <grupp>.
+#-#2044:Slår på, slår av eller visar en <option>: hermit, delbs, log, logonoff, auto, uinprompt, autosave, autofinger, linebreak, tabs, silent.
+#+#2044:Set, clear or display an <option>: hermit, delbs, log, logonoff, auto, uinprompt, autosave, autofinger, linebreak, tabs, silent.
+# #2044:Set, clear or display an <option>: color, delbs, auto, uinprompt, autosave, autofinger, linebreak, funny.
+#2044:Set, clear or display an <option>: color, delbs, auto, uinprompt, autosave, autofinger, linebreak, funny.
+2045:Slår på/av din synlighet till <kontakter> när du är online.
+2046:Du kan behöva använda protokoll version 8 för ICQ partner-till-partner-protokoll istället.\n
+2047:Skapar katalog %s.\n
+2048:Sparar inställingar i %s.\n
+2051:Fel på socket: %s (%d)\n
+2055:Användaren är "Tillgänglig för chat" och vill chatta om vad som helst.
+2056:getauto [auto] <namn> - Hämta auto-svaret från kontakten.\n
+2057:getauto away   <namn> - Hämta auto-svaret för "ej här" för kontakten.\n
+2058:getauto na     <namn> - Hämta auto-svaret för "ej tillgänglig" för kontakten.\n
+2059:getauto dnd    <namn> - Hämta auto-svaret för "stör ej" för kontakten.\n
+2060:getauto ffc    <namn> - Hämta auto-svaret för "tillgänglig för chat" för kontakten.\n
+2063:Du måste spara digg lösenord i din ~/.micq/micqrc-fil.\n
+2065:Okänt TCP_MSG_GREET_ kommando %04x.\n
+2066:Okänt TCP_MSG_ kommando %04x.\n
+2067:fil läsning/skrivning
+2071:Kunde ej hämta information om fil %s: %s (%d)\n
+2072:Filöverföring #%ld (%s) avbruten på grund av avbruten anslutning.\n
+2073:Minnesanvändning: %ld paket behandlas.\n
+2078:Utgående TCP-paket (%d - %s): %s
+2079:Inkommande TCP-paket (%d - %s): %s
+2080:Serverns SMS-leverans svar:\n%s\n
+2081:    vid %p förälder %p association %p\n
+2083:Kan ej öppna fil %s: %s (%d).\n
+#-#2084:Fel vid sökning till position %ld: %s (%ld).\n
+#+#2084:Error while seeking to offset %ld: %s (%ld).\n
+#2084:Error while seeking to offset %ld: %s (%d).\n
+2086:Fel vid läsning av fil %s: %s (%d).\n
+2087:Avslutade överföring av fil %s.\n
+2088:Avslutade överföring av de %d filerna.\n
+2089:fil-lyssnare
+2090:fil partner-till-partner
+2091:Köar upp %s som %s för överföring.\n
+2092:TCP-meddelande %s ignorerat - session avbruten.\n
+#-#2094:conn login         Öppna första server-anslutningen.\n
+#+#2094:conn login         Open first server connection.\n
+#2095 conn remove <nr>   Ta bort anslutning <nr>.\n
+#2094:conn login         Open current/first server connection.\n
+#2095:conn remove <nr>   Remove connection <nr>.\n
+2097:conn select <nr>   Välj anslutning <nr> som server-anslutning.\n
+2098:Anslutning %ld är inte en server-anslutning.\n
+2099:Valde anslutning %ld (version %d, UIN %ld) som aktiv anslutning.\n
+2100:conn select <uin>  Väljd anslutning med UIN <uin> som server-anslutning.\n
+2101:Tar bort anslutning %ld fullständigt och det som beror på den.\n
+2102:Anslutning %ld är en konfigurerad anslutning.\n
+#-#2103:contact show    Visa kontaktlistan som finns på servern.\n
+#+#2103:contact show    Show server side contact list.\n
+#-#2104:contact diff    Visa kontakter som finns på servern, men inte lokalt.\n
+#+#2104:contact diff    Show server side contacts not on local contact list.\n
+#-#2105:contact import  Lägg till kontakterna från servern till den lokala kontaktlistan.\n
+#+#2105:contact import  Add server side contact list to local contact list.\n
+#2103:contact show    Show server based contact list.\n
+#2104:contact diff    Show server based contacts not on local contact list.\n
+#2105:contact import  Import server based contact list as local contact list.\n
+2106:Senaste meddelandet från %s%s%s (%s):\n
+2107:Du har inte fått nåt meddelande från %s%s%s.\n
+2108:auto
+2109:version
+2110:peer files <namn> <file1> <as1> ... [<description>]\n
+2111:                  - Skicka file1 som as1, ..., med beskrivning.\n
+2112:                  - som = '/': ta bort sökväg, som = '.': som den är\n
+2115:'%s' är inte ett heltal.\n
+2116:Inget nytt namn angivet.\n
+2117:%ld tillagt som %s.\n
+2118:Slut på minne.\n
+#-#2119:auth [grant] <namn>    - ge begärd tillåtelse.\n
+#+#2119:auth [grant] <nick>    - grant authorization.\n
+#-#2120:auth deny <namn> <msg> - avslå begärd tillåtelse.\n
+#+#2120:auth deny <nick> <msg> - refuse authorization.\n
+#-#2121:auth req  <namn> <msg> - begär tillåtelse.\n
+#+#2121:auth req  <nick> <msg> - request authorization.\n
+#2119:auth [grant] <contacts>    - grant authorization.\n
+#2120:auth deny <contacts> <msg> - refuse authorization.\n
+#2121:auth req  <contacts> <msg> - request authorization.\n
+2122:Notera: Du måste spara med kommandot 'save' för att skpara det nya lösenordet till disk.\n
+#-#2123:%sSyntaxfel%s: För få parametrar: '%s'\n
+#+#2123:%sSyntax error%s: Too few arguments: '%s'\n
+#-#2124:%sSyntaxfel%s: Inte ett heltal: '%s'\n
+#+#2124:%sSyntax error%s: Not an integer: '%s'\n
+#2123:%sSyntax error%s: Too few arguments: %s\n
+#2124:%sSyntax error%s: Not an integer: %s\n
+2126.är nedkopplad, meddelande uppköat på servern.\n
+2128: Beskrivning: %s%s%s\n
+2129: URL:         %s%s%s\n
+2131:Skriver meddelande till %s%s%s:\n
+2133:Färg är %s%s%s.\n
+2134:Skojiga meddelanden är %s%s%s.\n
+2136:Lösenordsbytet gick %s%s%s.\n
+2137:Bytet av information %s%s%s.\n
+2138:Bytet av information %s%s%s.\n
+2139:Uppdateringen av informationen %s%s%s.\n
+2140:Slumpmssig chatgruppsförändring var %s%s%s.\n
+2141:Sökningen %sfailed%s.\n
+2142:Direkt-anslutning till %s är inte möjlig att upprätta.\n
+#-#2145:auth add  <namn>       - lägg till och begär tillåtelse.\n
+#+#2145:auth add  <nick>       - authorized add.\n
+#2145:auth add  <contacts>       - authorized add.\n
+2146:'%s' är redan ett alias för '%s' (%ld).\n
+2147:'%s' (%ld) är redan använt som ett namn.\n
+2148:Adderade '%s' som ett alias för '%s' (%ld).\n
+2149:Tog bort alias '%s' för '%s' (%ld).\n
+2150:Tog bort kontakt '%s' (%ld).\n
+2156:conn close <nr>    Stäng anslutning <nr>.\n
+2157:Moldavien
+#-#2158:Ingen fil angiven.\n
+#+#2158:No file given.\n
+#2158:No file name given.\n
+2159:Några filer.
+2160:peer file  <namn> <file> [<description>]\n
+#-#2161:Tar emot %ld filer med en total storlek av %ld bytes med hastighet %lx från %s.\n
+#+#2161:Receiving %ld files with together %ld bytes at speed %lx from %s.\n
+#2161:Receiving %ld files with total size %ld bytes at speed %lx from %s.\n
+2162:Tar emot fil %s (%s) med %ld bytes som %s.\n
+2163:Skickar fil %ld från position %ld.\n
+2164.Fel vid skrivning till fil.\n
+#-#2165:Avsändaren skickade fler bytes (%ld) än filens storlek (%ld).\n
+#+#2165:The peer sent more bytes (%ld) than file length (%ld).\n
+#2165:The peer sent more bytes (%ld) than the file length (%ld).\n
+2166:Avslutade filöverföring.\n
+2167:Fel - okänt paket.\n
+2168:Filöverföring #%ld (%s) avbruten efter %ld försök på grund av avbrott.\n
+2169:Filöverföring avbruten av mottagaren (%d).\n
+#-#2170:Sänder med hastighet %lx till %s.\n
+#+#2170:Sending at speed %lx to %s.\n
+#2170:Sending file at speed %lx to %s.\n
+2171:Avancerat
+#-#2172:Kommandon för de mer avancerade funktionerna.
+#+#2172:Commands for advanced features.
+# #2172:Advanced commands.
+#-#2176:Visar utförligt nuvarande status för alla på din kontaktlista.
+#+#2176:Displays verbose the current status of everyone on your contact list.
+#-#2177:Visar utförligt nuvarande status för alla på din kontaktlista som är online.
+#+#2177:Displays verbose the current status of online people on your contact list.
+#2172:Advanced commands.
+#2176:Displays verbosely the current status of everyone on your contact list.
+#2177:Displays verbosely the current status of online people on your contact list.
+2179:Skicka en fil till <kontakter>.
+2180:Skicka flera filer till <uin> eller <namn>.
+2181:Stänger eller tar bort anslutning nummer <nr>.
+#-#2182:Välj server-anslutning nummer <nr> som aktiv server-anslutning.
+#+#2182:Select server connection number <nr> as current server connection.
+# #2182:Select server connection number <nr> or connection for uin <uin> as current server connection.
+#2182:Select server connection number <nr> or connection for uin <uin> as current server connection.
+2183:Kontrollera om alla <kontakter> är offline eller osynliga.
+#-#2184:%s%-10s%s - %s\n
+#+#2184:%s%-10s%s - %s\n
+# #2184:%s%-14s%s - %s\n
+#2184:%s%-14s%s - %s\n
+2185:Stänger anslutning %ld.\n
+2188:Du skickar data för snabbt - sluta skriv nu, annars kommer servern koppla ner dig!\n
+2191:Omedelbart-meddelande-fel: %d.\n
+2192:Förmågor:
+2194:Vet inte hur denna anslutningstyp ska öppnas.\n
+2195:Föråldrat nummer:
+2196:Föråldrad text:
+2197:Föråldrad byte
+2198:Olämpligt lösenord '%s' - får ej starta med byten 0xf3.\n
+2199:  -h, --help     ger denna hjälptext\n
+2200:  -v, --verbose  sätt (eller öka) mängden debug-meddelanden\n
+2201:  -b, --basedir  använd given baskatalog (standard: %s)\n
+2203:  -l, --logplace använd given loggfil/-katalog (standard: %s)\n
+2204:  -i, --i18n     använd given språkinställning (standard: auto-dektektering)\n
+2205:  -c, --nocolor  slå av färger\n
+2206:Servern vill inte skicka de meddelanden som skickats när vi varit nedkopplade.
+2207:Protokollfel i kommando till den gamla ICQ servern: %d.\n
+2211:Din status är %s.\n
+2212:bytte status till %s
+2213:Loggade in (%s)
+2214:Info om %s%lu%s:\n
+2215:Denna mICQ kan inte konvertera mellan SJIS eller EUC och unicode.\n
+2216:Denna mICQ kan inte tolka '%s'-kodningen.\n
+2217:Denna mICQ kan inte konvertera mellan '%s' och unicode.\n
+2218:UIN: %s\n
+2220:flera
+2222:Skriptkommandot '%s' misslyckades: %s (%d).\n
+#-#2223:Öppnar fjärrkontrolls-FIFO på %s... 
+#+#2223:Opening remote control FIFO at %s... 
+# #2223:Opening scripting FIFO at %s... 
+#-#2225:fjärrkontroll
+#+#2225:remote control
+# #2225:scripting
+#2223:Opening scripting FIFO at %s... 
+#2225:scripting
+2226:Kunde inte skapa FIFO
+2227:Kunde inte öppna FIFO
+2228:Kunde inte ställa in FIFO som icke-blockerande
+#-#2233:avslog begäran om tillåtelse: %s%s\n
+#+#2233:refused authorization: %s%s\n
+#2233:refused authorization: %s%s%s\n
+2234:Meddelande %s ignoreras - session förlorad.\n
+2236:Information om %s%s%s (%ld):\n
+2237:Web-medveten:
+2238:Gömmer IP:
+2239:Okänt mer:
+2240:Ingen kontaktgrupp angiven.\n
+2241:Lade till '%s' till kontaktgrupp '%s'.\n
+2243:Tog bort kontakt '%s' från grupp '%s'.\n
+2244:Kontaktgrupp '%s' har redan kontakten '%s' (%ld).\n
+2245:Lade till kontaktgrupp '%s'.\n
+2246:Kontakt '%s' finns inte i grupp '%s'.\n
+2248:Sparade metadata för '%s' (%ld).\n
+2249:Kunde ej spara metadata för '%s' (%ld).\n
+2250:Nummret '%s' är inte av formatet +<landskod><operatör><nummer>.\n
+2251:Fel:
+2252:Piper när %sbeep%sing.\n
+2253:Piper när %sevent%-skripten kör.\n
+#-#2254:Piper aldrig.
+#+#2254:A beep is never generated.
+#2254:A beep is never generated.\n
+2255:Ett pip för ankommande kontakter genereras alltid genom att köra skriptet %sevent%s.\n
+2256:Ett pip för avgående kontakter genereras alltid genom att köra skriptet %sevent%s.\n
+2258:Inga väntande inkommande filöverföringag begärda för %s med (sekvens %ld) hittade.\n
+2260:Vänligen prova getauto kommandot istället.\n
+2262:Tolkning av ett delete-tecken som baksteg är %s%s%s.\n
+2265:Automatiska svar är %s%s%s.\n
+2266:Att ha det senste namnet i uppmaningen är %s%s%s.\n
+2267:Automatiska sparningar är %s%s%s.\n
+2268:Automatisk information om nya UIN är %s%s%s.\n
+2269:bryt
+2270:enkel
+2271:indentera
+2272:smart
+2278:    delbs:      tolka delete-tecken som baksteg.\n
+2281:    auto:       skicka auto-svar.\n
+#-#2282:    uinprompt:  ha det senaste namnet i uppmaningen.\n
+#+#2282:    uinprompt:  display the last nick in the prompt.\n
+#2282:    uinprompt:  have the last nick in the prompt.\n
+2283:    autosave:   spara micqrc automatiskt.\n
+2284:    autofinger: hämta information om nya UIN automatiskt.\n
+2285:    linebreak:  inställning för radbrytning av meddelanden: enkel, bryt, indentera, smart.\n
+2288:Indenterings inställningen är %s%s%s.\n
+2293:--=
+2294:===
+2297:Alias för vad?\n 
+2298:Ta bort vilket alias?\n
+2299:Alias existerar inte.\n
+2300:Skapa ett alias eller lista nuvarande alias.
+2301:Ta bort ett alias.
+2302:För många nivåer av alias expandering; antagligen en oändlig loop.\n
+2303:Ogiltigt tecken 0x%x i alias.\n
+2304:Hämta automatiskt svar från alla <kontakter> för aktivt status, ej här, ej tillgänglig, stör ej, upptagen eller tillgängli för chat.
+2305:Hantera kontakters metadata.
+2306:Begär kontaktlistan från server och visa alla eller nya kontakter eller importera.
+2307:Visa nuvarande status för de på din kontaktlista som är online, sorterat efter kontaktgrupp.
+2308:Visa nuvarande status för alla på din kontaktlista, sorterat efter kontaktgrupp.
+#-#2309:Visa utförligt nuvarande status för de på din kontaktlista som är online, sorterat efter kontaktgrupp.
+#+#2309:Displays verbose the current status of online people on your contact list, sorted by contact group.
+#-#2310:Visa utförligt nuvarande status för alla på din kontaktlista, sorterat efter kontaktgrupp.
+#+#2310:Displays verbose the current status of everyone on your contact list, sorted by contact group.
+#2309:Displays verbosely the current status of online people on your contact list, sorted by contact group.
+#2310:Displays verbosely the current status of everyone on your contact list, sorted by contact group.
+2311:Lägger till <uin> som <nytt namn> eller lägger till alias <nytt namn> för <uin> eller <namn>.
+2312:Ta bort alla alias i <kontakter>, tar bort kontakt om 'all' är angivet.
+2313:Tillåt, avslå, begär eller bekräfta tillåtelse från/till <kontakter> till dig/dem till deras/din kontaktlista.
+2314:Det här är avancerade kommandon. Se till att du läst manualsidorna för den fullständiga informationen om vad de innebär.\n
+2315:Kan inte kolla %s status - för många andra som kollar just nu. \n
+#2316:Translation %s not found.\n
+2319:Acceptera inkommande filöverföring från <uin> eller <namn>.
+2320:peer accept <namn> [<id>]\n                  - acceptera en inkommande filöverföring.\n
+#2321:contact add     Add server based contact list to local contact list.\n
+#2322:contact sync    Import server based contact list if appropriate.\n
+#2323:contact export  Export local contact list to server based list.\n
+#2324:contact upload  Add local contacts to server based contact list.\n
+#2325:Warning: server based contact list change failed with error code %d.\n
+#2326:Server side contact list only supported for ICQ v8.\n
+2327:%smICQ (Matt's ICQ klon)%s version %s%s%s\n
+2328:Du loggade in för ofta, vänligen vänta 30 minuter innan du försöker igen.\n
+2329:syntax-fel
+2330:tar bort icke-kontakt
+2331:okänd
+2332:Kontaktfel %d (%s) för %d kontakter:
+2333:%s [show|;load|save|set|get|rget] <kontakter> - hantera metadata för kontakter.\n
+2334:  show - visa aktiv känd metadata\n
+2335:  load - ladda metadata från fil och visa\n
+2336:  save - spara metadata till fil\n
+2337:  set  - ladda upp egen metadata till servern\n
+2338:  get  - begär metadata från servern\n
+2339:  rget - begär metadata om senaste avsändaren från servern\n
+2342:Skriptning
+#-#2343:Skriptningsutökningar.
+#+#2343:Scripting extensions.
+# #2343:Advanced commands for scripting.
+#2343:Advanced commands for scripting.
+2344:Exekvera Tcl skript från <file>.
+2345:Exekvera Tcl skript i <string>.
+2346:Följande Tcl kommando stödjs:\n
+2348:Installera hake för att ta emot meddelanden från UIN eller namn, eller alla om ej angivet.
+2351:Avinstallera meddelande hake för UIN eller namn.
+2353:Installera händelsehake. Hakfunktionsparametrar: typ ...
+2355:Avinstallera händelsehake.
+2356:Lista alla installerade hakar. Format <type> <command> <filter>.
+2358:Exekvera micq kommando.
+2360:Hitta namn utifrån <uin>.
+2361:Felaktigt antal parametrar till kommandot '%s %s'. %d förväntade.\n
+2362:Felaktigt antal parametrar. Prova 'help'.
+2363:Fel: rekursiv 'micq exec' inte tillåten.
+2364:Ingen anslutning hittad.
+2365:okänt kommando: %s
+2366:TCL-fel i fil %s: %s\n
+2367:TCL-fel: %s\n
+2368:peer deny <namn> [<id>] [<reason>]\n                  - avslå en inkommande filöverföring.\n
+2369: Avslå en inkommande filöverföring från <uin> eller <namn>.
+2371:SSL initialisering misslyckades.\n
+2372:Kunde ej skicka SSL begäran till %s\n
+2374:SSL-fel: %s [%d]\n
+#-#2375:SSL handskakning ok\n
+#+#2375:SSL handshake ok\n
+# #2375:SSL handshake ok.\n
+#2375:SSL handshake ok.\n
+2376:SSL läsning från %s [FEL=%d]: %s
+2377:SSL skrivning till %s [FEL=%d]: %s
+2378:peer ssl <namn>   - initalisera SSL handskakning.
+2381:Jag lägger till utvecklaren av mICQ på din lista. Missbruka inte denna möjlighet - vänligen använd hjälpkommandot och gör ett allvarligt försök att läsa mansidan och FAQ innan du ställer frågor.\n
+#2383:View your last messages of <contact>. Type 'h' as short command.
+#2384:Case insensitive search of <pattern> in log file of <contact>.
+#2385:Couldn't open %s for reading: %s (%d).\n
+#2386:Found %s%d%s matches.\n
+#2388:find <contact> <pattern> -- Search <pattern> case insensitive in history of <contact>.\n
+#2389:finds <contact> <pattern> -- Search <pattern> case sensitive in history of <contact>.\n
+#2390:No or empty pattern given.\n
+#2391:Case sensitive search of <pattern> in log file of <contact>.
+#2393:%Y-%m-%d
+#2394: %I:%M %p
+#2395:View your messages of <contact> since <date>.
+#2396:Parameter '%s' has a wrong date format, it has to be ISO 8601 compliant. Try '2004-01-31' or '2004-01-31T23:12:05'.\n
+#2397:No server session found.\n
+#2398:Set or display options for a contact group, a contact or global.\n
+#2399:Request SSL connection.
+#2400:No translation (%s) loaded (%d entries).\n
+#2401:Auto reply messages are now contact options, see the %s command.\n
+#2402:The global auto reply flag is handled by the %s command.\n
+#2403:msg>
+#2405:Your status is %s (%s).\n
+#2406:Couldn't load meta data for %s (%ld).\n
+#2407:This flag is handled by the %s command.\n
+#2408:%s is not a contact group.\n
+#2409:%s is not a contact.\n
+#2410:%s is neither a contact, nor a contact group, nor the %sglobal%s keyword.\n
+#2411:opt - short hand for optglobal, optconnection, optgroup or optcontact.\n
+#2412:optglobal            [<option> [<value>]] - set global option.\n
+#2413:optconnection        {<option> [<value>]] - set connection option.\n
+#2414:optgroup   <group>   [<option> [<value>]] - set contact group option.\n
+#2415:optcontact <contact> [<option> [<value>]] - set contact option.\n
+#2416:Options for contact %s:\n
+#2417:Options for contact group %s:\n
+#2418:Global options:\n
+#2419:undefined
+#2420:effectivly
+#2421:Unknown option %s.\n
+#2422:Option %s for contact %s is undefined.\n
+#2423:Option %s for contact group %s is undefined.\n
+#2424:Option %s%s has no global value.\n
+#2425:Option %s for contact %s is %s%s%s.\n
+#2426:Option %s for contact group %s is %s%s%s.\n
+#2427:Option %s%s is globally %s%s%s.\n
+#2428:Option %s for contact %s is %s.\n
+#2429:Option %s for contact group %s is %s.\n
+#2430:Option %s%s is globally %s.\n
+#2431:Undefining option %s for contact %s.\n
+#2432:Undefining option %s for contact group %s.\n
+#2433:Undefining global option %s%s.\n
+#2434:Setting option %s for contact %s to %s.\n
+#2435:Setting option %s for contact group %s to %s.\n
+#2436:Setting option %s%s globally to %s.\n
+#2437:Setting option %s for contact %s to %s%d%s.\n
+#2438:Setting option %s for contact group %s to %s%d%s.\n
+#2439:Setting option %s%s globally to %s%d%s.\n
+#2440:Setting option %s for contact %s.\n
+#2441:Setting option %s for contact group %s.\n
+#2442:Setting option %s%s globally.\n
+#2443:Clearing option %s for contact %s.\n
+#2444:Clearing option %s for contact group %s.\n
+#2445:Clearing option %s%s globally.\n
+#2446:Invalid value %s for boolean option %s.\n
+#2447:No new password given.\n
+#2448:Contact group '%s' already exists.\n
+#2449:Primary contact group for contact '%s' is now '%s'.\n
+#2450:Last %d people you talked with:\n
+#2451:history <contact> [<last> [<count>]] -- Show history of <contact>.\n
+#2452:%02d %-15s version %d%s for %s (%lx), at %s:%ld %s\n
+#2453:    at %p parent %p assoc %p ssl %d\n
+#2454:    open %p reconn %p close %p err %p dispatch %p\n
+#2455:About>
+#2456:Unknown command %s, type %shelp%s for help.\n
+#2457:Unknown configuration file format version %d.\n
+#2458:Can't tab spool %s; type "%sopt %s tabspool 1%s" manually.\n
+#2459:Peer-to-peer connection not associated to server connection, discarding.\n
+#2460:Contact group %s (id %s%d%s) not associated to server connection.\n
+#2461:Deprecated syntax found in configuration file '%s'!\n    Please update or "save" the configuration file and check for changes.\n
+#2462:File transfer %s to port %s%ld%s.
+#2463:File transfer %s rejected by peer: %s.
+#2464:Accepting file %s (%s%ld%s bytes).
+#2465:Refusing file request %s (%s%ld%s bytes): %s.
+#2466:Refusing chat request (%s/%s) from %s%s%s.
+#2467:mICQ>
+#2468:requests file transfer %s of %s%ld%s bytes (sequence %s%ld%s).\n
+#2469:URL:
+#2470:requests authorization: %s\n
+#2471:Ignored contacts:\n
+#2472:Hidden-from contacts:\n
+#2473:Normal contacts:\n
+#2474:Intimate contacts:\n
+#2475:Showed %d contact groups, alltogether %d contacts, %d ignored, %d hidden, %d intimate.\n
+#2476:Downloaded %d contact groups, alltogether %d contacts, %d ignored, %d hidden, %d intimate.\n
+#2477:Uploading %d contact groups and %d contacts.\n
+#2478:Server: Group %s (#%d)\n
+#2479:Local:  Group %s (#%d)\n
+#2480:Server: Group %s Contact %s (#%d) <ignored>\n
+#2481:Server: Group %s Contact %s (#%d) <hidefrom>\n
+#2482:Server: Group %s Contact %s/%s (#%d) <hidefrom>\n
+#2483:Local:  Group %s Contact %s/%s (#%d)\n
+#2484:Server: Group %s Contact %s (#%d)\n
+#2485:Server: Group %s Contact %s/%s (#%d)\n
+#2486:Local:  Group %s Contact %s/%s (#%d) <%s>\n
+#2487:hidefrom
+#2488:intimate
+#2489:Server: Group %s Contact %s/%s (#%d) <intimate>\n
+#2490:normal
+#2491:Differences in %d contact groups, alltogether %d contacts, %d ignored, %d hidden, %d intimate, %d local.\n
+#2492:Usage: micq [-h] [-c] [-b <basedir>] [-i <locale>] [-v[<level>]] [-l <logplace>]\n
+#2493:            [[-u <UIN>] [-p <passwd>] [-s <status>] [[-C] <command>]...]...\n
+#2494:  -u, --uin      login with this UIN instead of those configured\n
+#2495:  -p, --passwd   ... and override password\n
+#2496:  -s, --status   ... and override status\n
+#2497:  -C, --cmd      ... and execute mICQ command\n
+#2498:Encoding %s%s%s is not supported by this mICQ.\n
+#2499:Please recompile using the '--enable-iconvrepl' configure option.\n
+#2500:Manual locale setting %s ignored - use a real locale instead.\n
+#2501:Your locale is unset. Please use the %s--i18n%s command line option or set one of the environment variables %sLC_ALL%s, %sLC_MESSAGES%s, or %sLANG%s to your current locale.\n
+#2502:Locale setting %s is no real locale and probably not what you want.\n
+#2503:Your system doesn't know the %s locale - try %slocale -a%s.\n
+#2504:Could not open configuration file %s%s%s.
+#2505:Deprecated option -f used. Please use the similar -b instead.\n
+#2506:This console uses encoding %s.\n
+#2507:Translation %s%s%s not found. Would you like to translate mICQ into your language?\n
+#2508:English (%s) translation loaded (%s%d%s entries).\n
+#2509:WSAStartup() for WinSocks 1.1 failed
+#2510:Opening v5 connection to %s:%s%ld%s... 
+#2511:Redirect to server %s:%s%ld%s... 
+#2512:Opening v8 connection to %s:%s%ld%s for %s%s%s... 
+#2513:new UIN
+#2514:refused (ignored)
+#2515:You queried already too many users today - come back tomorrow.\n
+#2516:The query got stuck. Or somesuch. Try again later.\n
+#2517:I'm out of wisdom about the server's problem. It just didn't work out.\n
+#2518:You need to 'save' to write your new UIN to disc.\n
+#2519:Opening file listener connection at %slocalhost%s:%s%ld%s... 
+#2520:Opening file transfer connection to %s:%s%ld%s... \n
+#2521:Opening peer-to-peer connection at %slocalhost%s:%s%ld%s... 
+#2522:Opening TCP connection at %s:%s%ld%s... 
+#2523:%s not recognized as a nick name.\n
+#2524:Can't restore terminal modes.\n
+#2525:Can't read terminal modes.\n
+#2526:Can't modify terminal modes.\n
+#2527:OpenSSL internal error: %s:%i\n
+#2528:OpenSSL read error: %s\n
+#2529:OpenSSL read error %d (unknown)\n
+#2530:OpenSSL write error: %s\n
+#2531:OpenSSL write error %d (unknown)\n
+#2532:OpenSSL error: SSL_RET=%d, SSL_ERR=%d\n
+#2533:SSL handshake failed.\n
+#2534:IP:
+#2535:Groups:\n
+#2536:Group:
+#2537:Contact upload failed, authorization required.\n
+#2538:Contact upload failed, already on server.\n
+#2539:Contact upload succeeded.\n
+#2540:    sound:      how to beep: off, on = beep, event.\n
+#2541:Status
+#2542:Commands to change your status.
+#2543:Contacts
+#2544:Commands to modify your contact list.
+#2545:     %s\n
+#2546:No help available for '%s'.\n
+#2547:Displays saved meta data about <contacts>.
+#2548:Displays the current status of online people on your contact list, including otherwise hidden contacts.
+#2549:Displays verbosely the current status of online people on your contact list, including otherwise hidden contacts.
+#2550:Displays the current status of online people on your contact list, sorted by contact group, including otherwise hidden contacts.
+#2551:Displays verbosely the current status of online people on your contact list, sorted by contact group, including otherwise hidden contacts.
+#2552:Displays the current status of everyone on your contact list, including otherwise hidden contacts.
+#2553:Displays verbosely the current status of everyone on your contact list, including otherwise hidden contacts.
+#2554:Displays the current status of everyone on your contact list, sorted by contact group, including otherwise hidden contacts.
+#2555:Displays verbosely the current status of everyone on your contact list, sorted by contact group, including otherwise hidden contacts.
+#2556:Add contact, alias, or contact to group.
+#2557:Remove alias, or contact from group or contact list.
+#2558:Set or display options for a contact.\n
+#2559:Set or display options for a contact group.\n
+#2560:Set or display global options.\n
+#2561:Logs off and quits without saving.
+#2562:Execute <cmd> with connection <nr> or connection for uin <uin> as current server connection.
+#2563:Set or display connection options.\n
+#2564:The user couldn't be detected to be online.\n
+#2565:Contact upload for %s%s%s failed, authorization required.\n
+#2566:Contact upload for %s%s%s failed, already on server.\n
+#2567:Contact upload for %s%s%s succeeded.\n
+#2568:Ignored request for auto-response from %s%s%s.\n
+#2569:Send <message> and further messages to <contacts> until canceled.
+#2570:Continuing chat with %s%s%s:\n
+#2571:"%s" <%s> emailed you a message [%s]: %s\n
+#2572:"%s" <%s> sent you a web message [%s]: %s\n
+#2573:The user is probably offline.\n
+#2574:%sReleased under version 2 of the GNU General Public License (%sGPL v2%s).\n
+#2575:Error writing to file (%lu bytes written out of %u).\n
+#2576:contact delete  Delete server based contact list entry.\n
+#2577:SBL ids:
+#2578:Modified %d contact groups, alltogether %d contacts, %d ignored, %d hidden, %d intimate.\n

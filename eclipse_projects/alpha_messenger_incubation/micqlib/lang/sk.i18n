@@ -1,0 +1,1218 @@
+# $Id: sk.i18n,v 1.11 2005/04/24 12:01:06 kuhlmann Exp $ Slovak (Slovak)
+#  EN: __.i18n,v 1.79 2005/04/24 11:43:08 <-- NEVER TOUCH THIS - it's updated automatically
+1000:UTF-8
+1001:sk
+1002:sk_SK
+1003:0-5-0-0
+1004:Ján Staník
+1005:Ján Staník
+1006:2.8.2004
+1008:iso-8859-2
+1010:Užívateľ je Preč [Automatická správa]
+1011:Užívateľ je Nedostupný [Automatická správa]
+1012:Užívateľ je Zaneprázdnený [Automatická správa]
+#1014:None
+1015:Jan
+1016:Feb
+1017:Mar
+1018:Apr
+1019:Máj
+1020:Jún
+1021:Júl
+1022:Aug
+1023:Sep
+1024:Okt
+1025:Nov
+1026:Dec
+1027:ANO
+1028:NIE
+1029:Prosím ANO alebo NIE!
+1030:odhlásený.
+1032:ladenie: double packet #%04lx type %04x (%s)\n
+1033:Prichádza v8 server paket:
+1034:Maximálny počet pokusov dosiahnutý. Vzdávam to.
+1038:Správa stornovaná.\n
+1039:Server oznamuje, že nie ste pripojený.\n
+1043:Všetci užívatelia boli nájdení.
+1044:Bolo nájdených príliš mnoho užívateľov.
+1045:Hľadanie dokončené.
+1046:Dĺžka
+1047:Extra Data
+1048:Chybový kód: %ld\n
+1050:Úspešne prihlásenie!
+1053:Pripojený na %s, čakámna odpoveď\n
+1055:Vytvorenie socketu zlyhalo
+1056:Socket vytvorený, pripravujem spojenie.\n
+1060:Úroveň hlásení %ld.\n
+1061:'%s' nebolo rozpoznané ako nick.\n
+1062:Ignorovanní užívatelia:
+1063:Vložte heslo:
+1064:Automaticky zmenený stav na %s.\n
+1078:Nie je k dispozícii preklad.
+1079:Preklad (%s, %s) od %s, naposledy upravovaný %s, upravil %s, pre verziu mICQ %d.%d.%d%s.\n
+1082:Pokúšam sa o obnovenie spojenia... [pokus %d z %d]\n
+1085:on
+1086:off
+1089:Preklad zrušený.
+1093:Hesdlo nesúhlasí - skúste znova.
+1094:SOCKS5 server:
+1095:SOCKS5 port:
+1096:SOCKS5 login:
+1097:SOCKS5 heslo:
+1098:Zobrazí zoznam prezývok, ktoré sú k dispozícii v tabuľkovom výpise.
+1101:Arabčina
+1102:Bhojpuri
+1103:Bulharčina
+1104:Burmese
+1105:Kantončina
+1106:Katalánčina
+1107:Čínština
+1108:Chorvátština
+1109:Čeština
+1110:Dánčina
+1111:Holandština
+1112:Angličtina
+1113:Esperanto
+1114:Estónčina
+1115:Farsi
+1116:Fínština
+1117:Francúzština
+1118:Gaelic
+1119:Nemčina
+1120:Gréčtina
+1121:Hebrejčina
+1122:Hindu
+1123:Maďarčina
+1124:Islandština
+1125:Indonézština
+1126:Taliančina
+1127:Japončina
+1128:Khmer
+1129:Kórejština
+1130:Lao
+1131:Latva
+1132:Litovština
+1133:Malajština
+1134:Nórština
+1135:Poľština
+1136:Portugalčina
+1137:Rumunčina
+1138:Ruština
+1139:Srbo-Chorvátština
+1140:Slovenčina
+1141:Slovinčina
+1142:Somálčina
+1143:Španielština
+1144:Swahilština
+1145:Švédština
+1146:Tagalog
+1147:Tartar
+1148:Thai
+1149:Turečtina
+1150:Ukrajinčina
+1151:Urdu
+1152:Vietnamčina
+1153:Jidiš
+1154:Yoruba
+1155:Afrikánčina
+1156:Bosna
+1157:Perzština
+1158:Albánčina
+1159:Arménčina
+1161:Veda
+1162:Administratíva
+1163:Umenie/Zábava
+1164:Študent univerzity
+1165:Počítače
+1166:Sociálne vedy
+1167:Vzdelávanie
+1168:Inžinierstvo
+1169:Finančníctvo
+1170:Štátna správa
+1171:Študent strednej školy
+#1172:Home
+1173:ICQ - Pomoc
+1174:Právo
+1175:Manažment
+1176:Výroba
+1177:Zdravie/Medicína
+1178:Armáda
+1179:Tretí sektor
+#1180:Professional
+#1181:Retail
+#1182:Retired
+1183:Veda a výskum
+1184:Športy
+1185:Technika
+1186:Študent univerzity
+1187:Webdesign
+1188:Nerozpoznaný príkaz '%s' v konfiguračnom súbore, ignorovaný.
+1198:Iné služby
+1200:neurčené
+1201:Afganistan
+1202:Albánsko
+1203:Alžír
+1204:Americká Samoa
+1205:Andora
+1206:Angola
+1207:Anguila
+1208:Antigua
+1209:Argentína
+1210:Arménsko
+1211:Aruba
+1212:Ascention Island
+1213:Austrália
+1214:Austrálske Antarktické Teritórium
+1215:Rakúsko
+1216:Azerbajdžan
+1217:Bahamy
+1218:Bahrain
+1219:Bangladéš
+1220:Barbados
+1221:Bielorusko
+1222:Belgicko
+1223:Belize
+1224:Benin
+1225:Bermudy
+1226:Bhután
+1227:Bolívia
+1228:Bosna a Hercegovina
+1229:Botswana
+1230:Brazília
+1231:Britské Panenské Ostrovy
+1232:Brunei
+1233:Bulharsko
+1234:Burkina Faso
+1235:Burundi
+1236:Kambodža
+1237:Kamerun
+1238:Kanada
+1239:Ostrovy Cape Verde
+1240:Kajmanské ostrovy
+1241:Stredoafrická republika
+1242:Čad
+1243:Vianočné ostrovy
+1244:Ostrovy Cocos-Keeling
+#1245:Comoros
+1246:Kongo
+1247:Cookove ostrovy
+1248:Čile
+1249:Čína
+1250:Kolumbia
+1251:Kostarika
+1252:Chorvátsko
+1253:Kuba
+1254:Cyprus
+1255:Česká republika
+1256:Dánsko
+#1257:Diego Garcia
+#1258:Djibouti
+#1259:Dominica
+1260:Dominikánska republika
+1261:Ekvádor
+1262:Egypt
+1263:Salvádor
+#1264:Equatorial Guinea
+1265:Eritrea
+1266:Estónsko
+1267:Etiópia
+1268:F.Y.R.O.M. (Bývalá Juhoslávia)
+1269:Farské ostrovy
+1270:Falklandy
+1271:Federálne Štáty Mikronézie
+1272:Fidži
+1273:Fínsko
+1274:Francuzsko
+1275:Francúzske Antily
+1276:Francúzske Antily
+1277:Francúzska Guajana
+1278:Francúzska Polynézia
+1279:Gabún
+1280:Gambia
+1281:Georgia
+1282:Nemecko
+1283:Ghana
+1284:Gibraltár
+1285:Grécko
+1286:Grónsko
+1287:Grenada
+#1288:Guadeloupe
+#1289:Guam
+#1290:Guantanomo Bay
+1291:Guatemala
+1292:Guinea
+1293:Guinea-Bissau
+1294:Guajána
+1295:Haiti
+1296:Honduras
+1297:Hong Kong
+1298:Maďarsko
+1299:Island
+1300:India
+1301:Indonézia
+1302:INMARSAT
+1303:INMARSAT Východný Atlantik
+1304:Irán
+1305:Irak
+1306:Írsko
+1307:Izrael
+1308:Taliansko
+#1309:Ivory Coast
+1310:Japonsko
+1311:Jordánsko
+1312:Kazachstan
+1313:Keňa
+1314:Južná Kórea
+1315:Kuvajt
+1316:Libéria
+1317:Líbia
+1318:Lichtenštajnsko
+1319:Luxemburgsko
+1320:Malawi
+1321:Malajzia
+1322:Mali
+1323:Malta
+1324:Mexiko
+1325:Monako
+1326:Maroko
+1327:Namíbia
+1328:Nepál
+1329:Holandsko
+1330:Holandské Antily
+1331:Nová Kaledónia
+1332:Nový Zéland
+1333:Nikaragua
+1334:Nigéria
+1335:NorwaNórsko
+1336:Omán
+1337:Pakistan
+1338:Panama
+1339:Papua Nová Guinea
+1340:Paraguaj
+1341:Peru
+1342:Filipíny
+1343:Poľsko
+1344:Portugalsko
+1345:Portoriko
+1346:Qatar
+1347:Rumunsko
+1348:Rusko
+1349:Saipan
+1350:San Maríno
+1351:Saudská Arábia
+1352:Senegal
+1353:Singapur
+1354:Slovensko
+1355:Južná Afrika
+1356:Španielsko
+1357:Srí Lanka
+#1358:Suriname
+1359:Švédsko
+1360:Švajčiarsko
+1361:Taiwan
+1362:Tanzánia
+1363:Thajsko
+#1364:Tinian Island
+#1365:Togo
+#1366:Tokelau
+#1367:Tonga
+1368:Trinidad a Tabago
+1369:Tunis
+1370:Turecko
+1371:Turkmenistán
+#1372:Turks and Caicos Islands
+#1373:Tuvalu
+1374:Uganda
+1375:Ukrajina
+1376:Spojené arabské emiráty
+1377:UK
+1378:Spojené štáty Panenské ostrovy
+1379:USA
+1380:Uruguaj
+1381:Uzbekistan
+#1382:Vanuatu
+1383:Vatikán
+1384:Venezuela
+1385:Vietnam
+#1386:Wallis and Futuna Islands
+1387:Západná Samoa
+1388:Jemen
+1389:Juhoslávia
+1390:Zair
+1391:Zambia
+1392:Zimbabwe
+1393:úspešne
+1394:neúspešne
+1400:Ukáže lokálne nastavené info o <uin> alebo <nick>, alebo o vás.
+1401:Aktualizuje rozšírené nastavenie o užívateľovi ako vek alebo pohlavie.
+1402:Aktualizuje informácie o vás.
+1403:Zobrazí poslednú správu od <contacts> alebo od každého.
+1404:Prepína ignorovanie/akceptovanie kontaktu/ov <contacts>.
+1405:Vypíše ignorované nicky/uin.
+1406:Prepína vašu viditeľnosť pre kontakt/y <contacts> keď ste neviditeľný.
+1407:Zobrazí aktuálny stav online ľudí vo vašom zozname kontaktov.
+1408:Zmení vaše heslo na <password>.
+1409:Pošle správu kontaktu/om <contacts>.
+1410:Pošle URL a správu kontaktu/om <contacts>.
+1412:Pošle správu poslednej osobe, ktorej ste poslali správu.
+1414:Odpoveď osobe ktorá vám poslala poslednú správu.
+1415:Nájde náhodného užívateľa v záujmovej skupinep <nr> alebo vypíše skupiny.
+1416:Zobrazí aktuálny stav každého vo vašom zozname kontaktov.
+1418:Nastaví úroveň hlásení alebo zobrazí aktuálne nastavenie.
+1419:Vymaže obrazovku.
+1420:Nastavenie pípnutia pri prichádzajúcej správe alebo nastavuje skript pre udalosť.
+1422:Odhlásenie a ukončenie.
+1424:Nastavuje automatické odpovede keď nie ste online lebo zobrazí aktuálne nastavenie.
+1425:Nastaví správu pre automatickú odpoveď pre stav.
+1426:Vytvorí nové UIN a heslo.
+1427:Zmení váš stav podľa čísla alebo vypíše dostupné módy.
+1428:Pridá všetky kontakty definované v <contacts> do skupiny <group>.
+1429:Vyhľadať ICQ užívateľa.
+1430:Zobrazí súhrnné informácie pre <uin> alebo <nick>.
+1431:Nastaví stav na "online".
+1432:Nastaví stav na "Preč".
+1433:Nastaví stav na "Nedostupný".
+1434:Nastaví stav na "Zaneprázdnený".
+1435:Nastaví stav na "Nerušiť".
+1436:Nastaví stav na "Voľný k rozhovoru".
+1437:Nastaví stav na "Neviditeľný".
+1438:Aktualizuje vaše základné údaje (email, nickname, atď.).
+1439:Nastaví náhodnú skupinu užívateľov.
+1440:Náhodný užívateľ:
+1441:vzdialená IP:
+1442:Vyberte prosím jednu zo sekcií pomoci.
+1443:Príkazy pre mICQ zobrazenie a nastavenia.
+1444:Príkazy pre vyhľadávanie a prezeranie iných užívateľov.
+1445:Príkazy pre váš ICQ účet.
+1446:Príkazy pre posielanie správ.
+1447:Klient
+1448:Správa
+1449:Užívateľ
+1450:Účet
+1451:lokálna  IP:
+1452:Stav:
+1453:TCP verzia:
+1454:Spojenie:
+1455:Umenie
+1456:Automobily
+1457:Fankluby
+1458:Zbierky
+1459:Počítače
+1460:Kultúra a literatúra
+1461:Fitness
+1462:Hry
+1463:Koníčky
+1465:Internet
+1466:Životný štýl
+1467:Filmy/TV
+1468:Hudba
+1469:Iné aktivity
+1470:Rodičovstvo
+1471:Zvieratá
+1472:Viera
+1473:Veda/Technika
+1474:Zručnosti
+1475:Športy
+1476:Webdesign
+1477:Príroda a životné prostredie
+1478:Noviny a médiá
+1479:Štátna správa
+1480:Obchod a ekonomika
+1481:Mystika
+1482:Cestovanie
+1483:Astronómia
+1484:Vesmír
+1485:Odievanie
+1486:Večierky
+1487:Ženy
+1488:Sociálne vedy
+1489:60-te roky
+1490:70-te roky
+1491:80-te roky
+1492:50-te roky
+1493:Peer-to-Peer
+1494:Iba server
+1495:Náhodný užívateľ nenájdený
+1497:zlyhalo
+1499:Iný
+1500:Prezývka (nick):
+1501:Meno:
+1505:Miesto:
+1506:Telefón:
+1507:Fax:
+1508:Ulica:
+1509:Mobil:
+1510:PSČ (ZIP code):
+1511:Krajina:
+1512:Kód krajiny:
+1513:Kód krajiny zamestnania:
+1514:Krajina zamestnania:
+1515:HomePage zamestnania:
+1516:Zamestnanie:
+1517:Pozícia:
+1518:Oddelenie:
+1519:Názov spoločnosti:
+1520:PSČ zamestnania:
+1521:Fax do zamestnania:
+1522:Adresa zamestnania:
+1523:Telefón zamestnania:
+1524:Miesto zamestnania:
+1525:Popis:
+1528:žena
+1529:muž
+1530:nešpecifikované
+1531:HomePage:
+1532:Narodený:
+1533:Jazyky:
+1534:Vložte jazyk podľa čísla alebo L pre zoznam:
+1535:Vložte nový vek:
+1536:Vložte nové pohlavie:
+1537:Vložte novú HomePage:
+1538:Vložte nový rok narodenia (4 číslice):
+1539:Vložte nový mesiac narodenia:
+1540:Vložte nový deň narodenia:
+1544:Vložte nové mesto:
+1545:Vložte nový štát:
+1546:Vložte nové telefónne číslo:
+1547:Vložte nové faxové číslo:
+1548:Vložte novú ulicu:
+1549:Vložte nové číslo mobilu:
+1550:Vložte nové PSČ (ZIP) (musí byť číslo):
+1551:Vložte novú predvoľbu krajiny:
+1552:Vložte vaše časové prásmo (+/- 0-12):
+1553:Vložte nové nicknamee:
+1554:Vložte nové krstné meno:
+1555:Vložte nové priezvisko:
+1556:Vložte novú emailovú adresu:
+1557:Chcete aby užívatelia Mirabilis potrebovali vašu autorizáciu? (ANO/NIE)
+1564:Krstné meno:
+1565:Priezvisko:
+1566:Emailová adresa:
+1570:Mesto:
+1574:Štát:
+1575:Vek:
+1578:Vložte predvoľbu krajiny:
+1579:Vložte spoločnosť: 
+1587:Vložte oddelenie: 
+1595:\nZoznam kontaktov.\n============================================\n%d Kontakty\n
+1596:[SOCKS] Nemôžem nájsť hostname %s: %s.
+1597:[SOCKS] Vytvorenie socketu zlyhalo\n
+1598:[SOCKS] Žiadosť o spojenie zrušená
+1599:[SOCKS] Nesprávna metóda autentifikácie
+1600:[SOCKS] Autorizačná chyba
+1601:[SOCKS] Všeobecná chyba SOCKS serveru
+1602:Vložte štát:
+1603:Vložte pozíciu: 
+1604:Mali by byť užívatelia online?
+1605:Chcete aby bol váš stav viditeľný na webe? (ANO/NIE)
+1606:Prijaté chybné ID sedenia %08lx (správne: %08lx) s cmd %04x ignorované.\n
+1612:Tento program bol vytvorený bez účasti pôvodného kódu Mirabilis alebo jeho obsahu.\n
+1613:Žiadne spätné inžinierstvo alebo dekompilácia kódu Mirabilis neboli použité pri vytvorení tohoto programu.\n
+1618:UIN:
+1619:Varovanie:
+1620:dosiahnutý maximálny počet kontaktov. Požiadajte čarodejníka aby ma zväčšil!
+#1621:users not returned.
+1622:Chcete aplikovať tieto nastavenia? (YES/NO)
+1623:Zdvojený paket %04x\n
+1632:\nNestabilné spojenie. Končím....
+1633.\nSpojenie nestabilné. Končím....
+1634:v poriadku.\n
+1637:Nemôžem prideliť socket voľnému portu\n
+1638:Nemôžem vytvoriť socket
+1639:Nové UIN je %ld!\n
+1640:Aktualizácia informácií zlyhala.\n
+1641:Informácie o užívateľovi zaktualizované.\n
+1642:IP:
+#1643:Acknowledged SRV_X1 0x021C Done Contact list?\n
+#1644:Acknowledged SRV_X2 0x00E6 Done old messages?\n
+1645:Vložili ste nesprávne heslo.\n
+1646:Server je zahltený.\n
+1648:Odpoveď bola %04x	
+1649:Verzia bola %x	
+1650:\nSEQ bolo %04lx	
+1651:Veľkosť bola %d\n
+1653:Offline
+1654:Online
+1655:Vložte užívateľovu e-mailovú adresu:
+1656:Vložte užívateľov nick:
+1657:Vložte užívateľove krstné meno:
+1658:Vlože užívateľove priezvisko:
+1659:Neznáma sekcia '%s' v konfiguračnom súbore.
+1660:Nesprávny príkaz: %s\n
+1661:Príkazy shellu boli vypnuté.\n
+1666:Povolení %s.\n
+1667:Ignorovaní %s.\n
+1670:Štandartne viditeľný pre %s odteraz.\n
+1671:Vždy viditeľný pre %s odteraz.\n
+1675:Ignorovaný riadok:
+1678:Je potrebné URL.\n
+1679:Uloženie vašich osobných automatických odpovedí zlyhalo, ľutujem!\n
+1680:Vaše nastavenia boli uložené!\n
+1682:Dostali ste správy od:\n
+1687:mICQ je spustené už
+1688:dni
+1689:hodiny
+1690:minúty
+1691:sekundy
+1696:Pohlavie:
+1703:Stavové módy:\n
+1704:Skupiny:\n
+1705:Všeobecné
+#1706:Romance
+1707:Hry
+1708:Študenti
+1709:20 a niečo
+1710:30 a niečo
+1711:40 a niečo
+1712:50+
+1713:Hľadá ženu
+1714:Hľadá muža
+1715:mICQ
+#1716:None
+1717:Vykoná príkaz shell-u <cmd> (napr. '!ls', '!dir', '!mkdir temp').
+1719:Zobrazí ako dlho je mICQ spustené a ďalšie štatistiky.
+1721:Zaslanie prázdnej správy prepne klient do multiriadkového režimu.\nPoužite . v samostatnom riadku pre uzavretie správy.\nPoužite # v samostatnom riadku pre zrušenie správy.
+1741:Najskôr musíte prijať správu.\n
+1742:Najskôr musíte napísať správu.\n
+1743:Chyba veľkosti v dĺžke paketov.\n
+1744:server (v5)
+1745:neznámy
+1746: nr typ         poslané/prijaté pakety/unikátne pakety\n
+1747:celkom
+1754:Poznámka: Potrebujete použiť príkaz 'save' pre zápis zoznamu kontaktov na disk.\n
+1755:vás pridali do svojho zoznamu kontaktov.\n
+1762:Vaše nové UIN je: %ld.\n
+1766:Zmena stavu na Preč/Nedostupný po čakaní %s%ld%s sekúnd.\n
+1767:Prepína automatické cyklenie Preč/Nedostupný.
+1770:Znovu pošle posledné správy kontaktom <contacts>.
+1771:Ešte ste nikomu neposlali správu!\n
+1774:Prichádzajúci paket:
+1775:Odchádzajúci paket:
+1781:Vaše heslo pre UIN %ld:\n
+1782:Potrebujete heslo pre vaše nové UIN.\n
+1783:Kvôli preklepom vložte heslo ešte raz.\n
+1784:Ak ste chránení firewallom, možno budete musieť použiť SOCKS5 server. Ak áno, vložte jeho hostname alebo IP adresu. Ak si nie ste istý, stlačte Enter.\n
+1785:úspešne.\n
+1786:Potrebujem port,na ktorom SOCKS server počúva. Ak si nie ste istý, stlačte Enter pre štandartný port.\n
+1787:Možno sa budete musieť autentifikovať pre SOCKS server. Ak áno, vložte užívateľské meno, ktoré vám pridelil administrátor SOCKS serveru. V opačnom prípade stlašte Enter.\n
+1788:Teraz budete potrebovať aj heslo pre tohoto užívateľa.\n
+1789:Prijatý poškodený paket: (%d)
+1790:Sprievodca nastavením dokončený. Blahoželám k novému UIN!\n
+1791:Sprievodca nastavením dokončený. Blahoželám!\n
+1792:Je mi ľúto, AOL vám nechce vydať nové UIN, možno preto, že dostal príliš mnoho požiadavok na nové UIN z tejto IP adresy. Skúste neskôr.\n
+1793:Neplatné UIN. Sprievodca nastavením vám pomôže s nastavením vášho UIN.\n
+1794:Ak už UIN máte, vložte ho. Inak, vložte 0 a požiadam AOL o jedno pre vás.\n
+1795:Heslo:
+1796:Sprievodca nastavením dokončený. Prosím, počkajte na dokončenie registrácie.\n
+1797:Financie a spoločnosti
+1798:Základná škola
+1799:Stredná škola
+1800:Zmení jazyk (a kódovanie) na <lang> alebo zobrazí reťazec pre jazyk <nr>.
+1801:Zobrazí zoznam ľudí vo vašom zozname kontaktov vo formáte pre širšie obrazovky.
+1807:Stornovaná prichádzajúca správa (seq %04x) od %s\n
+1808:Univerzita
+1810:Univerzita
+1812:Posledné zamestnanie
+1813:Posledný zamestnávateľ
+1814:Nastavená automatická odpoveď na %s%s%s.\n
+1815:    funny:      použitie funny správ pre výstup.\n
+1817:Skriptovanie udalostí je vypnuté.\n
+1818:Varovanie: Zastaralá syntax v konfiguračnom súbore!\n    Aktualizujte alebo použite "save" pre uloženie konfiguračného súboru a porovnajte zmeny.\n
+1820:%s <option> [on|off|<value>] - jednoduché nastavenie.\n
+1822:    color:      použitie farebných správ pre výstup.\n
+1823:Prichádzajúci čiastočný paket:
+1825:Stratený %04x (%s) paket
+1826:Znovuposlanie správy %04x (%s) sekvencia %04lx (attempt #%ld, len %d).\n
+#1830:Discarding message to %s after %ld send attempts.  Message content:\n
+1833:Peer-to-peer TCP spojenie nadviazané.\n
+1842:Uzavretie socketu %d pre %s.\n
+1843:Uzavretie socketu %d.\n
+1844:TCP správa %04x odstránená po uplynutí timeout-u.\n
+1846:Otvára a zatvára priame (peer-to-peer) spojenie:\n
+1847:peer open  <nick> - Otvorí priame spojenie.\n
+1848:peer close <nick> - Zavrie/zruší priame spojenie(a).\n
+1849:Chyba vo výbere: %s (%d)\n
+1850:Vypršanie spojenia s %s na %s:%ld\n
+1855:TCP spojenie s %s na %s:%ld zlyhalo.\n
+1856:Zahodený paket %04x (%s) z pôvodnej relácie %08lx (aktuálna: %08lx).\n
+1857:Prajete si skryť vašu IP pre iné kontakty? (YES/NO)
+1867:Prijatý poškodený (príliš krátky) paket - ignorovaný.\n
+1868:Prijatý poškodený (príliš dlhý subpaket) multipaket - ignorovaný.\n
+1869:Porotkol s verziou nižšou než 5 už nie je podporovaný.\n
+1870:peer off   <nick> - Zatvorí priame spojenie(a) a viac sa o ne nepokúsi.\n
+1872:zlyhalo: %s (%d)\n
+1873:Miesto zamestnania:
+1874:Štát zamestnania:
+1875:Osobné záujmy:
+#1876:Personal past background:
+1877:ok.\n
+1878:Chyba počas čítania zo socketu: %s (%d)\n
+#1879:Affiliations:
+1881:FLAP kanál 1 je bez dát.\n
+1882:FLAP kanál 1 cmd 1 extra dáta:\n
+1883:FLAP kanál 1 neznámy príkaz %d.\n
+1884:FLAP s neznámym kanálom %ld prijatý.\n
+1885:Spojenie v8 vypršalo.\n
+1887:Spojenia:
+1888:bez webaware
+1889:server
+1890:peer-to-peer
+1891:Spojenie %ld už je otvorené.\n
+1892:conn               Zoznam dostupných spojení.\n
+1893:conn login <nr>    Otvorís pojenie <nr>.\n
+1894:Neexistuje spojenie s číslom %ld.\n
+1895:Prihlásenie zlyhalo:\n
+1896:Server ukončil spojenie:\n
+#1897:Incomplete TLV %d, len %ld of %ld - ignoring.\n
+1899:Požadovaná neznáma rodina: %d\n
+1900:Je len pre čítanie.
+1901:vás autorizoval aby ste si ho pridali do zoznamu kontaktov.\n
+1903:Odchádzajúci v8 server paket:
+1904:Server nerozumie ver %d (only %d) pre rodinu %d!\n
+1907:Varovanie: Server považuje za UIN %ld, keď je %ld.\n
+1911:nadväzovanie spojenia
+1912:uzavreté
+1914:Nemôžem vyhradiť štruktúru spojenia.\n
+1915:Server oznamuje, že smena %s.\n
+1918:Ignored server request for a minimum report interval of %d.\n
+1919:UIN zlyhanie: %ld vs %ld.\n
+1920:Registrácia nového UIN zamietnutá.\n
+1921:Online
+1922:Nerušiť
+1923:Preč
+1924:Nedostupný
+1925:Zaneprázdnený
+1926:Neviditeľný
+1927:Voľný k rozhovoru
+1929:Užívateľ je Nerušiť [Autmatická správa]
+1931:Aktuálne spojenie je ukončené. Skúste iné alebo zopakujte toto.\n
+1934:spojený
+#1935:    type %d socket %d ip %s (%d) on [%s,%s] id %lx/%x/%x\n
+1936:Vložte minimálny vek (18-22,23-29,30-39,40-49,50-59,60-120):
+1937:Vložte maximálny vek (22,29,39,49,59,120):
+1938:Vložte pohlavie:
+1939:Vložte mesto:
+#1940:Unknown Meta User result %lx.\n
+1942:Ďalšie e-mailové adresy:
+1943:(nie je potrebná autorizácia)
+1944:(musíte požiadať o autorizáciu)
+#1945:Unknown Meta User response
+#1947:listener
+1948:Nemôžem nájsť hostname %s: %s.
+1949:zlyhalo:\n
+#1950:Couldn't set socket nonblocking
+1951:Nemôžem nájsť hostname %s: %s (%d).
+1952:Nemôžem otvoriť spojenie
+#1953:couldn't bind socket to free port
+1954:nemôžem čítať socket
+1955:Spojenie zlyhalo
+1958:[SOCKS] Žiadosť o spojenie odmietnutá (%d)
+1960:Vložte údaje pre vyhľadanie užívateľa. Vložte '.' pre štart vyhľadávania.\n
+1961:URL: %s\n
+1966:Spojenie odmietnuté na porte %ld pre %s\n
+1967:Viac informácií pre
+1968:Užívateľ nájdený:\n
+1969:offline
+1970:online
+1971:Nerušiť
+1972:Preč
+1973:Zaneprázdnený
+1974:Nedostupný
+1975:Neviditeľný
+1976:Voľný k rozhovoru
+1977:Obraz a zvuk
+1978:Šport a atletika
+1979:Publikovanie
+1980:Domáce spotrebiče
+#1981:Alumni Org.
+1982:Charita
+#1983:Club/Social Org.
+#1984:Community Org.
+1985:Kultúrne organizácie
+1986:Fankluby
+#1987:Fraternity/Sorority
+1988:Nadšenci
+1989:Medzinárodné organizácie
+#1990:Nature and Environment Org.
+1991:Profesinálne organizácie
+1992:Vedecko-technické organizácie
+#1993:Self Improvement Group
+#1994:Spiritual/Religious Org.
+1995:Športové organizácie
+#1996:Support Org.
+1997:Obchod a podnikanie
+#1998:Union
+1999:Združenia voličov
+2000:Zábava
+2001:Spotrebná elektronika
+#2002:Retail stores
+2003:Krása a zdravie
+2004:Médiá
+#2005:Household products
+2006:Dobierkové služby
+2007:Obchodné služby
+2009:Nájdený náhodný užívateľ pre rozhovor/chat UIN %ld s chatovej skupine %d.\n
+2011:Neočakávate peer-to-peer spoje nie.\n
+2012:Heslo nebolo zadané.\n
+2013:Tento príkaz je len pre v8.\n
+2014:Číslo nebolo zadané.\n
+2015:Správa nebola zadaná.\n
+2017:Užívateľ je online, ale môže byť Neviditeľný.\n
+2020:Bude viditeľný pre %s.\n
+2021:Bude neviditeľný pre %s.\n
+2022:Užívateľ je offline.\n
+2023:Priame spojenie prerušené druhou stranou.\n
+2024:Neznámy protokol verzie %d pre ICQ peer-to-peer protokol.\n
+2026:TCP cookie:
+2029:Chyba protokolu pre peer-to-peer spojenie
+2031:Príliš časté zlyhanie spojenia, ruším reláciu.\n
+2032:Plánujem pokus o obnovu v8 spojenia za %d sekúnd.\n
+2033:má dnes narodeniny
+2036:Uloženie aktuálnych nastavení na disk.
+2037:Otvorenie alebo ukončenie peer-to-peer spojenia, alebo zrušenie peer-to-peer spojení pre <uin> alebo <nick>.
+2038:Otvorí spojenie číslo <nr> alebo spojenie s užívateľom <uin>, alebo prvé spojenie so serverom.
+2039:Pošle správu na mobilný telefón užívateľovi <nick> s číslom <cell>.
+2042:Zobrazí zoznam online užívateľov z vášho zoznamu kontaktov vo formáte pre širokú obrazovku.
+2043:Odstráni všetky kontakty <contacts> zo skupiny <group>.
+2044:Nastaví, vymaže alebo zobrazí nastavenie <option>: color, delbs, auto, uinprompt, autosave, autofinger, linebreak, funny.
+2045:Prepína vašu viditeľnosť pre kontakty <contacts> v čase keď ste online.
+2046:Možno chcete použiť verziu protokolu v8 pre namiesto peer-to-peer protokolu.\n
+2047:Vytváram adresár %s.\n
+2048:Ukladám nastavenia do %s.\n
+2051:Chyba v sockete: %s (%d)\n
+2055:Užívateľ je Voľný k rozhovoru a praje si chatovať o čomkoľvek.
+2056:getauto [auto] <nick> - Získa automatickú odpoveď od kontaktu.\n
+2057:getauto away   <nick> - Získa automatickú odpoveď od kontaktu pre stav Preč.\n
+2058:getauto na     <nick> - Získa automatickú odpoveď od kontaktu pre stav Nedostupný.\n
+2059:getauto dnd    <nick> - Získa automatickú odpoveď od kontaktu pre stav Nerušiť.\n
+2060:getauto ffc    <nick> - Získa automatickú odpoveď od kontaktu pre stav Voľný k rozhovoru.\n
+2063:Mali by ste uložiť heslo do súboru ~/.micq/micqrc.\n
+2065:Neznámy príkaz TCP_MSG_GREET_ %04x.\n
+2066:Neznámy príkaz TCP_MSG_ %04x.\n
+2067:súbor io
+2071:Nemôžem zistiť stav súboru %s: %s (%d)\n
+2072:Prenos súboru #%ld (%s) ukončený z dôvodu prerušenia spojenia.\n
+2073:Využitie pamäte: %ld paketov spracovávaných.\n
+2078:Odchádzajúci TCP paket (%d - %s): %s
+2079:Prichádzajúci TCP paket (%d - %s): %s
+2080:Odpoveď na doručenie SMS správy serverom:\n%s\n
+#2081:    at %p parent %p assoc %p\n
+2083:Nemôžem otvoriť súbor %s: %s (%d).\n
+2084:Chyba počas nastavovania pozície %ld: %s (%d).\n
+2086:Chyba počas čítania súboru %s: %s (%d).\n
+2087:Prenos súboru dokončený %s.\n
+2088:Dokončené prenosy všetkých %d súborov.\n
+#2089:file listener
+#2090:file peer-to-peer
+#2091:Queueing %s as %s for transfer.\n
+2092:TCP správa %s stratená - strata spojenia.\n
+2094:conn login         Otvorí aktuálne/prvé spojenie so serverom.\n
+2095:conn remove <nr>   Odstráni spojenie <nr>.\n
+2097:conn select <nr>   Zvolí spojenie <nr> ako spojenie so serverom.\n
+2098:Spojenie %ld nie je spojenie so serverom.\n
+2099:Vybrané spojenie %ld (verzia %d, UIN %ld) ako aktuálne spojenie.\n
+2100:conn select <uin>  Zvolí spojenie s UIN <uin> ako spojenie so serverom.\n
+2101:Odstránenie spojenia %ld a jeho závislostí ukončené.\n
+2102:Spojenie %ld je nastavené spojenie.\n
+2103:contact show    Zobrazí kontakty na strane servera.\n
+2104:contact diff    Zobrazí kontakty na strane servera, ktoré nie sú v lokálkom zozname.\n
+2105:contact import  Importuje zoznam kontaktov zo servera do lokálneho zoznamu.\n
+2106:Posledná správa od %s%s%s na %s:\n
+2107:Žiadne správy od %s%s%s.\n
+#2108:auto
+2109:verzia
+2110:peer files <nick> <file1> <as1> ... [<description>]\n
+2111:                  - Pošle súbor file1 ako as1, ..., s popisom description.\n
+#2112:                  - as = '/': strip path, as = '.': as is\n
+2115:'%s' nie je celé číslo.\n
+2116:Nebolo určené nové nickname (prezývka).\n
+2117:%ld pridaný ako %s.\n
+2118:Pretečenie pamäte.\n
+2119:auth [grant] <contacts>    - povolí autorizáciu.\n
+2120:auth deny <contacts> <msg> - odmietne autorizáciu.\n
+2121:auth req  <contacts> <msg> - nová požiadavka na autorizáciu.\n
+2122:Poznámka: Musíte použiť 'save' pre uloženia nového hesla na disk.\n
+2123:%sSyntax error%s: Príliš málo parametrov: %s\n
+2124:%sSyntax error%s: Nie je celé číslo: %s\n
+2126.je offline, správa čakána serveri.\n
+2128:       Popis: %s%s%s\n
+2129:         URL: %s%s%s\n
+2131:Písanie správy pre %s%s%s:\n
+2133:Farba je %s%s%s.\n
+2134:Funny správy sú %s%s%s.\n
+2136:Zmena hesla bola %s%s%s.\n
+2137:Zmena základných informácií bola %s%s%s.\n
+2138:Zmena informácií bola %s%s%s.\n
+2139:Zmena ďalších informácií bola %s%s%s.\n
+2140:Náhodná chatová skupina bola %s%s%s.\n
+2141:Vyhľadávanie %szlyhalo%s.\n
+2142:Priame spojenie s %s nie je možné.\n
+2145:auth add  <contacts>       - autorizované pridanie.\n
+2146:'%s' už je alias pre '%s' (%ld).\n
+2147:'%s' (%ld) je už použité pre nick.\n
+2148:Pridané '%s' ako alias pre '%s' (%ld).\n
+2149:Odstránený alias '%s' pre '%s' (%ld).\n
+2150:Odstránený kontakt '%s' (%ld).\n
+2156:conn close <nr>    Zavrie spojenie <nr>.\n
+2157:Moldavsko
+2158:Nebolo zadané meno súboru.\n
+2159:Nejaké súbory.
+2160:peer file  <nick> <file> [<description>]\n
+2161:Prijímam %ld súborov s celkovou veľkosťou %ld bajtov rýchlosťou %lx od %s.\n
+2162:Prijímam súbor %s (%s) s dĺžkou %ld bajtov ako %s.\n
+2163:Sending file %ld at offset %ld.\n
+2164.Chyba pri zápise súboru.\n
+2165:Peer poslal viac bajtov (%ld) ako je dĺžka súboru (%ld).\n
+2166:Príjem súboru dokončený.\n
+2167:Chyba - neznámy paket.\n
+2168:Prenos súboru #%ld (%s) zlyhal po %ld pokusoch kvôli časovému vypršaniu.\n
+2169:Prenos súboru prerušený druhou stranou (%d).\n
+2170:Posielam súbor rýchlosťou %lx pre %s.\n
+2171:Rozšírené
+2172:Príkazy pre rozšírené možnosti.
+2176:Zobrazí podrobný stav pre každého vo vašom zozname kontaktov.
+2177:Zobrazí podrobný stav každého online kontaktu vo vašom zozname kontaktov.
+2179:Pošle všetkým kontaktom <contacts> jeden súbor.
+2180:Pošle kontaktu <uin> alebo <nick> niekoľko súborov.
+2181:Zavrie alebo odstráni spojenie <nr>.
+2182:Nastaví číslo serverového spojenia <nr> alebo spojenie s uin <uin> ako súčasné spojenie so serverom.
+2183:Zistí, či sú kontakty <contacts> offline alebo Neviditeľný.
+2184:%s%-14s%s - %s\n
+2185:Ukončujem spojenie %ld.\n
+2188:Posielate údaje príliš rýchlo - prerušte písanie inak server ukončí spojenie!\n
+2191:Instant messaging chyba: %d.\n
+2192:Možnosti: 
+2194:Neviem otvoriť spojenie tohoto typu.\n
+2195:Pôvodné číslo:
+2196:Pôvodný text:
+2197:Pôvodný bajt
+2198:Nepoužiteľné heslo '%s' - nesmie začínať bajtom 0xf3.\n
+2199:  -h, --help     poskytne text nápovedy\n
+2200:  -v, --verbose  nastaví (alebo zvýši) úroveň hlásení (vhodné pre ladenie)\n
+2201:  -b, --basedir  použije zadaný priečinok BASE (default: %s)\n
+2203:  -l, --logplace použije zadaný súbor/adresár pre logovanie (default: %s)\n
+2204:  -i, --i18n     použije zadanú lokalizáciu (default: auto-detekcia)\n
+2205:  -c, --nocolor  zakáže farby\n
+2206:Server odmieta poskytnúť offline správy.\n
+2207:Chyba protokolu v príkaze pre starý ICQ server: %d.\n
+2211:Váš stav je %s.\n
+2212:stav zmenený na %s
+2213:prihlásený (%s)
+2214:Info pre %s%lu%s:\n
+2215:Toto mICQ nedokáže konvertovať medzi SJIS alebo EUC a unicode.\n
+2216:Toto mICQ nedokáže rozpoznať '%s' kódovanie.\n
+2217:Toto mICQ nedokáže konvertovať medzi'%s' a unicode.\n
+2218:UIN: %s\n
+2220:niekoľko
+2222:Príkaz skriptu '%s' zlyhal: %s (%d).\n
+2223:Otváram skriptovanie FIFO na %s... 
+2225:skriptujem
+2226:Nemôžem vytvoriť FIFO
+2227:Nemôžem otvoriť FIFO
+2228:Nemôžem nastaviť odblokovanie FIFO
+2233:odmieta autorizáciu: %s%s%s\n
+2234:Správa %s zahodená - stratené sedenie.\n
+2236:Informácia pre %s%s%s (%ld):\n
+2237:Webaware:
+2238:Skrytá IP:
+2239:Ďalšie neznáme:
+2240:Nebola zadaná skupina kontaktov.\n
+2241:Pridané '%s' do skupiny kontaktov '%s'.\n
+2243:Kontakt '%s' odstránený zo skupiny '%s'.\n
+2244:Skupina '%s' už obsahuje kontakt '%s' (%ld).\n
+2245:Pridaná skupina '%s'.\n
+2246:Kontakt '%s' nie je  v skupine '%s'.\n
+2248:Uložené metadata pre '%s' (%ld).\n
+2249:Nemôžem uložiť metadata pre '%s' (%ld).\n
+2250:Číslo '%s' nemá formát +<countrycode><cellprovider><number>.\n
+2251:Chyba:
+2252:Pípnutie generované %sbeep%sing.\n
+2253:Pípnutie generované skriptom %sevent%s.\n
+2254:Pípnutie nebude nikdy generované.\n
+2255:Pípnutie pre prichádzajúce kontakty bude vždy generované skriptom %sevent%s.\n
+2256:Pípnutie pre odchádzajúce kontakty bude vždy generované skripom %sevent%s.\n
+#2258:No pending incoming file transfer request for %s with (sequence %ld) found.\n
+2260:Skúste príkaz getauto namiesto toho.\n
+2262:Interpretácia delete ako backspace je %s%s%s.\n
+2265:Automatické odpovede sú %s%s%s.\n
+2266:Posledný nick z konzoly je %s%s%s.\n
+2267:Automatické ukladanie je %s%s%s.\n
+2268:Automatické detaily nových UIN je %s%s%s.\n
+#2269:break
+#2270:simple
+#2271:indent
+#2272:smart
+2278:    delbs:      znak delete ako backspace.\n
+2281:    auto:       posielať automatické odpovede.\n
+2282:    uinprompt:  zobraziť posledný nick v konzole.\n
+2283:    autosave:   automaticky ukladať súbor micqrc.\n
+2284:    autofinger: autofinger (info) o nových UIN.\n
+#2285:    linebreak:  style for line-breaking messages: simple, break, indent, smart.\n
+#2288:Indentation style is %s%s%s.\n
+2293:--=
+2294:===
+2297:Alias čoho?\n
+2298:Ktorý alias odstrániť?\n
+2299:Alias neexistuje.\n
+2300:Nastaví alias alebo zobrazí aliasy.
+2301:Odstráni alias.
+2302:Príliš zložitá úroveň aliasov; možnosť nekonečnej slučky.\n
+2303:Nevhodný znak 0x%x v názve aliasu.\n
+2304:Získa automatickú odpoveď od všetkých kontaktov <contacts> pre aktuálny stav, Preč, Nedostupný, Nerušiť, Zaneprázdnený alebo pre Voľný k rozhovoru.
+2305:Správa meta data kontaktov.
+2306:Požiada server o zoznam kontaktov a zobrazí všetky alebo len nové kontakty pre import.
+2307:Zobrazí aktuálny stav online užívateľov z vášho zoznamu kontaktov zoradených podľa skupín.
+2308:Zobrazí aktuálny stav každého zo zoznamu kontaktov zoradených podľa skupín.
+2309:Zobrazí podrobne aktuálny stav online užívateľov z vášho zoznamu kontaktov zoradených podľa skupín.
+2310:Zobrazí podrobne aktuálny stav každého z vášho zoznamu kontaktov zoradených podľa skupín.
+2311:Pridá <uin> ako <new nick>, alebo pridá alias <new nick> pre <uin> alebo <nick>.
+2312:Odstráni všetky aliasy pre <contacts>, odstráni kontakt ak je 'all' zadané.
+2313:Povolí, zakáže, požiada alebo overí autorizáciu pre/od <contacts> pre vás/ich pre ich/váš zoznam kontaktov.
+2314:Toto sú rozšírené príkazy. Pre istotu si prečítajte manuál.\n
+2315:Nemôžem zistiť status pre %s - príliš mnoho požiadavok.\n
+2316:Preklad %s nebol nájdený.\n
+2319:Prijať prichádzajúci súbor od <uin> alebo <nick>.
+2320:peer accept <nick> [<id>]\n                  - prijať prichádzajúci súbor.\n
+2321:contact add     Pridá zoznam kontaktov zo serveru do lokálneho zoznamu kontaktov.\n
+2322:contact sync    Importuje zoznam kontaktov, ak je to potrebné.\n
+2323:contact export  Exportuje lokálny zoznam kontaktov na server.\n
+2324:contact upload  Pridá lokálne kontakty do kontaktov na serveri.\n
+2325:Varovanie: zmena kontaktov na serveri zlyhala s chybovým kódom %d.\n
+2326:Zoznam kontaktov na serveri je podporovaný len pre ICQ v8.\n
+2327:%smICQ (Mattov klon ICQ)%s verzia %s%s%s\n
+2328:Prihlasovali ste sa príliš často, počkajte 30 minút do ďalšieho pokusu o prihlásenie.\n
+2329:chyba syntaxe
+2330:odstránenie non-kontaktov
+2331:neznámy
+2332:Chyba kontaktu %d (%s) pre %d kontaktov: 
+2333:%s [show|load|save|set|get|rget] <contacts> - správa meta data pre kontakty contacts.\n
+2334:  show - zobrazí aktuálne známe meta data\n
+2335:  load - načíta zo súboru a zobrazí meta data\n
+2336:  save - uloží meta data do súboru\n
+2337:  set  - uloží vlastné meta data na server\n
+2338:  get  - požiada server o meta data\n
+2339:  rget - požiada server o meta data poslednej relácie\n
+2342:Skriptovanie
+2343:Rozšírené príkazy pre skriptovanie.
+2344:Spustí Tcl skript zo súboru <file>.
+2345:Spustí Tcl skript v <string>.
+2346:Tieto Tcl príkazy sú podporované:\n
+2348:Inštaluje správcu pre prijímanie správ od UIN alebo nick, alebo od všetkých (ak nie je uvedený).
+2351:Odinštalovať správcu udalosti pre UIN alebo nick.
+2353:Inštalovat správcu udalosti (event hook). Návratové hodnoty: type ...
+2355:Odinštalovať správcu udalosti (event hook).
+2356:Zoznam všetkých inštalovaných správcov (hooks). Formát: <type> <command> <filter>.
+2358:Spustí príkaz mICQ.
+2360:Nájdené nick-name pre <uin>.
+2361:Nesprávny počet parametrov pre príkaz '%s %s'. Očakáva sa %d.\n
+2362:Nesprávny počet parametrov. Skúste 'help'.
+2363:Chyba: rekurzívny príkaz 'micq exec' nie je povolený.
+2364:Neboli zistené spojenia.
+2365:neznámy príkaz: %s
+2366:TCL chyba v súbore %s: %s\n
+2367:TCL chyba: %s\n
+2368:peer deny <nick> [<id>] [<reason>]\n                  - zakáže prenos prichádzajúceho súboru.\n
+2369:Odmietnutie prichádzajúceho súboru od <uin> alebo od <nick>.
+2371:Inicializácia SSL zlyhala.\n
+2372:Nemôžem poslať SSL požiadavku na %s\n
+2374:SSL chyba: %s [%d]\n
+2375:SSL výmena (handshake) ok.\n
+2376:SSL čítanie z %s [ERR=%d]: %s
+2377:SSL zápis do %s [ERR=%d]: %s
+2378:peer ssl <nick>   - začne SSL výmenu (handshake).
+2381:Pridám autora mICQ do vášho zoznamu kontaktov pre vašu potrebu. Nezneužívajte túto výhodu, použite najskôr príkaz 'help' a snažte sa prečítať stránky man a FAQ pred akoukoľvek otázkou.\n
+2383:Zobrazí vaše posledné správy kontaktu <contact>. Použite 'h' ako skratku príkazu.
+2384:Case insensitive vyhľadávanie vzoru <pattern> v log súbore kontaktu <contact>.
+2385:Nemôžem otvoriť %s pre čítanie: %s (%d).\n
+2386:Nájdených %s%d%s výsledkov.\n
+2388:find <contact> <pattern> -- Vyhľadá <pattern> case insensitive v histórii kontaktu <contact>.\n
+2389:finds <contact> <pattern> -- Vyhľadá <pattern> case sensitive v histórii kontaktu <contact>.\n
+2390:Žiaden alebo prázdny vzor.\n
+2391:Case sensitive vyhľadávanie vzoru <pattern> v log súbore kontaktu <contact>.
+2393:%d-%m-%Y
+2394: %I:%M %p
+2395:Zobrazí správy od <contact> v časovom úseku od <date>.
+2396:Parameter '%s' nemá korektný formát, má byť kompatibilný s ISO 8601. Skúste '2004-01-31' alebo '2004-01-31T23:12:05'.\n
+2397:Nebola nájdená serverová relácia.\n
+2398:Nastaví alebo zobrazí možnosti pre skupinu kontaktov, kontakt alebo globálne nastavenia.\n
+2399:Žiadosť o SSL spojenie.
+2400:Žiaden preklad (%s) nebol načítaný (%d záznamov).\n
+2401:Autmoatické odpovede sú teraz v možnostiach kontaktov, viď. príkaz %s.\n
+2402:Globálny príznak pre automatickú odpoveď je teraz spravovaný príkazom %s.\n
+2403:msg>
+2405:Váš stav je %s (%s).\n
+2406:Nemôžem načítať metadata pre %s (%ld).\n
+2407:Toto nastavenie je spravované príkazom %s.\n
+2408:%s nie je skupina kontaktov.\n
+2409:%s nie je kontakt.\n
+2410:%s nie je ani kontakt, ani skupina kontaktov, ani kľúčové slovo %sglobal%s.\n
+2411:opt - skratka pre optglobal, optconnection, optgroup alebo optcontact.\n
+2412:optglobal            [<option> [<value>]] - nastaví globálnu premennú.\n
+2413:optconnection        {<option> [<value>]] - nastaví parametre spojenia.\n
+2414:optgroup   <group>   [<option> [<value>]] - nastaví parametre skupiny.\n
+2415:optcontact <contact> [<option> [<value>]] - nastaví parametre kontaktu.\n
+2416:Nastavenia kontaktu %s:\n
+2417:Nastavenia skupiny %s:\n
+2418:Globálne nastavenia:\n
+#2419:undefined
+#2420:effectivly
+2421:Neznáma hodnota %s.\n
+2422:Nastavenie %s pre kontakt %s nie je definované.\n
+2423:Nastavenie %s pre skupinu kontaktov %s nie je definované.\n
+2424:Nastavenie %s%s nie je globálna premenná.\n
+2425:Nastavenie %s pre kontakt %s je %s%s%s.\n
+2426:Nastavenie %s pre skupinu kontaktov %s je %s%s%s.\n
+2427:Nastavenie %s%s je globálne %s%s%s.\n
+2428:Nastavenie %s pre kontakt %s je %s.\n
+2429:Nastavenie %s pre skupinu kontaktov %s je %s.\n
+2430:Nastavenie %s%s je globálne %s.\n
+2431:Odstraňujem nastavenie %s pre kontakt %s.\n
+2432:Odstraňujem nastavenie %s pre skupinu kontaktov %s.\n
+2433:Odstraňujem globálne nastavenie %s%s.\n
+2434:Nastavujem %s pre kontakt %s na hodnotu %s.\n
+2435:Nastavujem %s pre skupinu kontaktov %s na hodnotu %s.\n
+2436:Nastavujem %s%s globálne na hodnotu %s.\n
+2437:Nastavujem %s pre kontakt %s na hodnotu %s%d%s.\n
+2438:Nastavujem %s pre skupinu kontaktov %s na hodnotu %s%d%s.\n
+2439:Nastavujem %s%s globálne na hodnotu %s%d%s.\n
+2440:Nastavujem %s pre kontakt %s.\n
+2441:Nastavujem %s pre skupinu kontaktov %s.\n
+2442:Nastavujem %s%s globálne.\n
+2443:Vymazávam nastavenie %s pre kontakt %s.\n
+2444:Vymazávam nastavenie %s pre skupinu kontaktov %s.\n
+2445:Vymazávam nastavenie %s%s globálne.\n
+2446:Nevhodná hodnota %s pre nstavenie %s typu Boolean.\n
+2447:Nebolo zadané nové heslo.\n
+2448:Skupina '%s' už existuje.\n
+2449:Primárna skupina pre kontakt '%s' je teraz '%s'.\n
+2450:Posledných %d ľudí,s ktorými ste hovorili:\n
+2451:history <contact> [<last> [<count>]] -- Zobrazí históriu pre <contact>.\n
+#2452:%02d %-15s version %d%s for %s (%lx), at %s:%ld %s\n
+#2453:    at %p parent %p assoc %p ssl %d\n
+#2454:    open %p reconn %p close %p err %p dispatch %p\n
+#2455:About>
+2456:Neznámy príkaz %s, napíšte %shelp%s pre nápovedu.\n
+2457:Neznáma verzia formátu konfiguračného súboru %d.\n
+#2458:Can't tab spool %s; type "%sopt %s tabspool 1%s" manually.\n
+2459:Peer-to-peer spojenie nie je priradené serverovému spojeniu, ruším.\n
+2460:Skupina %s (id %s%d%s) nie je priradená serverovému spojeniu.\n
+2461:Zastaralá syntax zistená v konfiguračnom súbore '%s'!\n    Prosím, zaktualizujte konfiguračný súbor alebo použite "save" a skontrolujte zmeny.\n
+2462:Prenos súboru %s na port %s%ld%s.
+2463:Prenos súboru %s odmietnutý: %s.
+2464:Prijatie prenosu súboru %s (%s%ld%s bajtov).
+2465:Odmietnutie prijatia súboru %s (%s%ld%s bajtov): %s.
+2466:Odmietnutie žiadosti o chat (%s/%s) s %s%s%s.
+#2467:mICQ>
+2468:žiada o prenos súboru %s z %s%ld%s bajtov (sekvencia %s%ld%s).\n
+#2469:URL:
+2470:žiada autorizáciu: %s\n
+2471:Ignorované kontakty:\n
+2472:Hidden-from kontakty:\n
+2473:Normálne kontakty:\n
+2474:Tajné kontakty:\n
+2475:Zobrazených %d skupín kontaktov, celkom %d kontaktov, %d ignorovaných, %d skrytých, %d intimate.\n
+2476:Stiahnutých %d skupín kontaktov, celkom %d kontaktov, %d ignorovaných, %d skrytých, %d intimate.\n
+2477:Upload %d skupín kontaktov  a %d kontaktov.\n
+2478:Server: Skupina %s (#%d)\n
+2479:Local:  Skupina %s (#%d)\n
+2480:Server: Skupina %s Kontakt %s (#%d) <ignorovaný>\n
+2481:Server: Skupina %s Kontakt %s (#%d) <hidefrom>\n
+2482:Server: Skupina %s Kontakt %s/%s (#%d) <hidefrom>\n
+2483:Local:  Skupina %s Kontakt %s/%s (#%d)\n
+2484:Server: Skupina %s Kontakt %s (#%d)\n
+2485:Server: Skupina %s Kontakt %s/%s (#%d)\n
+2486:Local:  Skupina %s Kontakt %s/%s (#%d) <%s>\n
+#2487:hidefrom
+#2488:intimate
+2489:Server: Skupina %s Kontakt %s/%s (#%d) <intimate>\n
+#2490:normal
+2491:Rozdiely v  %d skupinách, celkom %d kontaktov, %d ignorovaných, %d skrytých, %d intimate, %d lokálnych.\n
+2492:Použitie: micq [-h] [-c] [-b <basedir>] [-i <locale>] [-v[<level>]] [-l <logplace>]\n
+2493:            [[-u <UIN>] [-p <passwd>] [-s <status>] [[-C] <command>]...]...\n
+2494:  -u, --uin      prihlásiť s týmto UIN namiesto nakonfigurovaného\n
+2495:  -p, --passwd   ... a použiť toto heslo\n
+2496:  -s, --status   ... a nastaviť tento stav\n
+2497:  -C, --cmd      ... a vykonať tento príkaz mICQ\n
+2498:Kódovanie %s%s%s nie je podporované touto verziou mICQ.\n
+2499:Prosím, prekompilujte ho s použitím '--enable-iconvrepl' konfigurácie.\n
+2500:Ručné nastavenie lokalizácie %s je ignorované - používam skutočné nastavenie.\n
+2501:Vaša lokalizácia nie je nastavená. Použite, prosím, parameter %s--i18n%s v príkazovom riadku alebo nastavte systémové premenné %sLC_ALL%s, %sLC_MESSAGES%s, alebo %sLANG%s pre vašu lokalizáciu.\n
+2502:Nastavenie lokalizácie %s ingorované - používam skutočné nastavenie.\n
+#+#2502:Locale setting %s ignored - use a real locale instead.\n
+# #2502:Locale setting %s is no real locale and probably not what you want.\n
+2503:Váš systém nemôže rospoznať %s lokalizáciu - použite %slocale -a%s.\n
+2504:Nemôžem otvoriť konfiguračný súbor %s%s%s.
+2505:Je použitá zastaralá voľba -f. Použite, prosím, podobnú voľbu -b namiesto nej.\n
+2506:Táto konzola používa kódovanie %s.\n
+2507:Preklad %s%s%s nebol nájdený. Nechete preložiť mICQ do vášho jazyka?\n
+2508:Slovenský (%s) preklad načítaný (%s%d%s položiek).\n
+#2509:WSAStartup() for WinSocks 1.1 failed
+2510:Otváram v5 spojenie na %s:%s%ld%s... 
+2511:Presmerovanie na server %s:%s%ld%s... 
+2512:Otváram v8 spojenie na %s:%s%ld%s pre %s%s%s... 
+2513:nové UIN
+2514:odmietnuté (ignorované)
+2515:Už ste sa dnes pýtali na príliš mnoho užívateľov - vráťte sa zajtra.\n
+#2516:The query got stuck. Or somesuch. Try again later.\n
+2517:Nemôžem rozpoznať chybu servera. Nepracuje.\n
+2518:Musíte použiť 'save' pre zápis nového UIN na disk.\n
+#2519:Opening file listener connection at %slocalhost%s:%s%ld%s... 
+#2520:Opening file transfer connection to %s:%s%ld%s... \n
+#2521:Opening peer-to-peer connection at %slocalhost%s:%s%ld%s... 
+#2522:Opening TCP connection at %s:%s%ld%s... 
+2523:%s nebolo rozpoznané ako prezývka alebo alias.\n
+2524:Nemôžem obnoviť módy terminálu.\n
+2525:Nemôžem čítať módy terminálu.\n
+2526:Nemôžem nastaviť módy terminálu.\n
+2527:Vnútorná chyba OpenSSL: %s:%i\n
+2528:OpenSSL chyba čítania: %s\n
+2529:OpenSSL chyba čítania %d (unknown)\n
+2530:OpenSSL chyba zápisu: %s\n
+2531:OpenSSL chyba zápisu %d (unknown)\n
+2532:OpenSSL chyba: SSL_RET=%d, SSL_ERR=%d\n
+2533:SSL výmena zlyhala.\n
+2534:IP:
+2535:Skupiny:\n
+2536:Skupina:
+2537:Upload kontaktu zlyhal, autorizácia je vyžadovaná.\n
+2538:Upload kontaktu zlyhal, kontakt je už na serveri.\n
+2539:Upload kontaktu úspešný.\n
+#2540:    sound:      how to beep: off, on = beep, event.\n
+2541:Stav
+2542:Príkazy pre zmenu vášho stavu.
+2543:Kontakty
+2544:Príkazy pre úpravu zoznamu kontaktov.
+#2545:     %s\n
+2546:Nie je nápoveda k '%s'.\n
+2547:Zobrazí uložené metadata pre <contacts>.
+2548:Zobrazí aktuálny stav online užívateľov z vášho zoznamu kontaktov, vrátane skrytých užívateľov.
+2549:Zobrazí podrobne aktuálny stav online užívateľov z vášho zoznamu kontaktov, vrátane skrytých užívateľov.
+2550:Zobrazí aktuálny stav online užívateľov z vášho zoznamu kontaktov, zotriedených podľa skupín, vrátane skrytých užívateľov.
+2551:Zobrazí podrobne aktuálny stav online užívateľov z vášho zoznamu kontaktov, zotriedených podľa skupín, vrátane skrytých užívateľov.
+2552:Zobrazí aktuálny stav každého z vášho zoznamu kontaktov, vrátane skrytých užívateľov.
+2553:Zobrazí podrobne aktuálny stav každého z vášho zoznamu kontaktov, vrátane skrytých užívateľov.
+2554:Zobrazí aktuálny stav každého z vášho zoznamu kontaktov, zotriedených podľa skupín, vrátane skrytých užívateľov.
+2555:Zobrazí podrobne aktuálny stav každého z vášho zoznamu kontaktov, zotriedených podľa skupín, vrátane skrytých užívateľov.
+2556:Pridať kontakt, alias, alebo kontakt do skupiny.
+2557:Odstrániť alias, alebo kontakt zo skupiny alebo zo zoznamu kontaktov.
+2558:Nastaví alebo zobrazí nastavenia pre kontakt.\n
+2559:Nastaví alebo zobrazí nastavenia pre skupinu kontaktov.\n
+2560:Nastaví alebo zobrazí globálne nastavenia.\n
+2561:Odhlásenie a koniec bez uloženia.
+2562:Vykonať príkaz <cmd> na spojení <nr> alebo spojení pre <uin> ako serverovom spojení.
+2563:Nastaví alebo zobrazí nastavenia spojenia.\n
+2564:Užívateľov stav online nemôže byť zistený.\n
+2565:Upload kontaktu %s%s%s zlyhal, je vyžadovaná autorizácia.\n
+2566:Upload kontaktu %s%s%s zlyhal, už je na serveri.\n
+2567:Upload kontaktu %s%s%s úspešný.\n
+2568:Ignorovaná požiadavka na auto-response od %s%s%s.\n
+2569:Pošle správu <message> a všetky ďalšie správy kontaktom <contacts> až do prerušenia.
+2570:Pokračovanie v rozhovore s %s%s%s:\n
+#2571:"%s" <%s> emailed you a message [%s]: %s\n
+#2572:"%s" <%s> sent you a web message [%s]: %s\n
+#2573:The user is probably offline.\n
+#2574:%sReleased under version 2 of the GNU General Public License (%sGPL v2%s).\n
+#2575:Error writing to file (%lu bytes written out of %u).\n
+#2576:contact delete  Delete server based contact list entry.\n
+#2577:SBL ids:
+#2578:Modified %d contact groups, alltogether %d contacts, %d ignored, %d hidden, %d intimate.\n

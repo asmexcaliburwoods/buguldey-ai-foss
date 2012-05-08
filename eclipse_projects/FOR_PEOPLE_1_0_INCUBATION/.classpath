@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="FORPEOPLE/TERTIUM DATUR/Java source code"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JRE_LIB_PLUS_SRC"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

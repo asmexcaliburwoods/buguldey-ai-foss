@@ -3,6 +3,11 @@
 	<name>FOR_PEOPLE_1_0_INCUBATION</name>
 	<comment></comment>
 	<projects>
+		<project>oberon_interpreter_1_0_incubation</project>
+		<project>oberon_interpreter_1_0_incubation_win32</project>
+		<project>oberon86_1_0_incubation</project>
+		<project>OPetris_1_0_incubation</project>
+		<project>ORDE</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -1,0 +1,97 @@
+#!/usr/bin/perl
+
+my %defstr, $k, $uname, $name, $new, $pref;
+
+open NRS, "<../lang/C.i18n" || die;
+
+{ my $neu = 0;
+sub NewNumber ()
+{
+    if (!$neu)
+    {
+        while (<NRS>)
+        {
+            chomp;
+            if (m/^([0-9][0-9][0-9][0-9]):/)
+            {
+                if ($1 != 9999)
+                {
+                    $neu = $1;
+                }
+            }
+        }
+    }
+    $neu ++;
+    return $neu;
+}}
+
+%defstr = {};
+
+print "Numbering new translation entries.\n";
+
+while ($uname = shift)
+{
+    $name = "../src/$uname";
+    stat "$name~" && next;
+    stat "$name" || next;
+
+    open IN, "<$name" || die;
+    $match = 0;
+    while (<IN>)
+    {
+        $match = 1 if (m/i18n \(##*, "(([^"]*(\")*)*)"\)/);
+    }
+    next if not $match;
+
+    print "$uname ";
+    $nl = "\n";
+    rename ($name, "$name~");
+    open IN, "<$name~" || die;
+    open OUT, ">$name" || die;
+   
+    while (<IN>)
+    {
+        $k = $_;
+        chomp ($k);
+        while ($k =~ m/i18n \(##*,((("(([^\"]*(\\.)*)*)")*(COL(NONE|CONTACT|CLIENT|MESS|SERV|ACK|SENT))* *)*)\)/)
+        {
+            $new = $1;
+            $new =~ s/\\/\\\\/g;
+            $new =~ s/\(/\\(/g;
+            $new =~ s/\)/\\)/g;
+            $new =~ s/\./\\./g;
+            $new =~ s/\[/\\[/g;
+            $new =~ s/\]/\\]/g;
+            $new =~ s/\|/\\|/g;
+            $new =~ s/\+/\\+/g;
+            $new =~ s/\*/\\*/g;
+            $new =~ s/\?/\\?/g;
+            $new =~ s/\"/"/g;
+            print $nl;
+            $nl = "";
+            if (not defined $defstr{$new})
+            {
+                $i = NewNumber ();
+                $defstr{$new} = $i;
+                print ("New translation: $i:$new\n");
+            }
+            $l = $k;
+            foreach $i (keys %defstr)
+            {
+                $k =~ s/i18n \(##*,($i)\)/i18n ($defstr{$i},$1)/g;
+            }
+            if (not $k cmp $l)
+            {
+                print "Line loops: $k";
+                last;
+            }
+            else
+            {
+                print "Line was:   $l\n";
+                print "Line is:    $k\n";
+            }
+        }
+        print OUT "$k\n";
+    }
+}
+print $nl . "Finished.\n";

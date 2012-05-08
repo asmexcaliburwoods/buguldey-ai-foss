@@ -1,0 +1,67 @@
+//PARSE{
+  Sentence.
+  //Write a TCP echo server.
+  Sentence(s): Sentence1(s) {"!"|"?"|"."}.
+  Sentence1(s): "(" Sentence2(s) [")"].
+  Sentence1(s): Sentence2(s) [")"].
+  Sentence2(s): VerbWordClass(a) ObjectClause(o) (. new "sentence"(s)->"imperative"->"verb"->a->"object"->o; .).
+  ObjectClause(o): "a" ObjectClause(o).
+  ObjectClause(o): "the" ObjectClause(o).
+  //echo server is a thing
+  ObjectClause(o): QualificationClause(q) ObjectClause(o) (. o->"qualification"->q; .).
+  ObjectClause(o): NounWordClass(o).
+  //[][][][] echo
+  //QualificationClause(q):#occurrence(q).
+  //...: "TCP"-->replace("TCP" "based").
+  QualificationClause(q):NounWordClass(q).
+  QualificationClause(q):posessivePronounPre(wh) "own" (. new "own"(q)->wh; .). //its own
+
+  //Client connects to the server, sends bytes to the server, and
+  //receives them back immediately, until client does disconnect
+  //on behalf of its own
+
+  Sentence2(s): ObjectClause(o) ActionDef(ad1)
+          (. new "sentence"(s)->o->new "sequence-of-actions"(seq)->ad1; .)
+                          {"," ActionDef(ad2)  (. seq->ad2; .)
+                          } {"," ActionConstraint(ac) (. seq->ac; .) }
+                            .
+  ActionDef(ad): ["and"] [doVerb(do_)]
+                 VerbWordClass(a) (. new "verb"(ad)->a; .) //connect_s_, send_s_, receive_s_
+                 [ObjectClause(o) (. a->"object"->o; .)]
+                 ["in" ObjectClause(o) (.a->"in"->o;.)]
+                 ["to" ObjectClause(o) (.a->"to"->o;.)]
+                 {HowWhereConstraint(h) (. a->"how-where"->h; .)}
+                 [#$Be(be1) "able" "to" ActionDef(ad2) (.a->"verb"->be1->"able-to"->ad2;.)]
+                 [#$Be(be1) ActionDef(ad2) (.a->"verb"->be1->ad2;.)]
+                 .
+  ObjectClause(o): NART "(#$PronounFn ?T ?S ?N #$ObjectPronoun)"(o). //them
+  HowWhereConstraint(a2): AdverbWordClass(a2).
+  HowWhereConstraint(a2): "on" (. new "on-behalf-of"(a2); .)
+          [QualificationClause(q) (. a2->q; .)] "behalf" ["of" ObjectClause(o)
+                  (. a2->o; .)].
+  ObjectClause(o): QualificationClause(o). //its own
+  posessivePronounPre(wh): NART "(#$PronounFn ?T ?S ?M #$PossessivePronoun-Pre)"(wh).
+  ActionConstraint(ac): "until" EventDef(e) (.new "until"(ac)->e;.).
+  EventDef(ad): ObjectClause(o) ActionDef(ad) (. ad->"subject"->o; .).
+
+  //Server must be able to serve more than one client simultaneously
+
+  ObjectClause(m): "more" "than" QuantityClause(q) ObjectClause(o)(. new "more-than"(m)->q->"of"->o; .).
+  QuantityClause(q): "one"(. new "1"(q); .).
+  QuantityClause(q): "two"(. new "2"(q); .).
+  QuantityClause(q): "three"(. new "3"(q); .).
+  QuantityClause(q): "four"(. new "4"(q); .).
+  QuantityClause(q): "five"(. new "5"(q); .).
+  QuantityClause(q): "six"(. new "6"(q); .).
+  QuantityClause(q): "seven"(. new "7"(q); .).
+  QuantityClause(q): "eight"(. new "8"(q); .).
+  QuantityClause(q): "nine"(. new "9"(q); .).
+  QuantityClause(q): "ten"(. new "10"(q); .).
+  QuantityClause(q): "eleven"(. new "11"(q); .).
+  QuantityClause(q): "twelve"(. new "12"(q); .).
+//}
+
+//ASSERT1{
+  //SRV genls #$ServerProgram -> PROT isa #$Client-ServerProtocol =>
+  //  assert ...
+//}

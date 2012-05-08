@@ -1,0 +1,54 @@
+ac-actionTakesPlaceInContext( writing, ac-ActionEntityFn(Ent12), ac-COntextFn(Ent14) (ac-EnumFn ac-SubjFn(Ent8), ac-ObjectFn(Ent7)))
+
+qualification(Ent7, TCP)
+
+ac-actionTakesPlaceInContext( ConnectingClientToServer, ac-COntextFn(Ent15), ac-ActionEntityFn(Ent13), SubjFn(Ent9),ToFn(Ent7))
+
+(implies
+  (ac-actionTakesPlaceInContext ?ACTION_VERB, ac-COntextFn(?AC), ac-ActionEntityFn(?EA), SubjFn(?ES),ToFn(?EO))
+  (ac-existsInContext ac-COntextFn(?AC) (ac-ProcessFn ?ACTION_VERB ac-ActionEntityFn(?EA) ?PROCESS_ENTITY_NAME)))
+
+(implies
+  (ac-actionTakesPlaceInContext ?ACTION_VERB (ac-COntextFn ?AC), ac-ActionEntityFn(?EA), SubjFn(?ES),ToFn(?EO))
+  (ac-contextIncludes (ac-ContextFn ?AC) (ac-ContextFn (ac-ActionContextFn ?ACTION_VERB ac-ActionEntityFn(?EA)))
+)
+
+(implies
+  (and
+     (ac-actionTakesPlaceInContext ConnectingClientToServer (ac-COntextFn ?AC) (ac-ActionEntityFn ?EA)
+       (ac-EnumFn (SubjFn ?ECLIENT) (ToFn ?ESERVER)))
+     (ac-existsInContext ac-COntextFn(?AC) 
+       (ac-ProcessFn ConnectingClientToServer ac-ActionEntityFn(?EA) ?PROCESS_ENTITY_NAME))
+  (and
+    (ac-mayOccur (ac-actionTakesPlaceInContext Receiving 
+      (ac-COntextFn (ac-ProcessContextFn 
+        (ac-ProcessFn ConnectingClientToServer ac-ActionEntityFn(?EA) ?PROCESS_ENTITY_NAME)))
+      (ac-ActionEntityFn ?EA3) (ac-EnumFn (SubjFn ?ECLIENT) (FromFn ?ESERVER)))
+    (ac-mayOccur (ac-actionTakesPlaceInContext Receiving 
+      (ac-COntextFn (ac-ProcessContextFn 
+        (ac-ProcessFn ConnectingClientToServer ac-ActionEntityFn(?EA) ?PROCESS_ENTITY_NAME)))
+      (ac-ActionEntityFn ?EA4) (ac-EnumFn (SubjFn ?ESERVER) (FromFn ?ECLIENT)))
+    (ac-actionTakesPlaceInContext Separation-Complete 
+      (ac-COntextFn (ac-ProcessContextFn 
+        (ac-ProcessFn ConnectingClientToServer ac-ActionEntityFn(?EA) ?PROCESS_ENTITY_NAME)))
+      (ac-ActionEntityFn ?EA5) (ac-EnumFn (SubjFn ?ESERVER) (FromFn ?ECLIENT) (OnBehalfOfFn ?EBEHALF)))
+  )
+)
+	
+  
+(equivalence
+  (ac-actionTakesPlaceInContext Receiving (ac-COntextFn ?AC) (ac-ActionEntityFn ?EA)
+    (ac-EnumFn (SubjFn ?ERECEIVER) (FromFn ?EENDPOINT2)))
+  (ac-actionTakesPlaceInContext SendingInNetworkingProgram (ac-COntextFn ?AC)
+    (ac-ActionEntityFn ?EA2) (ac-EnumFn (SubjFn ?EENDPOINT2) (ToFn ?ERECEIVER)))
+)
+
+(implies
+    (ac-actionTakesPlaceInContext Separation-Complete 
+      (ac-COntextFn ?AC)
+      (ac-ActionEntityFn ?EA2) (ac-EnumFn (SubjFn ?ESERVER) (FromFn ?ECLIENT) (OnBehalfOfFn ?EBEHALF)))
+
+    (ac-actionTakesPlaceInContext Separation-Complete 
+      (ac-COntextFn ?AC)
+      (ac-ActionEntityFn ?EA3) (ac-EnumFn (SubjFn ?ECLIENT) (FromFn ?ESERVER) (OnBehalfOfFn ?EBEHALF)
+)

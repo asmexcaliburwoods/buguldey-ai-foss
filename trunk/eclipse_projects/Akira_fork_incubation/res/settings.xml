@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<IDENTITIES>
+   <GLOBAL locale="en:US">
+      <LOCALE locale="ru:RU" name="русский"/>
+      <LOCALE locale="en:US" name="english"/>
+   </GLOBAL>
+   <IDENTITY api="livejournal" moodslist="res/moods.txt" name="_default_" path="/interface/flat" port="80" server="www.livejournal.com" showupics="1"/>
+</IDENTITIES>

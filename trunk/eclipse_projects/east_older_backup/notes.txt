@@ -1,0 +1,58 @@
+- all assertions and contexts must be immutable!!!!!!!!!!!!
+
+- make "Project East programmers were wrong or closed-minded" hypothesis as a
+  last-resort hypothesis.
+- when working miscellanneous hypotheses, make a special set of last-resort hypotheses.
+
+- the last-resort hypothesis is the last hypothesis to be picked by
+  SetOfHypotheses.pickNextAlternative().
+
+- make hypothesis sandboxing: when doing miscellanneous actions on a context, do them via
+  the methods of HypothesisSandbox, for example when resolving links, or when getting
+  values for objects.
+
+- SetOfHypotheses: when picking the next alternative hypothesis, estimate the probability
+  of all non-invalid hypotheses in a set, and pick the most probable hypothesis first.
+
+- use BigInteger UIDs.
+
+- do a cyc predicate ea-uidIsUsed(String uidValue, CycConstant constantUidUsedFor).
+  When initializing UidGenerator class, pick the maximum uid + 1 as the initial value
+  for uid generator counter.
+
+- ??? make a boolean field Hypothesis.allConsequencesEvaluated
+
+***************************************************************************************
+
+- move all cyc work and naming to CycLink.java
+
+***************************************************************************************
+
+- msdn as a source of software texts to parse.
+
+- mif
+
+Напишите серверное приложение. Серверное приложение получает
+данные и посылает данные.
+
+Из первого предложения можно также сделать вывод, что слова
+"серверное приложение" обозначают некий абстрактный класс,
+однако во втором предложении мы получаем важные на этот класс
+ограничения
+
+мне тут подсказывают, что это всё про тему и рему. Тема в
+первой части предложения, рема во второй. В связном тексте
+то, что было в одном предложении ремой, в следующем становится
+темой, наподобие того как место, бывшее вечером прошедшего дня
+для сказочных долбоxxx наxxx, с наступлением утра становится
+им домом родным. как-то так.
+
+в первом предложении серверное приложение - рема. во втором
+тема. через это и через предположение о некоей связности текста
+(а без этого предположения нечего даже и приниматься читать)
+можно считать, что речь идёт об одном и том же серверном
+приложении.
+
+данные во втором предложении находятся в реме. и как-раз-таки
+являются неким недоопределённым классом, отчего они могут быть
+и разные и одни и те же - пофигу.

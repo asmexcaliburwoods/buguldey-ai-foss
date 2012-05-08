@@ -1,0 +1,232 @@
+import java.util.*;
+import org.east.e1.semaction.*;
+import org.east.e1.semaction.expr.*;
+
+COMPILER Ac1
+
+CHARACTERS
+        tab           = '\u0009'. /*  9 = tabulator */
+        lf            = '\u000a'. /* 10 = line feed */
+        cr            = '\u000d'. /* 13 = carriage return */
+
+        zero                                    = '0'.
+        zeroToThree             = zero + "123" .
+        octalDigit              = zero + "1234567" . 
+        nonZeroDigit    = "123456789".
+        digit                   = '0' + nonZeroDigit .
+        hexDigit                        = digit + "ABCDEFabcdef" .
+        letter                  = 'A' .. 'Z' + 'a' .. 'z' + '_' + '$'.
+
+        char          = ANY - "'" - '\\' - cr - lf.
+        stringChar    = ANY - "\"" - '\\' - cr - lf.
+
+TOKENS
+        ident                           = letter { letter | digit }.
+        /*-------------------------------------------------------------------------*/
+        intLit = 
+        (       zero | nonZeroDigit { digit }
+        | ( "0x" | "0X" ) hexDigit { hexDigit }
+        | '0' octalDigit { octalDigit }
+        ) [ "l" | "L" ].
+        /*-------------------------------------------------------------------------*/
+        floatLit =
+                "." digit {digit} 
+                [("e" | "E") ["+" | "-"] digit {digit}] 
+                [ "F" | "f" | "D" | "d" ]
+        | digit {digit} 
+                ( "." {digit} 
+                        [("e" | "E" ) ["+" | "-"] digit {digit} ] 
+                        [ "F" | "f" | "D" | "d" ]
+                | ("e" | "E") ["+" | "-"] digit {digit}
+                        [ "F" | "f" | "D" | "d" ]
+                | "F" | "f" | "D" | "d"
+                ).      
+        /*-------------------------------------------------------------------------*/
+        charLit = 
+          "'" ( char
+        | "\\" ( "b" | "t" | "n" | "f" | "r" | "\"" | "\'" | "\\"
+                     | "u" { "u" } hexDigit hexDigit hexDigit hexDigit
+                           | zeroToThree [ octalDigit ] [ octalDigit ]
+                           | octalDigit [ octalDigit ]
+                           )
+        ) 
+    "'".
+        /*-------------------------------------------------------------------------*/
+        stringLit = 
+          "\"" { stringChar
+         | "\\" ( "b" | "t" | "n" | "f" | "r" | "\"" | "\'" | "\\"
+                      | "u" { "u" } hexDigit hexDigit hexDigit hexDigit
+                            | zeroToThree [ octalDigit ] [ octalDigit ]
+                          | octalDigit [ octalDigit ]
+                            )
+         } 
+    "\"".
+
+        /*----- keyword names needed in LL(1) resolvers -----*/
+
+        boolean = "boolean".
+        byte    = "byte".
+        char    = "char".
+        class   = "class".
+        double  = "double".
+        false   = "false".
+        final   = "final".
+        float   = "float".
+        int     = "int".
+        long    = "long".
+        new     = "new".
+        null    = "null".
+        short   = "short".
+        static  = "static".
+        super   = "super".
+        this    = "this".
+        true    = "true".
+        void    = "void".
+        
+        /*----- operators and special characters needed in LL(1) resolvers --------------*/
+
+        colon  = ":".
+        comma  = ",".
+        dec    = "--".
+        dot    = ".".
+        inc    = "++".
+        lbrace = "{".
+        lbrack = "[".
+        lpar   = "(".
+        minus  = "-".
+        not    = "!".
+        plus   = "+".
+        rbrace = "}".
+        rbrack = "]".
+        rpar   = ")".
+        tilde  = "~".
+
+COMMENTS FROM "/*" TO "*/"
+COMMENTS FROM "//" TO lf
+
+IGNORE lf + cr + tab
+
+/*---------------------------------------------------------------------------*/
+
+PRODUCTIONS
+
+Ac1<out Ac1Language e1>        (. e1=new Ac1Language(); .)
+= {
+    ident                       (. String ruleId=t.val; .)
+    (  "."                      (. e1.setTopLevelRuleId(ruleId); .)
+    |                           (. Ac1Rule rule=new Ac1Rule(ruleId); .)
+      RuleRest<rule>            (. e1.addRule(rule); .)
+    )
+  }
+.
+
+RuleRest<Ac1Rule rule>          (. Ac1Args args; .)
+= "(" formalArgs<out args> ")" ":"
+                                (. LHSSequenceElement seq; .)
+  LHSSequence<out seq>          (. rule.setLHS(seq); rule.setFormalArgs(args); .)
+  "."
+.
+
+formalArgs<out Ac1Args args>=args<out args>.
+
+LHSSequence<out LHSSequenceElement e> 
+                                (. LHSSeq s1=new LHSSeq();
+                                   e=s1;
+                                   LHSSequenceElement e1; .)
+= LHSSequenceElement<out e1>    (. s1.addElem(e1); .)
+  { LHSSequenceElement<out e1>  (. s1.addElem(e1); .)
+  }
+  [ "|"                         (. LHSSeqElementOr sout=new LHSSeqElementOr(); .)
+                                (. LHSSequenceElement s2; .)
+    LHSSequence<out s2>         (. sout.setElem1(s1); sout.setElem2(s2); e=sout; .)
+  ]
+.
+
+args<out Ac1Args args>          (. args=new Ac1Args(); .)
+= ident                         (. args.getArgs().add(t.val); .)
+  { "," ident                   (. args.getArgs().add(t.val); .)
+  }
+.
+
+LHSSequenceElement<out LHSSequenceElement e>
+                                (. LHSSequenceElement seq; e=null; .)
+=
+( WordLit<out e>
+| RuleLabelReferenceOrWordClass<out e>
+| "{" LHSSequence<out seq> "}"  (. e=new Repeatable(seq); .)
+| "[" LHSSequence<out seq> "]"  (. e=new Deletable(seq); .)
+) [ "(."                        (. SemanticalAction sa; .)
+      SemanticalAction<out sa>  (. e.setSemanticalAction(sa); .)
+    ".)"
+  ]
+.
+        
+WordLit<out WordLit e>=stringLit
+                                (. e=new WordLit(t.val); .)
+.
+
+RuleLabelReferenceOrWordClass<out LHSSequenceElement e>
+                                (. List wordForms=null; .)
+= [ ":" WordForm                (. wordForms=new ArrayList();
+                                   wordForms.add(WordFormFactory.newInstance(t.val)); .)
+        { "," WordForm          (. wordForms.add(WordFormFactory.newInstance(t.val)); .)
+        }
+    ":"
+  ]                             (. boolean cyc=false;
+                                   boolean nart=false;
+                                   String literal=null;
+                                   int col=-1;
+                                   int line=-1;
+                                   String fileName=null; .)
+    ( ["#$"                     (. cyc=true; .)
+      ] ident                   (. literal=cyc?"#$"+t.val:t.val;
+                                   col=t.col;
+                                   line=t.line;
+                                   fileName=scanner.buffer.fileName;
+                                   nart=false; .)
+    | "NART" stringLit          (. literal=t.val.substring(1,t.val.length()-1);
+                                   col=t.col;
+                                   line=t.line;
+                                   fileName=scanner.buffer.fileName;
+                                   nart=true; .)
+    )                           (. Ac1Args args; .)
+      "(" args<out args> ")"    (. e=new RuleLabelReferenceOrWordClass(
+                                     wordForms,line,col,fileName,literal,nart,args); .)
+.
+
+WordForm=ident.
+
+SemanticalAction<out SemanticalAction sa> 
+                                (. sa=null; Expr e; .)
+= {Expr1<out e> ";"             (. if(sa==null)sa=new SemanticalAction(); 
+                                   sa.addStatement(new ExpressionStatement(e)); .)
+  }.
+
+Expr1<out Expr e>=Expr2<out e> 
+ { "." ident 
+                                (. String memberName=t.val; List args; .)
+   "(" ExprArgs<out args> ")"   (. e=new MemberExpr(e,memberName,args); .)
+ }.
+Expr2<out Expr e>=Expr3<out e> 
+  { "->"                        (. Expr e2; .)
+    Expr3<out e2>               (. e=new LinkExpr(e,e2); .)
+  }.
+Expr3<out Expr e>               (. e=null; .)
+=ident                          (. e=new IdentExpr(t.val); .)
+| stringLit                     (. e=new StringLitExpr(t.val); .)
+| "new"                         (. String className=null; boolean isNameable=false;
+                                   String instanceName=null; .)
+  ( ident                       (. className=t.val; .)
+  | stringLit                   (. className=t.val; isNameable=true; .)
+  )
+  ["(" ident                    (. instanceName=t.val; .)
+   ")"]                         (. e=new NewInstanceExpr(className,isNameable);
+                                   if(instanceName!=null)
+                                     e=new AssignToNameExpr(instanceName,e); .)
+.
+ExprArgs<out List args>         (. args=new ArrayList(1); Expr e; .)
+=Expr1<out e>                   (. args.add(e); .)
+ { "," Expr1<out e>             (. args.add(e); .)
+ }.
+
+END Ac1.

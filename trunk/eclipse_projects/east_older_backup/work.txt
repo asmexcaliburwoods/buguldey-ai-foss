@@ -1,0 +1,5 @@
+Write a TCP echo server.
+(Client connects to the server, sends bytes to the server,
+and receives them back immediately, until client does disconnect on behalf of its own).
+Server must be able to serve more than one client simultaneously.
+The server should be implemented in Java.

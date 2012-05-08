@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<project name="ab" default="all">
+ 
+    <target name="init" depends="clean">
+        <mkdir dir="output" />
+    </target>
+
+    <target name="compile" depends="init">
+        <javac debug="true" srcdir="src-java" destdir="output" />
+    </target>
+	
+    <target name="clean">
+        <delete dir="output" />
+        <delete dir="output_jar" />
+    </target>
+     
+    <target name="jar" depends="compile">
+		<jar destfile="ab.jar">
+			<manifest>
+                <attribute name="Main-Class" value="taygalove_shepherd.abproject.ab"/>
+			</manifest>
+	    	<fileset dir="output"/>
+	    	<fileset dir="src-java" excludes="**/*.java"/>
+	    	<fileset dir="src-locales"/>
+		    <fileset dir="src-pictures"/>
+		</jar>
+    </target>
+
+	<target name="all" depends="launch4l"/>
+
+    <target name="launch4l" depends="jar">
+    	<exec dir="launch4l" executable="/bin/sh" os="Linux">
+    	  <arg line="-c ./generate.sh"/>
+    	</exec>    	
+    </target>
+</project>

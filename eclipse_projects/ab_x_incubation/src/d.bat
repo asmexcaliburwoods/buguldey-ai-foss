@@ -1,0 +1,1 @@
+@del ..\classes\*.class

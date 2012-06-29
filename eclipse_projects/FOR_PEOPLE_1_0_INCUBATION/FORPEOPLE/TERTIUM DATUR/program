@@ -1,4 +1,0 @@
-;file: program
-;language: my programming language
-
-transclude file 1.before_entry =>= transclude file 1.inside =>= transclude file 1.after_exit

@@ -1,1 +1,0 @@
-Ubuntu/Lucid_Lynx/spawn.sh

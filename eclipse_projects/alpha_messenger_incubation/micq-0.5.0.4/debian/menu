@@ -1,3 +1,0 @@
-?package(micq):needs=text section=Apps/Net hints="ICQ client"\
-  title="mICQ" command="/usr/bin/micq" \
-  icon=/usr/share/pixmaps/micq.xpm

@@ -1,2 +1,0 @@
-MODULE test;
-END test.

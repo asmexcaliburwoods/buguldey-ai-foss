@@ -33,10 +33,14 @@ Coco/R itself) does not fall under the GNU General Public License.
 #if !defined(Oberon_COCO_PARSER_H)
 #define Oberon_COCO_PARSER_H
 
-namespace Oberon {class CodeGenerator;}
+#include "common.h"
+
+#include "stdio.h"
+#include "wchar.h"
+
+namespace Oberon {class CodeGenerator;class SymbolTable;}
 #include "SymbolTable.h"
 #include "CodeGenerator.h"
-#include "wchar.h"
 
 #include "Scanner.h"
 
@@ -65,8 +69,7 @@ private:
 		_badString=2,
 		_string=3,
 		_integer=4,
-		_real=5,
-		_character=6
+		_real=5
 	};
 	int maxT;
 
@@ -89,27 +92,25 @@ public:
 	Token *t;			// last recognized token
 	Token *la;			// lookahead token
 
-void abortIfNull(void* ptr){
-		if(ptr==0){
-			wprintf(L"No memory.\n"); 
-			exit(2);
-		}
-	}
+typedef bool boolean;
 
-	typedef bool boolean;
+	enum OperatorsEnum { 
+	  illegal_operator, plus, minus, times, slash, equals, less, greater,
+	  orOperation, notEquals, lessOrEqual, greaterOrEqual, in, is, divOp, 
+	  modOp, ampersand
+	};
 
-	static const int // operators
-	  illegal_operator=1, plus=2, minus=3, times=4, slash=5, equals=6, less=7, greater=8,
-	  orOperation=9, notEquals=10, lessOrEqual=11, greaterOrEqual=12, in=13, is=14, divOp=15, modOp=16, ampersand=17;
+	enum ObjectKindsEnum {
+	  var, proc
+	};
 
-	static const int // object kinds
-	  var=1, proc=2;
-
-	static const int // opcodes
-	  ADD=0,  SUB=1,  MUL=2,  DIV=3,   EQU=4,  LSS=5, GTR=6, NEG=7,
-	  LOAD=8, LOADG=9, STO=10,   STOG=11,  CONST=12,
-	  CALL=13, RET=14,   ENTER=15, LEAVE=16,
-	  JMP=17,  FJMP=18,  READ=19,  WRITE=20;
+	enum OpcodesEnum { 
+	  ADD,  SUB,  MUL,  DIV,   EQU,  LSS, GTR, NEG,
+	  LOAD, LOADG, STO,   STOG,  CONST,
+	  CALL, RET,   
+	  ENTER, LEAVE,
+	  JMP,  FJMP,  READ,  WRITE
+	};
 
 	typedef wchar_t* characterRecord; 
 	typedef wchar_t* stringRecord; 
@@ -120,11 +121,10 @@ void abortIfNull(void* ptr){
 		identRec rightIdent; /* rightIdent==0 if not specified */
 	};
 
-#define num_int (1)
-#define num_real (2)
+	enum NumTypeEnum {num_int, num_real};
 	
 	struct numberRecord{
-		int numtype; //num_int or num_real
+		NumTypeEnum numtype;
 		wchar_t* tokenString;
 	};
 	  
@@ -132,18 +132,20 @@ void abortIfNull(void* ptr){
 		wchar_t* ident_;
 	};
 	
-	static const int ft_undef=0;
-	static const int ft_DesignatorMaybeWithExprList=1;
-	static const int ft_number=2;
-	static const int ft_character=3;
-	static const int ft_string=4;
-	static const int ft_NIL=5;
-	static const int ft_Set=6;
-	static const int ft_Expr=7;
-	static const int ft_tildeFactor=8;
+	enum FactorTypeEnum {
+		ft_undef,
+		ft_DesignatorMaybeWithExprList,
+		ft_number,
+		ft_character,
+		ft_string,
+		ft_NIL,
+		ft_Set,
+		ft_Expr,
+		ft_tildeFactor
+	};
 
 	struct FactorRecord{
-		virtual int getFactorType()=0; //ft_*
+		virtual FactorTypeEnum getFactorType()=0; //ft_*
 	};
 	
 	struct TermMulOpRecord{
@@ -199,16 +201,14 @@ void abortIfNull(void* ptr){
 	};
 
 	struct FactorRecord_Expr: public FactorRecord{
-		virtual int getFactorType(){return ft_Expr;}
+		virtual FactorTypeEnum getFactorType(){return ft_Expr;}
 		ExprRecord expr;
 	};
 
+	enum ClauseEnum {cl1,cl2,cl3,cl4};
+	
 	struct DesignatorMaybeWithExprListRepeatingPartRecord{
-		int clauseNumber; //[1..4]
-		identRec clause1_identRec;
-		ExprListRecord clause2_exprList;
-		QualidentOrOptionalExprListRecord clause4_qualidentOrOptionalExprList;
-
+		virtual ClauseEnum getClauseNumber()=0;
 		DesignatorMaybeWithExprListRepeatingPartRecord* nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord;
 /*
 	("." ident 			//clauseNumber==1
@@ -219,6 +219,26 @@ void abortIfNull(void* ptr){
 */
 	};
 
+	struct DesignatorMaybeWithExprListRepeatingPartRecordCL1 : public DesignatorMaybeWithExprListRepeatingPartRecord{
+		virtual ClauseEnum getClauseNumber() {return cl1;}
+		identRec clause1_identRec;
+		//"." ident
+	};
+	struct DesignatorMaybeWithExprListRepeatingPartRecordCL2 : public DesignatorMaybeWithExprListRepeatingPartRecord{
+		virtual ClauseEnum getClauseNumber() {return cl2;}
+		ExprListRecord clause2_exprList;
+		//"[" ExprList "]"
+	};
+	struct DesignatorMaybeWithExprListRepeatingPartRecordCL3 : public DesignatorMaybeWithExprListRepeatingPartRecord{
+		virtual ClauseEnum getClauseNumber() {return cl3;}
+	    //"^"
+	};
+	struct DesignatorMaybeWithExprListRepeatingPartRecordCL4 : public DesignatorMaybeWithExprListRepeatingPartRecord{
+		virtual ClauseEnum getClauseNumber() {return cl4;}
+		QualidentOrOptionalExprListRecord clause4_qualidentOrOptionalExprList;
+		//"(" QualidentOrOptionalExprList ")"
+	};
+
 	struct DesignatorMaybeWithExprListRecord{
 		identRecord identRec;
 		DesignatorMaybeWithExprListRepeatingPartRecord* nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord;
@@ -226,44 +246,44 @@ void abortIfNull(void* ptr){
 
 
 	struct FactorRecord_DesignatorMaybeWithExprList: public FactorRecord{
-		virtual int getFactorType(){return ft_DesignatorMaybeWithExprList;}
+		virtual FactorTypeEnum getFactorType(){return ft_DesignatorMaybeWithExprList;}
 		DesignatorMaybeWithExprListRecord r; 
 	};
   
 	struct FactorRecord_number: public FactorRecord{
-		virtual int getFactorType(){return ft_number;}
+		virtual FactorTypeEnum getFactorType(){return ft_number;}
 		numberRecord num; 
 	};
   
 	struct FactorRecord_character: public FactorRecord{
-		virtual int getFactorType(){return ft_character;}
+		virtual FactorTypeEnum getFactorType(){return ft_character;}
 		characterRecord ch; 
 	};
   
 	struct FactorRecord_string: public FactorRecord{
-		virtual int getFactorType(){return ft_string;}
+		virtual FactorTypeEnum getFactorType(){return ft_string;}
 		stringRecord s; 
 	};
   
 	struct FactorRecord_NIL: public FactorRecord{
-		virtual int getFactorType(){return ft_NIL;}
+		virtual FactorTypeEnum getFactorType(){return ft_NIL;}
 	};
 
 	struct FactorRecord_Set: public FactorRecord{
-		virtual int getFactorType(){return ft_Set;}
+		virtual FactorTypeEnum getFactorType(){return ft_Set;}
 		SetRecord set;
 	};
  
 	struct FactorRecord_tildeFactor: public FactorRecord{
-		virtual int getFactorType(){return ft_tildeFactor;}
+		virtual FactorTypeEnum getFactorType(){return ft_tildeFactor;}
 		FactorRecord* factorPtr;
 	};
 
-	static const int modifier_none=0,modifier_star=1,modifier_minus=2;
+	enum ModifierEnum {modifier_none, modifier_star, modifier_minus};
 	
 	struct IdentDefRecord{
 		identRec ident_;
-		int modifier;
+		ModifierEnum modifier;
 	};
 
 	struct IdentListRecord{
@@ -275,8 +295,22 @@ void abortIfNull(void* ptr){
 		IdentList2Record* nullOrCommaIdentList;
 	};
 
+	enum StmtTypeNumberEnum {
+		 stmtTypeNumber_EmptyStmt
+		,stmtTypeNumber_EXPR_OR_ASSIGN
+		,stmtTypeNumber_IF
+		,stmtTypeNumber_CASE
+		,stmtTypeNumber_WHILE
+		,stmtTypeNumber_REPEAT
+		,stmtTypeNumber_FOR
+		,stmtTypeNumber_LOOP
+		,stmtTypeNumber_WITH
+		,stmtTypeNumber_EXIT
+		,stmtTypeNumber_RETURN
+	};
+	
 	struct StatementRecord{
-		virtual int getStatementTypeNumber()=0; 
+		virtual StmtTypeNumberEnum getStatementTypeNumber()=0; 
 	};
 
 	struct StatementSeqRecord{
@@ -284,8 +318,16 @@ void abortIfNull(void* ptr){
 		StatementSeqRecord* nullOrPtrToNextStatementSeq;
 	};
 
+	enum TypeNumberQARPPEnum { 
+		 type_number_Qualident
+		,type_number_ARRAY
+		,type_number_RECORD
+		,type_number_POINTER
+		,type_number_PROCEDURE
+	};
+	
 	struct TypeRecord{
-		virtual int getTypeNumber()=0;
+		virtual TypeNumberQARPPEnum getTypeNumber()=0;
 	};
 
 	struct VarDeclRecord{
@@ -314,7 +356,7 @@ void abortIfNull(void* ptr){
 	};
 	
 	struct ModuleImportEntryRecord{
-		identRec lhs,rhs;
+		identRec lhs, rhs;
 		boolean rhsPresent;
 	};
 
@@ -396,19 +438,31 @@ void abortIfNull(void* ptr){
 		DeclSeqVarDeclListMandatoryRecord varDecls; /* undefined if specified==false*/
 	};
 
-	static const int decl_const=1,decl_type=2,decl_var=3;
+	enum DeclEnum {decl_const,decl_type,decl_var};
 	
 	struct DeclSeqConstTypeVarListMandatoryRecord{
-		int decl_variant; /* either decl_const, decl_type, or decl_var */
-		DeclSeqConstDeclListRecord constDeclList; /* undefined if decl_variant!=decl_const */ 
-		DeclSeqTypeDeclListRecord typeDeclList;   /* undefined if decl_variant!=decl_type  */
-		DeclSeqVarDeclListRecord varDeclList;	  /* undefined if decl_variant!=decl_var   */
+		virtual DeclEnum get_decl_variant()=0;
 		DeclSeqConstTypeVarListMandatoryRecord *next;
 	}; 
 	
+	struct DeclSeqConst : public DeclSeqConstTypeVarListMandatoryRecord{
+		virtual DeclEnum get_decl_variant() {return decl_const;}
+		DeclSeqConstDeclListRecord constDeclList; 
+	}; 
+
+	struct DeclSeqType : public DeclSeqConstTypeVarListMandatoryRecord{
+		virtual DeclEnum get_decl_variant() {return decl_type;}
+		DeclSeqTypeDeclListRecord typeDeclList;
+	}; 
+
+	struct DeclSeqVar : public DeclSeqConstTypeVarListMandatoryRecord{
+		virtual DeclEnum get_decl_variant() {return decl_var;}
+		DeclSeqVarDeclListRecord varDeclList;
+	}; 
+
 	struct DeclSeqConstTypeVarListRecord{
 		bool specified;
-		DeclSeqConstTypeVarListMandatoryRecord constTypeVarList; /* undefined if specified==false */
+		DeclSeqConstTypeVarListMandatoryRecord *constTypeVarListPtr; /* undefined if specified==false */
 	};
 
 	struct DeclSeqRecord;
@@ -422,35 +476,33 @@ void abortIfNull(void* ptr){
 	    StatementSeqRecord procBodyStmtSeq; /* undefined if procBodySpecifiedHere==false */
 	};
 
-	static const int decl_proc=4,decl_fwd=5;
+	enum DeclProcFwd {decl_proc,decl_fwd};
 	
 	struct DeclSeqProcDeclFwdDeclListMandatoryRecord{
-		int decl_variant; /* either decl_proc, or decl_fwd */
-		ProcDeclRecord procDecl;     /* undefined if decl_variant!=decl_proc */ 
-		ForwardDeclRecord fwdDecl;   /* undefined if decl_variant!=decl_fwd  */
+		virtual DeclProcFwd get_decl_variant()=0;
 		DeclSeqProcDeclFwdDeclListMandatoryRecord *next;
+	}; 
+	struct DeclSeqProcDecl : public DeclSeqProcDeclFwdDeclListMandatoryRecord{
+		virtual DeclProcFwd get_decl_variant(){return decl_proc;}
+		ProcDeclRecord procDecl; 
+	}; 
+	struct DeclSeqFwdDecl : public DeclSeqProcDeclFwdDeclListMandatoryRecord{
+		virtual DeclProcFwd get_decl_variant(){return decl_fwd;}
+		ForwardDeclRecord fwdDecl;
 	}; 
 	
 	struct DeclSeqProcDeclFwdDeclListRecord{
 		bool specified;
-		DeclSeqProcDeclFwdDeclListMandatoryRecord procDeclFwdDeclList; /* undefined if specified==false */
+		DeclSeqProcDeclFwdDeclListMandatoryRecord *procDeclFwdDeclListPtr; /* undefined if specified==false */
 	};
 	
 	struct DeclSeqRecord{
-		DeclSeqConstTypeVarListRecord ctvlist;
-		DeclSeqProcDeclFwdDeclListRecord pflist;
+		DeclSeqConstTypeVarListRecord ctvList;
+		DeclSeqProcDeclFwdDeclListRecord pfList;
 	};
 
-	static const int 
-		 type_number_Qualident=1
-		,type_number_ARRAY=2
-		,type_number_RECORD=3
-		,type_number_POINTER=4
-		,type_number_PROCEDURE=5
-		;
-	
 	struct TypeQualident: public TypeRecord{
-		int getTypeNumber(){return type_number_Qualident;}
+		TypeNumberQARPPEnum getTypeNumber(){return type_number_Qualident;}
 		QualidentRecord qualident;
 	}; 
 	struct TypeArrayConstExprListMandatoryRecord{
@@ -458,42 +510,29 @@ void abortIfNull(void* ptr){
 		TypeArrayConstExprListMandatoryRecord *next;
 	};
 	struct TypeARRAY: public TypeRecord{
-		int getTypeNumber(){return type_number_ARRAY;}
+		TypeNumberQARPPEnum getTypeNumber(){return type_number_ARRAY;}
 		TypeArrayConstExprListMandatoryRecord *dimensionsConstExprsListPtr;
 		TypeRecord *arrayElementTypePtr;
 	}; 
 	struct TypeRECORD: public TypeRecord{
-		int getTypeNumber(){return type_number_RECORD;}
+		TypeNumberQARPPEnum getTypeNumber(){return type_number_RECORD;}
 		QualidentRecord *optionalQualidentPtr;
 		MandatoryFieldsListRecord fieldsList;
 	}; 
 	struct TypePOINTER: public TypeRecord{
-		int getTypeNumber(){return type_number_POINTER;}
+		TypeNumberQARPPEnum getTypeNumber(){return type_number_POINTER;}
 		TypeRecord *pointedTypePtr;
 	}; 
 	struct TypePROCEDURE: public TypeRecord{
-		int getTypeNumber(){return type_number_PROCEDURE;}
+		TypeNumberQARPPEnum getTypeNumber(){return type_number_PROCEDURE;}
 		FormalParsRecord *optionalFormalParsPtr;
 	}; 
 
-	static const int
-		 stmtTypeNumber_EmptyStmt=0
-		,stmtTypeNumber_EXPR_OR_ASSIGN=1
-		,stmtTypeNumber_IF=2
-		,stmtTypeNumber_CASE=3
-		,stmtTypeNumber_WHILE=4
-		,stmtTypeNumber_REPEAT=5
-		,stmtTypeNumber_FOR=6
-		,stmtTypeNumber_LOOP=7
-		,stmtTypeNumber_WITH=8
-		,stmtTypeNumber_EXIT=9
-		,stmtTypeNumber_RETURN=10
-		;
 	struct Stmt_EmptyStmt:public StatementRecord{
-	  virtual int getStatementTypeNumber(){return stmtTypeNumber_EmptyStmt;} 
+	  virtual StmtTypeNumberEnum getStatementTypeNumber(){return stmtTypeNumber_EmptyStmt;} 
 	};
 	struct Stmt_EXPR_OR_ASSIGN:public StatementRecord{
-	  	virtual int getStatementTypeNumber(){return stmtTypeNumber_EXPR_OR_ASSIGN;} 
+	  	virtual StmtTypeNumberEnum getStatementTypeNumber(){return stmtTypeNumber_EXPR_OR_ASSIGN;} 
 	  	ExprRecord lhsExpr;
 	  	bool assignment;
 	  	ExprRecord rhsExpr; 
@@ -504,7 +543,7 @@ void abortIfNull(void* ptr){
 		MandatoryELSIFsListRecord *optionalElsifsListPtr;
 	};
 	struct Stmt_IF:public StatementRecord{
-	 	virtual int getStatementTypeNumber(){return stmtTypeNumber_IF;} 
+	 	virtual StmtTypeNumberEnum getStatementTypeNumber(){return stmtTypeNumber_IF;} 
 	    ExprRecord expr;
 		StatementSeqRecord thenStmtSeq;
 		MandatoryELSIFsListRecord *optionalElsifsListPtr;
@@ -529,24 +568,24 @@ void abortIfNull(void* ptr){
 		CasesRecord *optionalOtherCasesPtr;
 	};
 	struct Stmt_CASE:public StatementRecord{
-	  	virtual int getStatementTypeNumber(){return stmtTypeNumber_CASE;} 
+	  	virtual StmtTypeNumberEnum getStatementTypeNumber(){return stmtTypeNumber_CASE;} 
 		ExprRecord expr;
 		CaseRecord caseFirst;
 		CasesRecord *optionalOtherCasesPtr;
 		StatementSeqRecord *optionalElsePtr;
 	};
 	struct Stmt_WHILE:public StatementRecord{
-		virtual int getStatementTypeNumber(){return stmtTypeNumber_WHILE;} 
+		virtual StmtTypeNumberEnum getStatementTypeNumber(){return stmtTypeNumber_WHILE;} 
 	    ExprRecord expr;
 	    StatementSeqRecord whileBodyStatementSeq;
 	};
 	struct Stmt_REPEAT:public StatementRecord{
-		virtual int getStatementTypeNumber(){return stmtTypeNumber_REPEAT;} 
+		virtual StmtTypeNumberEnum getStatementTypeNumber(){return stmtTypeNumber_REPEAT;} 
 	    StatementSeqRecord repeatBodyStatementSeq;
 	    ExprRecord expr;
 	};
 	struct Stmt_FOR:public StatementRecord{
-	  virtual int getStatementTypeNumber(){return stmtTypeNumber_FOR;} 
+	  virtual StmtTypeNumberEnum getStatementTypeNumber(){return stmtTypeNumber_FOR;} 
 	  identRec forCounterVariableName;
 	  ExprRecord forCounterVariableInitialValueExpr;
 	  ExprRecord forCounterVariableToValueExpr;
@@ -555,7 +594,7 @@ void abortIfNull(void* ptr){
 	  StatementSeqRecord forStatementSeq; 
 	};
 	struct Stmt_LOOP:public StatementRecord{
-		virtual int getStatementTypeNumber(){return stmtTypeNumber_LOOP;} 
+		virtual StmtTypeNumberEnum getStatementTypeNumber(){return stmtTypeNumber_LOOP;} 
 	    StatementSeqRecord loopStatementSeq;
 	};
 	struct GuardRecord{
@@ -567,17 +606,17 @@ void abortIfNull(void* ptr){
 		FurtherWithClausesRecord *next;
 	};
 	struct Stmt_WITH:public StatementRecord{
-		virtual int getStatementTypeNumber(){return stmtTypeNumber_WITH;} 
+		virtual StmtTypeNumberEnum getStatementTypeNumber(){return stmtTypeNumber_WITH;} 
 	    GuardRecord firstGuard;
 	    StatementSeqRecord firstStatementSeq;
 		FurtherWithClausesRecord *optionalFurtherWithClausesPtr;
 		StatementSeqRecord *optionalElsePtr;
 	};
 	struct Stmt_EXIT:public StatementRecord{
-		virtual int getStatementTypeNumber(){return stmtTypeNumber_EXIT;} 
+		virtual StmtTypeNumberEnum getStatementTypeNumber(){return stmtTypeNumber_EXIT;} 
 	};
 	struct Stmt_RETURN:public StatementRecord{
-		virtual int getStatementTypeNumber(){return stmtTypeNumber_RETURN;} 
+		virtual StmtTypeNumberEnum getStatementTypeNumber(){return stmtTypeNumber_RETURN;} 
 		bool exprPresent;
 		ExprRecord expr;
 	};
@@ -613,6 +652,7 @@ void abortIfNull(void* ptr){
 	~Parser();
 	void SemErr(const wchar_t* msg);
 
+	void character();
 	void number(numberRecord &r);
 	void IntegerRec(wchar_t* &tok);
 	void RealRec(wchar_t* &tok);
@@ -635,12 +675,12 @@ void abortIfNull(void* ptr){
 	void DeclSeqVarDeclListMandatory(DeclSeqVarDeclListMandatoryRecord &r);
 	void VarDecl(VarDeclRecord &r);
 	void DeclSeqVarDeclList(DeclSeqVarDeclListRecord &r);
-	void DeclSeqConstTypeVarListMandatory(DeclSeqConstTypeVarListMandatoryRecord &r);
+	void DeclSeqConstTypeVarListMandatory(DeclSeqConstTypeVarListMandatoryRecord *&r);
 	void DeclSeqConstTypeVarList(DeclSeqConstTypeVarListRecord &r);
-	void DeclSeqProcDeclFwdDeclListMandatory(DeclSeqProcDeclFwdDeclListMandatoryRecord &r);
+	void DeclSeqProcDeclFwdDeclListMandatory(DeclSeqProcDeclFwdDeclListMandatoryRecord *&r);
 	void ProcDecl(ProcDeclRecord &r);
 	void ForwardDecl(ForwardDeclRecord &r);
-	void DeclSeqProcDeclFwdDeclList(DeclSeqProcDeclFwdDeclListRecord &r);
+	void DeclSeqProcDeclFwdDeclList(DeclSeqProcDeclFwdDeclListRecord *&r);
 	void DeclSeq(DeclSeqRecord &r);
 	void IdentDef(IdentDefRecord &r);
 	void Type(TypeRecord *&ptrToTypeRecord);
@@ -673,7 +713,7 @@ void abortIfNull(void* ptr){
 	void Character(wchar_t* &tok);
 	void String(wchar_t* &tok);
 	void Set(SetRecord &r);
-	void DesignatorMaybeWithExprListRepeatingPartClause(DesignatorMaybeWithExprListRepeatingPartRecord &r);
+	void DesignatorMaybeWithExprListRepeatingPartClause(DesignatorMaybeWithExprListRepeatingPartRecord *&r);
 	void IdentRec(wchar_t* &tok);
 	void ExprList(ExprListRecord &r);
 	void QualidentOrOptionalExprList(QualidentOrOptionalExprListRecord &r);

@@ -1,5 +1,5 @@
 /*-------------------------------------------------------------------------
-Oberon2 compiler for x86
+Oberon ZH compiler for x86
 Copyright (c) 2012 Evgeniy Grigorievitch Philippov
 Distributed under the terms of GNU General Public License, v.3 or later
 
@@ -38,7 +38,12 @@ Parser.h Specification
 #if !defined(-->prefixCOCO_PARSER_H)
 #define -->prefixCOCO_PARSER_H
 
-namespace Oberon {class CodeGenerator;}
+#include "common.h"
+
+#include "stdio.h"
+#include "wchar.h"
+
+namespace Oberon {class CodeGenerator;class SymbolTable;}
 -->headerdef
 #include "Scanner.h"
 
@@ -103,7 +108,6 @@ Parser.cpp Specification
 
 -->begin
 
-#include <wchar.h>
 #include "Parser.h"
 #include "Scanner.h"
 

@@ -6,31 +6,28 @@ Distributed under the terms of GNU General Public License, v.3 or later
 ----------------------------------------------------------------------*/
 #include "SymbolTable.h"
 #include "CodeGenerator.h"
-#include "wchar.h"
 
 COMPILER Oberon
 
-	void abortIfNull(void* ptr){
-		if(ptr==0){
-			wprintf(L"No memory.\n"); 
-			exit(2);
-		}
-	}
-
 	typedef bool boolean;
 
-	static const int // operators
-	  illegal_operator=1, plus=2, minus=3, times=4, slash=5, equals=6, less=7, greater=8,
-	  orOperation=9, notEquals=10, lessOrEqual=11, greaterOrEqual=12, in=13, is=14, divOp=15, modOp=16, ampersand=17;
+	enum OperatorsEnum { 
+	  illegal_operator, plus, minus, times, slash, equals, less, greater,
+	  orOperation, notEquals, lessOrEqual, greaterOrEqual, in, is, divOp, 
+	  modOp, ampersand
+	};
 
-	static const int // object kinds
-	  var=1, proc=2;
+	enum ObjectKindsEnum {
+	  var, proc
+	};
 
-	static const int // opcodes
-	  ADD=0,  SUB=1,  MUL=2,  DIV=3,   EQU=4,  LSS=5, GTR=6, NEG=7,
-	  LOAD=8, LOADG=9, STO=10,   STOG=11,  CONST=12,
-	  CALL=13, RET=14,   ENTER=15, LEAVE=16,
-	  JMP=17,  FJMP=18,  READ=19,  WRITE=20;
+	enum OpcodesEnum { 
+	  ADD,  SUB,  MUL,  DIV,   EQU,  LSS, GTR, NEG,
+	  LOAD, LOADG, STO,   STOG,  CONST,
+	  CALL, RET,   
+	  ENTER, LEAVE,
+	  JMP,  FJMP,  READ,  WRITE
+	};
 
 	typedef wchar_t* characterRecord; 
 	typedef wchar_t* stringRecord; 
@@ -41,11 +38,10 @@ COMPILER Oberon
 		identRec rightIdent; /* rightIdent==0 if not specified */
 	};
 
-#define num_int (1)
-#define num_real (2)
+	enum NumTypeEnum {num_int, num_real};
 	
 	struct numberRecord{
-		int numtype; //num_int or num_real
+		NumTypeEnum numtype;
 		wchar_t* tokenString;
 	};
 	  
@@ -53,18 +49,20 @@ COMPILER Oberon
 		wchar_t* ident_;
 	};
 	
-	static const int ft_undef=0;
-	static const int ft_DesignatorMaybeWithExprList=1;
-	static const int ft_number=2;
-	static const int ft_character=3;
-	static const int ft_string=4;
-	static const int ft_NIL=5;
-	static const int ft_Set=6;
-	static const int ft_Expr=7;
-	static const int ft_tildeFactor=8;
+	enum FactorTypeEnum {
+		ft_undef,
+		ft_DesignatorMaybeWithExprList,
+		ft_number,
+		ft_character,
+		ft_string,
+		ft_NIL,
+		ft_Set,
+		ft_Expr,
+		ft_tildeFactor
+	};
 
 	struct FactorRecord{
-		virtual int getFactorType()=0; //ft_*
+		virtual FactorTypeEnum getFactorType()=0; //ft_*
 	};
 	
 	struct TermMulOpRecord{
@@ -120,16 +118,14 @@ COMPILER Oberon
 	};
 
 	struct FactorRecord_Expr: public FactorRecord{
-		virtual int getFactorType(){return ft_Expr;}
+		virtual FactorTypeEnum getFactorType(){return ft_Expr;}
 		ExprRecord expr;
 	};
 
+	enum ClauseEnum {cl1,cl2,cl3,cl4};
+	
 	struct DesignatorMaybeWithExprListRepeatingPartRecord{
-		int clauseNumber; //[1..4]
-		identRec clause1_identRec;
-		ExprListRecord clause2_exprList;
-		QualidentOrOptionalExprListRecord clause4_qualidentOrOptionalExprList;
-
+		virtual ClauseEnum getClauseNumber()=0;
 		DesignatorMaybeWithExprListRepeatingPartRecord* nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord;
 /*
 	("." ident 			//clauseNumber==1
@@ -140,6 +136,26 @@ COMPILER Oberon
 */
 	};
 
+	struct DesignatorMaybeWithExprListRepeatingPartRecordCL1 : public DesignatorMaybeWithExprListRepeatingPartRecord{
+		virtual ClauseEnum getClauseNumber() {return cl1;}
+		identRec clause1_identRec;
+		//"." ident
+	};
+	struct DesignatorMaybeWithExprListRepeatingPartRecordCL2 : public DesignatorMaybeWithExprListRepeatingPartRecord{
+		virtual ClauseEnum getClauseNumber() {return cl2;}
+		ExprListRecord clause2_exprList;
+		//"[" ExprList "]"
+	};
+	struct DesignatorMaybeWithExprListRepeatingPartRecordCL3 : public DesignatorMaybeWithExprListRepeatingPartRecord{
+		virtual ClauseEnum getClauseNumber() {return cl3;}
+	    //"^"
+	};
+	struct DesignatorMaybeWithExprListRepeatingPartRecordCL4 : public DesignatorMaybeWithExprListRepeatingPartRecord{
+		virtual ClauseEnum getClauseNumber() {return cl4;}
+		QualidentOrOptionalExprListRecord clause4_qualidentOrOptionalExprList;
+		//"(" QualidentOrOptionalExprList ")"
+	};
+
 	struct DesignatorMaybeWithExprListRecord{
 		identRecord identRec;
 		DesignatorMaybeWithExprListRepeatingPartRecord* nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord;
@@ -147,44 +163,44 @@ COMPILER Oberon
 
 
 	struct FactorRecord_DesignatorMaybeWithExprList: public FactorRecord{
-		virtual int getFactorType(){return ft_DesignatorMaybeWithExprList;}
+		virtual FactorTypeEnum getFactorType(){return ft_DesignatorMaybeWithExprList;}
 		DesignatorMaybeWithExprListRecord r; 
 	};
   
 	struct FactorRecord_number: public FactorRecord{
-		virtual int getFactorType(){return ft_number;}
+		virtual FactorTypeEnum getFactorType(){return ft_number;}
 		numberRecord num; 
 	};
   
 	struct FactorRecord_character: public FactorRecord{
-		virtual int getFactorType(){return ft_character;}
+		virtual FactorTypeEnum getFactorType(){return ft_character;}
 		characterRecord ch; 
 	};
   
 	struct FactorRecord_string: public FactorRecord{
-		virtual int getFactorType(){return ft_string;}
+		virtual FactorTypeEnum getFactorType(){return ft_string;}
 		stringRecord s; 
 	};
   
 	struct FactorRecord_NIL: public FactorRecord{
-		virtual int getFactorType(){return ft_NIL;}
+		virtual FactorTypeEnum getFactorType(){return ft_NIL;}
 	};
 
 	struct FactorRecord_Set: public FactorRecord{
-		virtual int getFactorType(){return ft_Set;}
+		virtual FactorTypeEnum getFactorType(){return ft_Set;}
 		SetRecord set;
 	};
  
 	struct FactorRecord_tildeFactor: public FactorRecord{
-		virtual int getFactorType(){return ft_tildeFactor;}
+		virtual FactorTypeEnum getFactorType(){return ft_tildeFactor;}
 		FactorRecord* factorPtr;
 	};
 
-	static const int modifier_none=0,modifier_star=1,modifier_minus=2;
+	enum ModifierEnum {modifier_none, modifier_star, modifier_minus};
 	
 	struct IdentDefRecord{
 		identRec ident_;
-		int modifier;
+		ModifierEnum modifier;
 	};
 
 	struct IdentListRecord{
@@ -196,8 +212,22 @@ COMPILER Oberon
 		IdentList2Record* nullOrCommaIdentList;
 	};
 
+	enum StmtTypeNumberEnum {
+		 stmtTypeNumber_EmptyStmt
+		,stmtTypeNumber_EXPR_OR_ASSIGN
+		,stmtTypeNumber_IF
+		,stmtTypeNumber_CASE
+		,stmtTypeNumber_WHILE
+		,stmtTypeNumber_REPEAT
+		,stmtTypeNumber_FOR
+		,stmtTypeNumber_LOOP
+		,stmtTypeNumber_WITH
+		,stmtTypeNumber_EXIT
+		,stmtTypeNumber_RETURN
+	};
+	
 	struct StatementRecord{
-		virtual int getStatementTypeNumber()=0; 
+		virtual StmtTypeNumberEnum getStatementTypeNumber()=0; 
 	};
 
 	struct StatementSeqRecord{
@@ -205,8 +235,16 @@ COMPILER Oberon
 		StatementSeqRecord* nullOrPtrToNextStatementSeq;
 	};
 
+	enum TypeNumberQARPPEnum { 
+		 type_number_Qualident
+		,type_number_ARRAY
+		,type_number_RECORD
+		,type_number_POINTER
+		,type_number_PROCEDURE
+	};
+	
 	struct TypeRecord{
-		virtual int getTypeNumber()=0;
+		virtual TypeNumberQARPPEnum getTypeNumber()=0;
 	};
 
 	struct VarDeclRecord{
@@ -235,7 +273,7 @@ COMPILER Oberon
 	};
 	
 	struct ModuleImportEntryRecord{
-		identRec lhs,rhs;
+		identRec lhs, rhs;
 		boolean rhsPresent;
 	};
 
@@ -317,19 +355,31 @@ COMPILER Oberon
 		DeclSeqVarDeclListMandatoryRecord varDecls; /* undefined if specified==false*/
 	};
 
-	static const int decl_const=1,decl_type=2,decl_var=3;
+	enum DeclEnum {decl_const,decl_type,decl_var};
 	
 	struct DeclSeqConstTypeVarListMandatoryRecord{
-		int decl_variant; /* either decl_const, decl_type, or decl_var */
-		DeclSeqConstDeclListRecord constDeclList; /* undefined if decl_variant!=decl_const */ 
-		DeclSeqTypeDeclListRecord typeDeclList;   /* undefined if decl_variant!=decl_type  */
-		DeclSeqVarDeclListRecord varDeclList;	  /* undefined if decl_variant!=decl_var   */
+		virtual DeclEnum get_decl_variant()=0;
 		DeclSeqConstTypeVarListMandatoryRecord *next;
 	}; 
 	
+	struct DeclSeqConst : public DeclSeqConstTypeVarListMandatoryRecord{
+		virtual DeclEnum get_decl_variant() {return decl_const;}
+		DeclSeqConstDeclListRecord constDeclList; 
+	}; 
+
+	struct DeclSeqType : public DeclSeqConstTypeVarListMandatoryRecord{
+		virtual DeclEnum get_decl_variant() {return decl_type;}
+		DeclSeqTypeDeclListRecord typeDeclList;
+	}; 
+
+	struct DeclSeqVar : public DeclSeqConstTypeVarListMandatoryRecord{
+		virtual DeclEnum get_decl_variant() {return decl_var;}
+		DeclSeqVarDeclListRecord varDeclList;
+	}; 
+
 	struct DeclSeqConstTypeVarListRecord{
 		bool specified;
-		DeclSeqConstTypeVarListMandatoryRecord constTypeVarList; /* undefined if specified==false */
+		DeclSeqConstTypeVarListMandatoryRecord *constTypeVarListPtr; /* undefined if specified==false */
 	};
 
 	struct DeclSeqRecord;
@@ -343,35 +393,33 @@ COMPILER Oberon
 	    StatementSeqRecord procBodyStmtSeq; /* undefined if procBodySpecifiedHere==false */
 	};
 
-	static const int decl_proc=4,decl_fwd=5;
+	enum DeclProcFwd {decl_proc,decl_fwd};
 	
 	struct DeclSeqProcDeclFwdDeclListMandatoryRecord{
-		int decl_variant; /* either decl_proc, or decl_fwd */
-		ProcDeclRecord procDecl;     /* undefined if decl_variant!=decl_proc */ 
-		ForwardDeclRecord fwdDecl;   /* undefined if decl_variant!=decl_fwd  */
+		virtual DeclProcFwd get_decl_variant()=0;
 		DeclSeqProcDeclFwdDeclListMandatoryRecord *next;
+	}; 
+	struct DeclSeqProcDecl : public DeclSeqProcDeclFwdDeclListMandatoryRecord{
+		virtual DeclProcFwd get_decl_variant(){return decl_proc;}
+		ProcDeclRecord procDecl; 
+	}; 
+	struct DeclSeqFwdDecl : public DeclSeqProcDeclFwdDeclListMandatoryRecord{
+		virtual DeclProcFwd get_decl_variant(){return decl_fwd;}
+		ForwardDeclRecord fwdDecl;
 	}; 
 	
 	struct DeclSeqProcDeclFwdDeclListRecord{
 		bool specified;
-		DeclSeqProcDeclFwdDeclListMandatoryRecord procDeclFwdDeclList; /* undefined if specified==false */
+		DeclSeqProcDeclFwdDeclListMandatoryRecord *procDeclFwdDeclListPtr; /* undefined if specified==false */
 	};
 	
 	struct DeclSeqRecord{
-		DeclSeqConstTypeVarListRecord ctvlist;
-		DeclSeqProcDeclFwdDeclListRecord pflist;
+		DeclSeqConstTypeVarListRecord ctvList;
+		DeclSeqProcDeclFwdDeclListRecord pfList;
 	};
 
-	static const int 
-		 type_number_Qualident=1
-		,type_number_ARRAY=2
-		,type_number_RECORD=3
-		,type_number_POINTER=4
-		,type_number_PROCEDURE=5
-		;
-	
 	struct TypeQualident: public TypeRecord{
-		int getTypeNumber(){return type_number_Qualident;}
+		TypeNumberQARPPEnum getTypeNumber(){return type_number_Qualident;}
 		QualidentRecord qualident;
 	}; 
 	struct TypeArrayConstExprListMandatoryRecord{
@@ -379,42 +427,29 @@ COMPILER Oberon
 		TypeArrayConstExprListMandatoryRecord *next;
 	};
 	struct TypeARRAY: public TypeRecord{
-		int getTypeNumber(){return type_number_ARRAY;}
+		TypeNumberQARPPEnum getTypeNumber(){return type_number_ARRAY;}
 		TypeArrayConstExprListMandatoryRecord *dimensionsConstExprsListPtr;
 		TypeRecord *arrayElementTypePtr;
 	}; 
 	struct TypeRECORD: public TypeRecord{
-		int getTypeNumber(){return type_number_RECORD;}
+		TypeNumberQARPPEnum getTypeNumber(){return type_number_RECORD;}
 		QualidentRecord *optionalQualidentPtr;
 		MandatoryFieldsListRecord fieldsList;
 	}; 
 	struct TypePOINTER: public TypeRecord{
-		int getTypeNumber(){return type_number_POINTER;}
+		TypeNumberQARPPEnum getTypeNumber(){return type_number_POINTER;}
 		TypeRecord *pointedTypePtr;
 	}; 
 	struct TypePROCEDURE: public TypeRecord{
-		int getTypeNumber(){return type_number_PROCEDURE;}
+		TypeNumberQARPPEnum getTypeNumber(){return type_number_PROCEDURE;}
 		FormalParsRecord *optionalFormalParsPtr;
 	}; 
 
-	static const int
-		 stmtTypeNumber_EmptyStmt=0
-		,stmtTypeNumber_EXPR_OR_ASSIGN=1
-		,stmtTypeNumber_IF=2
-		,stmtTypeNumber_CASE=3
-		,stmtTypeNumber_WHILE=4
-		,stmtTypeNumber_REPEAT=5
-		,stmtTypeNumber_FOR=6
-		,stmtTypeNumber_LOOP=7
-		,stmtTypeNumber_WITH=8
-		,stmtTypeNumber_EXIT=9
-		,stmtTypeNumber_RETURN=10
-		;
 	struct Stmt_EmptyStmt:public StatementRecord{
-	  virtual int getStatementTypeNumber(){return stmtTypeNumber_EmptyStmt;} 
+	  virtual StmtTypeNumberEnum getStatementTypeNumber(){return stmtTypeNumber_EmptyStmt;} 
 	};
 	struct Stmt_EXPR_OR_ASSIGN:public StatementRecord{
-	  	virtual int getStatementTypeNumber(){return stmtTypeNumber_EXPR_OR_ASSIGN;} 
+	  	virtual StmtTypeNumberEnum getStatementTypeNumber(){return stmtTypeNumber_EXPR_OR_ASSIGN;} 
 	  	ExprRecord lhsExpr;
 	  	bool assignment;
 	  	ExprRecord rhsExpr; 
@@ -425,7 +460,7 @@ COMPILER Oberon
 		MandatoryELSIFsListRecord *optionalElsifsListPtr;
 	};
 	struct Stmt_IF:public StatementRecord{
-	 	virtual int getStatementTypeNumber(){return stmtTypeNumber_IF;} 
+	 	virtual StmtTypeNumberEnum getStatementTypeNumber(){return stmtTypeNumber_IF;} 
 	    ExprRecord expr;
 		StatementSeqRecord thenStmtSeq;
 		MandatoryELSIFsListRecord *optionalElsifsListPtr;
@@ -450,24 +485,24 @@ COMPILER Oberon
 		CasesRecord *optionalOtherCasesPtr;
 	};
 	struct Stmt_CASE:public StatementRecord{
-	  	virtual int getStatementTypeNumber(){return stmtTypeNumber_CASE;} 
+	  	virtual StmtTypeNumberEnum getStatementTypeNumber(){return stmtTypeNumber_CASE;} 
 		ExprRecord expr;
 		CaseRecord caseFirst;
 		CasesRecord *optionalOtherCasesPtr;
 		StatementSeqRecord *optionalElsePtr;
 	};
 	struct Stmt_WHILE:public StatementRecord{
-		virtual int getStatementTypeNumber(){return stmtTypeNumber_WHILE;} 
+		virtual StmtTypeNumberEnum getStatementTypeNumber(){return stmtTypeNumber_WHILE;} 
 	    ExprRecord expr;
 	    StatementSeqRecord whileBodyStatementSeq;
 	};
 	struct Stmt_REPEAT:public StatementRecord{
-		virtual int getStatementTypeNumber(){return stmtTypeNumber_REPEAT;} 
+		virtual StmtTypeNumberEnum getStatementTypeNumber(){return stmtTypeNumber_REPEAT;} 
 	    StatementSeqRecord repeatBodyStatementSeq;
 	    ExprRecord expr;
 	};
 	struct Stmt_FOR:public StatementRecord{
-	  virtual int getStatementTypeNumber(){return stmtTypeNumber_FOR;} 
+	  virtual StmtTypeNumberEnum getStatementTypeNumber(){return stmtTypeNumber_FOR;} 
 	  identRec forCounterVariableName;
 	  ExprRecord forCounterVariableInitialValueExpr;
 	  ExprRecord forCounterVariableToValueExpr;
@@ -476,7 +511,7 @@ COMPILER Oberon
 	  StatementSeqRecord forStatementSeq; 
 	};
 	struct Stmt_LOOP:public StatementRecord{
-		virtual int getStatementTypeNumber(){return stmtTypeNumber_LOOP;} 
+		virtual StmtTypeNumberEnum getStatementTypeNumber(){return stmtTypeNumber_LOOP;} 
 	    StatementSeqRecord loopStatementSeq;
 	};
 	struct GuardRecord{
@@ -488,17 +523,17 @@ COMPILER Oberon
 		FurtherWithClausesRecord *next;
 	};
 	struct Stmt_WITH:public StatementRecord{
-		virtual int getStatementTypeNumber(){return stmtTypeNumber_WITH;} 
+		virtual StmtTypeNumberEnum getStatementTypeNumber(){return stmtTypeNumber_WITH;} 
 	    GuardRecord firstGuard;
 	    StatementSeqRecord firstStatementSeq;
 		FurtherWithClausesRecord *optionalFurtherWithClausesPtr;
 		StatementSeqRecord *optionalElsePtr;
 	};
 	struct Stmt_EXIT:public StatementRecord{
-		virtual int getStatementTypeNumber(){return stmtTypeNumber_EXIT;} 
+		virtual StmtTypeNumberEnum getStatementTypeNumber(){return stmtTypeNumber_EXIT;} 
 	};
 	struct Stmt_RETURN:public StatementRecord{
-		virtual int getStatementTypeNumber(){return stmtTypeNumber_RETURN;} 
+		virtual StmtTypeNumberEnum getStatementTypeNumber(){return stmtTypeNumber_RETURN;} 
 		bool exprPresent;
 		ExprRecord expr;
 	};
@@ -537,21 +572,27 @@ CHARACTERS
   lf  = '\n'.
   tab = '\t'.
   
-  stringCh  = ANY - '"' - '\\' - cr - lf.
-  charCh    = ANY - '\'' - '\\' - cr - lf.
-  printable =  '\u0001' .. '\u007e' - '"' - '\\' - cr - lf. /*???*/
+  stringCh  = ANY - '"' - cr - lf.
+  charCh    = ANY - '\'' - cr - lf.
   hexDigit       = "0123456789ABCDEF".
 
 TOKENS
   ident  			= ident_symbol_first {ident_symbol}.
-  badString 		= '"'  { stringCh | '\\' printable | '\\' 'u' hexDigit hexDigit hexDigit hexDigit } (cr | lf)
-  					| '\'' { charCh   | '\\' printable | '\\' 'u' hexDigit hexDigit hexDigit hexDigit } (cr | lf).
-  string 			= '"'  { stringCh | '\\' printable | '\\' 'u' hexDigit hexDigit hexDigit hexDigit } '"' 
-                    | '\'' { charCh   | '\\' printable | '\\' 'u' hexDigit hexDigit hexDigit hexDigit } '\''.
+  
+	/*
+	Strings are sequences of characters enclosed in quote marks ("). A string cannot contain the 
+	delimiting quote mark. Alternatively, a single-character string may be specified by the ordinal 
+	number of the character in hexadecimal notation followed by an "X". The number of characters in a 
+	string is called the length of the string. 
+	
+	string  =  """ {character} """ | digit {hexdigit} "X"
+	*/
+  
+  badString 		= '"'  { stringCh } (cr | lf).
+  string 			= '"'  { stringCh } '"'	| digit {hexDigit} "X".
   integer     		= digit {digit} | digit {hexDigit} "H".
   /*ScaleFactor 		= ("E" | "D") ["+" | "-"] digit {digit}.*/
   real        		= digit {digit} "." {digit} [("E" | "D") ["+" | "-"] digit {digit}].
-  character			= digit {hexDigit} "X". 
 
 COMMENTS FROM "(*" TO "*)" NESTED
 
@@ -560,6 +601,8 @@ IGNORE cr + lf + tab
 
 
 PRODUCTIONS
+
+character = string.
 
 /* number     	= integer | real. */
 number<numberRecord &r>
@@ -677,47 +720,50 @@ DeclSeqVarDeclList<DeclSeqVarDeclListRecord &r>=
 		DeclSeqVarDeclListMandatory<r.varDecls>
 	).
 
-DeclSeqConstTypeVarListMandatory<DeclSeqConstTypeVarListMandatoryRecord &r>
-=
-	(
-		"CONST" DeclSeqConstDeclList<r.constDeclList> 	(. r.decl_variant=decl_const; .) 
-	| 	"TYPE" DeclSeqTypeDeclList<r.typeDeclList> 		(. r.decl_variant=decl_type; .)
-	| 	"VAR" DeclSeqVarDeclList<r.varDeclList>			(. r.decl_variant=decl_var; .)
+DeclSeqConstTypeVarListMandatory<DeclSeqConstTypeVarListMandatoryRecord *&r>
+=														(. r=0; .)
+	(													(. DeclSeqConst* rr = new DeclSeqConst(); abortIfNull(rr); r = rr; .)
+		"CONST" DeclSeqConstDeclList<(*rr).constDeclList> 
+	| 													(. DeclSeqType* rr = new DeclSeqType(); abortIfNull(rr); r = rr; .)
+		"TYPE" DeclSeqTypeDeclList<(*rr).typeDeclList> 		
+	| 													(. DeclSeqVar* rr = new DeclSeqVar(); abortIfNull(rr); r = rr; .)
+		"VAR" DeclSeqVarDeclList<(*rr).varDeclList>			
 	)
-	
-	(													(. r.next=0; .)
-	|													(. r.next=new DeclSeqConstTypeVarListMandatoryRecord(); abortIfNull(r.next); .)
-		DeclSeqConstTypeVarListMandatory<*(r.next)>
-	).
+													(. if(r!=0){ .)
+	(													(. r->next=0; .)
+	|	DeclSeqConstTypeVarListMandatory<(*r).next>
+	)												(. } .)
+	.
 
 DeclSeqConstTypeVarList<DeclSeqConstTypeVarListRecord &r>
 =
 	(						(. r.specified=false; .)
 	|						(. r.specified=true; .)
-		DeclSeqConstTypeVarListMandatory<r.constTypeVarList>
+		DeclSeqConstTypeVarListMandatory<r.constTypeVarListPtr>
 	).
 
-DeclSeqProcDeclFwdDeclListMandatory<DeclSeqProcDeclFwdDeclListMandatoryRecord &r>=
-	"PROCEDURE" 
-	(
-		ProcDecl<r.procDecl>							(. r.decl_variant=decl_proc; .)
-	|	ForwardDecl<r.fwdDecl>							(. r.decl_variant=decl_fwd; .)
+DeclSeqProcDeclFwdDeclListMandatory<DeclSeqProcDeclFwdDeclListMandatoryRecord *&r>=
+	"PROCEDURE" 										(. r=0; .)
+	(													(. DeclSeqProcDecl*rr=new DeclSeqProcDecl(); abortIfNull(rr); r=rr; .)
+		ProcDecl<(*rr).procDecl>							
+	|													(. DeclSeqFwdDecl*rr=new DeclSeqFwdDecl(); abortIfNull(rr); r=rr; .)
+		ForwardDecl<(*rr).fwdDecl>							
 	) ";"
-	
-	(													(. r.next=0; .)
-	|													(. r.next=new DeclSeqProcDeclFwdDeclListMandatoryRecord(); abortIfNull(r.next); .)
-		DeclSeqProcDeclFwdDeclListMandatory<*(r.next)>
-	).
+													(. if(r!=0){ .)
+	(													(. r->next=0; .)
+	|	DeclSeqProcDeclFwdDeclListMandatory<(*r).next> 
+	)												(. } .)
+	.
 
-DeclSeqProcDeclFwdDeclList<DeclSeqProcDeclFwdDeclListRecord &r>=
-	(						(. r.specified=false; .)
-	|						(. r.specified=true; .)
-		DeclSeqProcDeclFwdDeclListMandatory<r.procDeclFwdDeclList>
+DeclSeqProcDeclFwdDeclList<DeclSeqProcDeclFwdDeclListRecord *&r>=
+	(						(. r->specified=false; .)
+	|						(. r->specified=true; .)
+		DeclSeqProcDeclFwdDeclListMandatory<(*r).procDeclFwdDeclListPtr>
 	).
 
 /* DeclSeq      = { CONST {ConstDecl ";" } | TYPE {TypeDecl ";"} | VAR {VarDecl ";"}} 
                {ProcDecl ";" | ForwardDecl<fwdDeclN> ";"}. */
-DeclSeq<DeclSeqRecord &r> = DeclSeqConstTypeVarList<r.ctvlist> DeclSeqProcDeclFwdDeclList<r.pflist>.
+DeclSeq<DeclSeqRecord &r> = DeclSeqConstTypeVarList<r.ctvList> DeclSeqProcDeclFwdDeclList<r.pfList>.
 
 /* ConstDecl    = IdentDef "=" ConstExpr. */
 ConstDecl<ConstDeclRecord &r>
@@ -1115,7 +1161,7 @@ Factor<int &type>
   ).
 */
 
-DesignatorMaybeWithExprListRepeatingPartClause<DesignatorMaybeWithExprListRepeatingPartRecord &r>
+DesignatorMaybeWithExprListRepeatingPartClause<DesignatorMaybeWithExprListRepeatingPartRecord *&r>
 /*
 	struct DesignatorMaybeWithExprListRepeatingPartRecord{
 		int clauseNumber; //[1..4]
@@ -1134,20 +1180,21 @@ DesignatorMaybeWithExprListRepeatingPartClause<DesignatorMaybeWithExprListRepeat
 	};
 	
 */
-=
-	( "." IdentRec<r.clause1_identRec> 			(. r.clauseNumber=1; .)
-	| "[" ExprList<r.clause2_exprList> "]" 		(. r.clauseNumber=2; .)
-	| "^" 										(. r.clauseNumber=3; .)
-	| "(" QualidentOrOptionalExprList<r.clause4_qualidentOrOptionalExprList> ")"
-									 			(. r.clauseNumber=4; .)
+=												(. r=0; .)
+	( 												(. DesignatorMaybeWithExprListRepeatingPartRecordCL1 *rr=new DesignatorMaybeWithExprListRepeatingPartRecordCL1(); abortIfNull(rr); r=rr; .)
+		"." IdentRec<(*rr).clause1_identRec> 			
+	| 												(. DesignatorMaybeWithExprListRepeatingPartRecordCL2 *rr=new DesignatorMaybeWithExprListRepeatingPartRecordCL2(); abortIfNull(rr); r=rr; .)
+     	"[" ExprList<(*rr).clause2_exprList> "]" 		
+	| 												(. DesignatorMaybeWithExprListRepeatingPartRecordCL3 *rr=new DesignatorMaybeWithExprListRepeatingPartRecordCL3(); abortIfNull(rr); r=rr; .)
+		"^" 										
+	| 												(. DesignatorMaybeWithExprListRepeatingPartRecordCL4 *rr=new DesignatorMaybeWithExprListRepeatingPartRecordCL4(); abortIfNull(rr); r=rr; .)
+		"(" QualidentOrOptionalExprList<(*rr).clause4_qualidentOrOptionalExprList> ")"
 	)
-	
-	(			(. r.nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord=0; .)
-    |  			(. r.nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord=new DesignatorMaybeWithExprListRepeatingPartRecord(); 
-    			   abortIfNull(r.nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord); 
-    			.)
-  	  DesignatorMaybeWithExprListRepeatingPartClause<*(r.nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord)>
+												(. if(r!=0){ .)
+	(			(. r->nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord=0; .)
+    |  	DesignatorMaybeWithExprListRepeatingPartClause<(*r).nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord>
     )
+    											(. } .)
 .
 
 /* DesignatorMaybeWithExprList= Designator ["(" [ExprList] ")"]. */
@@ -1161,10 +1208,7 @@ DesignatorMaybeWithExprList<DesignatorMaybeWithExprListRecord &r>
 =
 	IdentRec<r.identRec.ident_>
 	(			(. r.nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord=0; .)
-    |  			(. r.nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord=new DesignatorMaybeWithExprListRepeatingPartRecord(); 
-    			   abortIfNull(r.nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord);
-    			.)
-  	  DesignatorMaybeWithExprListRepeatingPartClause<*(r.nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord)>
+    |	DesignatorMaybeWithExprListRepeatingPartClause<r.nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord>
     ).
 
 /*

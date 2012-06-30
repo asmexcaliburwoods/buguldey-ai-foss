@@ -27,6 +27,7 @@ Coco/R itself) does not fall under the GNU General Public License.
 -----------------------------------------------------------------------*/
 
 
+#include <stdio.h>
 #include <wchar.h>
 #include "Parser.h"
 #include "Scanner.h"

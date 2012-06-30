@@ -6,6 +6,7 @@ Copyright (c) 2012 Evgeniy Grigorievitch Philippov
 Distributed under the terms of GNU General Public License, v.3 or later
 */
 #include "Scanner.h"
+#include "Parser.h"
 
 namespace Oberon {
 

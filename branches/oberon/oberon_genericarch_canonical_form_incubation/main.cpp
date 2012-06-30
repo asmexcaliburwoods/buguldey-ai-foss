@@ -4,6 +4,9 @@ Copyright (c) 2012 Evgeniy Grigorievitch Philippov
 Distributed under the terms of GNU General Public License, v.3 or later
 */
 
+namespace Oberon {class ModuleTable;}
+
+#include "common.h"
 #include "stdio.h"
 #include "SymbolTable.h"
 #include "Parser.h"
@@ -16,17 +19,12 @@ using namespace Oberon;
 int main (const int argc, const char *argv[]) {
 	if (argc == 2) {
 		wchar_t *fileName = coco_string_create(argv[1]);
-		Scanner *scanner = new Scanner(fileName);
-		if(scanner==0){wprintf(L"No memory.\n");exit(1);}
-		Parser *parser = new Parser(scanner);
-		if(parser==0){wprintf(L"No memory.\n");exit(1);}
+		Scanner *scanner = new Scanner(fileName); abortIfNull(scanner);
+		Parser *parser = new Parser(scanner); abortIfNull(parser);
 		//parser->addParserListener(ParserListener)
-		parser->tab = new SymbolTable(parser);
-		if(parser->tab==0){wprintf(L"No memory.\n");exit(1);}
-		ModuleTable *modules = new ModuleTable(parser);
-		if(modules==0){wprintf(L"No memory.\n");exit(1);}
-		parser->gen = new CodeGenerator();
-		if(parser->gen==0){wprintf(L"No memory.\n");exit(1);}
+		parser->tab = new SymbolTable(parser); abortIfNull(parser->tab);
+		ModuleTable *modules = new ModuleTable(parser);	abortIfNull(modules);
+		parser->gen = new CodeGenerator();	abortIfNull(parser->gen);
 		wprintf(L"Reading %s...\n",argv[1]);
 		parser->Parse();
 		int errorsCount=parser->errors->count;

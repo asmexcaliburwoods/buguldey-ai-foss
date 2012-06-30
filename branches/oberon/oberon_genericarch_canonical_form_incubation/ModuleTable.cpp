@@ -33,7 +33,7 @@ ModuleTable::Module* ModuleTable::NewModule(Parser::ModuleRecord &moduleAST) {
 	}
 	Module *obj = new Module();
 	if(obj==0){
-		wprintf(L"No memory.\n");
+		wprintf(L"Not enough memory.\n");
 		exit(1);
 	}
 	obj->moduleAST=&moduleAST;

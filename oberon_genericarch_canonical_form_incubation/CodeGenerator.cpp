@@ -1,5 +1,6 @@
 #include "CodeGenerator.h"
 #include "Parser.h"
+#include <assert.h>
 
 void Oberon::CodeGenerator::Disassemble(Parser* parser) {
 	int maxPc = pc;
@@ -33,12 +34,14 @@ namespace Oberon {
 	fwrite(objFile, code, pc);
 	fclose(objFile);
 }*/
-void CodeGenerator::GenerateCodeForModule(Oberon::Parser::ModuleRecord &moduleAST, Oberon::SymbolTable &tab){
+void CodeGenerator::GenerateCodeForModule(Oberon::ModuleRecord *moduleASTPtr, Oberon::SymbolTable &tab){
+	assert(moduleASTPtr != 0);
+	Oberon::ModuleRecord &moduleAST = *moduleASTPtr;
 	tab.OpenScope();
 	/*
 	  "MODULE" Ident<r.moduleName> ";"
-	  ( 					(. r.importListPtr=0; .)
-	  |						(. r.importListPtr=new ImportListRecord(); abortIfNull(r.importListPtr); .)
+	  ( 	(. r.importListPtr=0; .)
+	  |	(. r.importListPtr=new ImportListRecord(); abortIfNull(r.importListPtr); .)
 		ImportList<*(r.importListPtr)>
 	  )
 	  DeclSeq<r.declSeq>
@@ -146,8 +149,8 @@ void CodeGenerator::Patch (int adr, int val) {
 		code[adr] = (char)(val>>8); code[adr+1] = (char)val;
 	}
 
-void CodeGenerator::GenerateCodeForModule(Oberon::Parser::ModuleRecord &moduleAST, Oberon::SymbolTable &tab);
-	//void WriteObjFile(Oberon::Parser::ModuleRecord &moduleAST);
+void CodeGenerator::GenerateCodeForModule(Oberon::ModuleRecord *moduleASTPtr, Oberon::SymbolTable &tab);
+//void WriteObjFile(Oberon::ModuleRecord &moduleAST);
 
 /*
   //----- interpreter methods -----

@@ -4,8 +4,6 @@ Copyright (c) 2012 Evgeniy Grigorievitch Philippov
 Distributed under the terms of GNU General Public License, v.3 or later
 */
 
-namespace Oberon {class ModuleTable;}
-
 #include "common.h"
 #include "stdio.h"
 #include "SymbolTable.h"
@@ -13,6 +11,7 @@ namespace Oberon {class ModuleTable;}
 #include "Scanner.h"
 #include <sys/timeb.h>
 #include <wchar.h>
+#include "ModuleTable.h"
 
 using namespace Oberon;
 
@@ -30,7 +29,7 @@ int main (const int argc, const char *argv[]) {
 		int errorsCount=parser->errors->count;
 		if (errorsCount == 0) {
 			wprintf(L"Read success! Generating code\n");
-			parser->gen->GenerateCodeForModule(*(parser->modulePtr), *(parser->tab));
+			parser->gen->GenerateCodeForModule(parser->modulePtr, *(parser->tab));
 			parser->gen->Disassemble(parser);
 			//parser->gen->Interpret();
 		}else{

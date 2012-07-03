@@ -433,12 +433,12 @@ void Parser::ForwardDecl(ForwardDeclRecord &r) {
 		OptionalFormalPars(r.optionalFormalPars);
 }
 
-void Parser::DeclSeqProcDeclFwdDeclList(DeclSeqProcDeclFwdDeclListRecord *&r) {
+void Parser::DeclSeqProcDeclFwdDeclList(DeclSeqProcDeclFwdDeclListRecord &r) {
 		if (la->kind == 31 /* "BEGIN" */ || la->kind == 32 /* "END" */) {
-			r->specified=false; 
+			r.specified=false; 
 		} else if (la->kind == 29 /* "PROCEDURE" */) {
-			r->specified=true; 
-			DeclSeqProcDeclFwdDeclListMandatory((*r).procDeclFwdDeclListPtr);
+			r.specified=true; 
+			DeclSeqProcDeclFwdDeclListMandatory(r.procDeclFwdDeclListPtr);
 		} else SynErr(88);
 }
 

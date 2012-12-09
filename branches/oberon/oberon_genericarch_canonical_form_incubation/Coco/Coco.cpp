@@ -63,7 +63,11 @@ int main(int argc, char *argv_[]) {
 
 	wprintf(L"Coco/R (Jan 02, 2012)\n");
 
-	wchar_t *srcName = NULL, *nsName = NULL, *frameDir = NULL, *ddtString = NULL, *traceFileName = NULL;
+	wchar_t *srcName = NULL;
+	wchar_t *nsName = NULL;
+	wchar_t *frameDir = NULL;
+	wchar_t *ddtString = NULL;
+	wchar_t *traceFileName = NULL;
 	wchar_t *outDir = NULL;
 	char *chTrFileName = NULL;
 	bool emitLines = false;
@@ -162,12 +166,12 @@ int main(int argc, char *argv_[]) {
 		wprintf(L"or in a directory specified in the -frames option.\n");
 	}
 
-	coco_string_delete(srcName);
-	coco_string_delete(nsName);
-	coco_string_delete(frameDir);
-	coco_string_delete(ddtString);
-	coco_string_delete(chTrFileName);
-	coco_string_delete(traceFileName);
+	delete [] srcName; srcName = NULL;
+	delete [] nsName; nsName = NULL;
+	delete [] frameDir; frameDir = NULL;
+	delete [] ddtString; ddtString = NULL;
+	delete [] chTrFileName; chTrFileName = NULL;
+	delete [] traceFileName; traceFileName = NULL;
 
 	return 0;
 }

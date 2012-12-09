@@ -300,6 +300,7 @@ Scanner.cpp Specification
 
 #include <memory.h>
 #include <string.h>
+#include <stdio.h>
 #include "Scanner.h"
 
 -->namespace_open

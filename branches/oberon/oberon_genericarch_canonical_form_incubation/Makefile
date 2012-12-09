@@ -1,8 +1,11 @@
+coco_build:
+	make -C Coco gpp all
+	
 Parser.h:
 Parser.cpp:
 Scanner.cpp:
 Scanner.h:
-coco:	Coco/Coco
+coco:	coco_build 
 	Coco/Coco Oberon.atg -namespace Oberon
 
 oberon_exec:	clean coco Parser.cpp Scanner.cpp Scanner.h Parser.h

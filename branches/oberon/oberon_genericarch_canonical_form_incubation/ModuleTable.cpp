@@ -3,12 +3,13 @@ Oberon2 compiler for x86
 Copyright (c) 2012 Evgeniy Grigorievitch Philippov
 Distributed under the terms of GNU General Public License, v.3 or later
 */
+#include <stdlib.h>
+#include <stdio.h>
+#include <wchar.h>
 #include "common.h"
 #include "ModuleTable.h"
 #include "Parser.h"
 #include "CodeGenerator.h"
-#include <stdio.h>
-#include <wchar.h>
 
 //for wstrlen
 //#include <synce.h>

@@ -38,12 +38,6 @@ Parser.h Specification
 #if !defined(-->prefixCOCO_PARSER_H)
 #define -->prefixCOCO_PARSER_H
 
-#include "common.h"
-
-#include "stdio.h"
-#include "wchar.h"
-
-namespace Oberon {class CodeGenerator;class SymbolTable;}
 -->headerdef
 #include "Scanner.h"
 
@@ -60,6 +54,8 @@ public:
 	void Exception(const wchar_t *s);
 
 }; // Errors
+
+class ModuleTable;
 
 class Parser {
 //public:
@@ -87,7 +83,7 @@ public:
 
 -->declarations
 
-	Parser(Scanner *scanner);
+	Parser(Scanner *scanner, Errors* errors_);
 	~Parser();
 	void SemErr(const wchar_t* msg);
 
@@ -269,7 +265,7 @@ void Parser::Parse() {
 -->parseRoot
 }
 
-Parser::Parser(Scanner *scanner) {
+Parser::Parser(Scanner *scanner, Errors* errors_) {
 	//parserListener=0;
 -->constants
 	ParserInitCaller<Parser>::CallInit(this);
@@ -278,7 +274,7 @@ Parser::Parser(Scanner *scanner) {
 	minErrDist = 2;
 	errDist = minErrDist;
 	this->scanner = scanner;
-	errors = new Errors();
+	errors = errors_;
 }
 
 bool Parser::StartOf(int s) {
@@ -292,7 +288,7 @@ bool Parser::StartOf(int s) {
 
 Parser::~Parser() {
 	ParserDestroyCaller<Parser>::CallDestroy(this);
-	delete errors;
+	//delete errors;
 	delete dummyToken;
 }
 

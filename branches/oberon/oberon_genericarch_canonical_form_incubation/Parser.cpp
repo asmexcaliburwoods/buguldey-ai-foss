@@ -353,15 +353,15 @@ void Parser::DeclSeqVarDeclList(DeclSeqVarDeclListRecord &r) {
 void Parser::DeclSeqConstTypeVarListMandatory(DeclSeqConstTypeVarListMandatoryRecord *&r) {
 		r=0; 
 		if (la->kind == 26 /* "CONST" */) {
-			DeclSeqConst* rr = new DeclSeqConst(); abortIfNull(rr); r = rr; 
+			DeclSeqConst* rr = new DeclSeqConst(); abortIfNull(rr); r=rr; 
 			Get();
 			DeclSeqConstDeclList((*rr).constDeclList);
 		} else if (la->kind == 27 /* "TYPE" */) {
-			DeclSeqType* rr = new DeclSeqType(); abortIfNull(rr); r = rr; 
+			DeclSeqType* rr = new DeclSeqType(); abortIfNull(rr);  r=rr; 
 			Get();
 			DeclSeqTypeDeclList((*rr).typeDeclList);
 		} else if (la->kind == 28 /* "VAR" */) {
-			DeclSeqVar* rr = new DeclSeqVar(); abortIfNull(rr); r = rr; 
+			DeclSeqVar* rr = new DeclSeqVar(); abortIfNull(rr);  r=rr; 
 			Get();
 			DeclSeqVarDeclList((*rr).varDeclList);
 		} else SynErr(82);
@@ -387,10 +387,10 @@ void Parser::DeclSeqProcDeclFwdDeclListMandatory(DeclSeqProcDeclFwdDeclListManda
 		Expect(29 /* "PROCEDURE" */);
 		r=0; 
 		if (la->kind == _ident || la->kind == 34 /* "(" */) {
-			DeclSeqProcDecl*rr=new DeclSeqProcDecl(); abortIfNull(rr); r=rr; 
+			DeclSeqProc*rr=new DeclSeqProc(); abortIfNull(rr); r=rr; 
 			ProcDecl((*rr).procDecl);
 		} else if (la->kind == 33 /* "^" */) {
-			DeclSeqFwdDecl*rr=new DeclSeqFwdDecl(); abortIfNull(rr); r=rr; 
+			DeclSeqFwd*rr=new DeclSeqFwd(); abortIfNull(rr); r=rr; 
 			ForwardDecl((*rr).fwdDecl);
 		} else SynErr(85);
 		Expect(25 /* ";" */);
@@ -547,14 +547,15 @@ void Parser::FormalPars(FormalParsRecord &r) {
 		} else SynErr(96);
 }
 
-void Parser::StatementSeq(StatementSeqRecord &r) {
-		Statement(r.statementPtr);
+void Parser::StatementSeq(StatementSeqRecord *&r) {
+		r = new StatementSeqRecord(); abortIfNull(r); 
+		Statement((*r).statementPtr);
 		if (StartOf(8)) {
-			r.nullOrPtrToNextStatementSeq=0; 
+			(*r).nullOrPtrToNextStatementSeq=0; 
 		} else if (la->kind == 25 /* ";" */) {
-			r.nullOrPtrToNextStatementSeq=new StatementSeqRecord(); abortIfNull(r.nullOrPtrToNextStatementSeq); 
+			(*r).nullOrPtrToNextStatementSeq=new StatementSeqRecord(); abortIfNull((*r).nullOrPtrToNextStatementSeq); 
 			Get();
-			StatementSeq(*(r.nullOrPtrToNextStatementSeq));
+			StatementSeq((*r).nullOrPtrToNextStatementSeq);
 		} else SynErr(97);
 }
 
@@ -706,7 +707,7 @@ void Parser::Statement(StatementRecord*&ptrToStmtRecord) {
 			} else if (la->kind == 54 /* "ELSE" */) {
 				pif->optionalElsePtr=new StatementSeqRecord(); abortIfNull(pif->optionalElsePtr); 
 				Get();
-				StatementSeq(*((*pif).optionalElsePtr));
+				StatementSeq((*pif).optionalElsePtr);
 			} else SynErr(110);
 			Expect(32 /* "END" */);
 			break;
@@ -728,7 +729,7 @@ void Parser::Statement(StatementRecord*&ptrToStmtRecord) {
 			} else if (la->kind == 54 /* "ELSE" */) {
 				(*pcs).optionalElsePtr=new StatementSeqRecord(); abortIfNull((*pcs).optionalElsePtr); 
 				Get();
-				StatementSeq(*((*pcs).optionalElsePtr));
+				StatementSeq((*pcs).optionalElsePtr);
 			} else SynErr(112);
 			Expect(32 /* "END" */);
 			break;
@@ -794,7 +795,7 @@ void Parser::Statement(StatementRecord*&ptrToStmtRecord) {
 			} else if (la->kind == 54 /* "ELSE" */) {
 				(*pwith).optionalElsePtr=new StatementSeqRecord(); abortIfNull((*pwith).optionalElsePtr); 
 				Get();
-				StatementSeq(*((*pwith).optionalElsePtr));
+				StatementSeq((*pwith).optionalElsePtr);
 			} else SynErr(115);
 			Expect(32 /* "END" */);
 			break;
@@ -1093,10 +1094,12 @@ void Parser::Module(ModuleRecord &r) {
 			ImportList(*(r.importListPtr));
 		} else SynErr(137);
 		DeclSeq(r.declSeq);
-		if (la->kind == 31 /* "BEGIN" */) {
+		if (la->kind == 32 /* "END" */) {
+			r.stmtSeq=0; 
+		} else if (la->kind == 31 /* "BEGIN" */) {
 			Get();
 			StatementSeq(r.stmtSeq);
-		}
+		} else SynErr(138);
 		Expect(32 /* "END" */);
 		Ident(endName);
 		if(!coco_string_equal(endName, r.moduleName)){
@@ -1219,10 +1222,10 @@ void Parser::Parse() {
 	la->val = coco_string_create(L"Dummy Token");
 	Get();
 	Oberon();
-	Expect(0);
+
 }
 
-Parser::Parser(Scanner *scanner) {
+Parser::Parser(Scanner *scanner, Errors* errors_) {
 	//parserListener=0;
 	maxT = 66;
 
@@ -1232,7 +1235,7 @@ Parser::Parser(Scanner *scanner) {
 	minErrDist = 2;
 	errDist = minErrDist;
 	this->scanner = scanner;
-	errors = new Errors();
+	errors = errors_;
 }
 
 bool Parser::StartOf(int s) {
@@ -1265,7 +1268,7 @@ bool Parser::StartOf(int s) {
 
 Parser::~Parser() {
 	ParserDestroyCaller<Parser>::CallDestroy(this);
-	delete errors;
+	//delete errors;
 	delete dummyToken;
 }
 
@@ -1414,6 +1417,7 @@ void Errors::SynErr(int line, int col, int n) {
 			case 135: s = coco_string_create(L"invalid Cases"); break;
 			case 136: s = coco_string_create(L"invalid FurtherWithClauses"); break;
 			case 137: s = coco_string_create(L"invalid Module"); break;
+			case 138: s = coco_string_create(L"invalid Module"); break;
 
 		default:
 		{

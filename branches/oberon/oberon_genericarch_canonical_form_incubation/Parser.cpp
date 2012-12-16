@@ -33,10 +33,11 @@ Coco/R itself) does not fall under the GNU General Public License.
 
 #include "Parser.h"
 #include "Scanner.h"
+#include "ModuleTable.h"
 
 
-namespace Oberon {
-
+/* namespace Oberon {
+ */
 
 void Parser::SynErr(int n) {
 	//if (errDist >= minErrDist)
@@ -1450,5 +1451,37 @@ void Errors::Exception(const wchar_t* s) {
 	exit(1);
 }
 
-} // namespace
+namespace ModTab{class Module;}
 
+Value* Parser::DesignatorMaybeWithExprListRepeatingPartRecordCL1::calc(Parser* parser, identRecord id1, SymbolTable &tab){
+			identRecord id2; id2.ident_=clause1_identRec;
+			struct Obj* obj = tab.Find(id1.ident_);
+			if (obj==0) {
+				tab.Err(L"Object not found");
+				tab.Err(id1.ident_);
+				return new ValueOfIdentDotIdent(id1, id2);
+			}else{
+				if(obj->kind==OKscope && obj->type!=0 && obj->type->getTypeNumber()==type_number_MODULE) {
+					wchar_t* dealiased=(wchar_t*)(obj->data);
+					if(dealiased == 0) dealiased = id1.ident_;
+					ModTab::Module* m = parser->getmodtab()->Find(dealiased);
+					if(m==0){tab.Err(L"module not found");tab.Err(id1.ident_);}else{
+						SymbolTable * tab2 = m->parser->tab;
+						Obj* obj2 = tab2->Find(id2.ident_);
+						if(obj2->kind==OKproc && obj2->type!=0 && obj2->type->getTypeNumber()==type_number_PROCEDURE &&
+						 		((obj2->data) != 0) && obj2->data->getKind()==DeclSeqProcDOK){
+								((DeclSeqProcDO*)(obj2->data))->DeclSeqProcPTR->callProcedure(m->parser);
+						}
+						return new ValueOfIdentDotIdent(id1, id2);
+					}
+				}else{
+					tab.Err(L"Must be MODULE, but is unknown");
+					tab.Err(id1.ident_);
+					return new ValueOfIdentDotIdent(id1, id2);
+				}
+		}
+}
+
+
+/* } // namespace
+ */

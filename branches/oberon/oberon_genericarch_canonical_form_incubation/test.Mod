@@ -1,5 +1,5 @@
 MODULE test;
   IMPORT Coco;
 BEGIN
-  Coco.Compile();
+  Coco.Compile;
 END test.

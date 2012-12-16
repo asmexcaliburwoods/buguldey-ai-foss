@@ -11,9 +11,7 @@
 #include "ModuleTable.h"
 #include "wchar.h"
 
-using namespace Oberon;
-
-int run(ModuleTable* modules, wchar_t* fileName);
+int run(ModTab::ModuleTable* modules, wchar_t* fileName);
 
 
 

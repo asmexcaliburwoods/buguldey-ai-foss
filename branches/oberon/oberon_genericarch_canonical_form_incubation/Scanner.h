@@ -63,8 +63,8 @@ Coco/R itself) does not fall under the GNU General Public License.
 #define COCO_HEAP_BLOCK_SIZE (64*1024)
 #define COCO_CPP_NAMESPACE_SEPARATOR L':'
 
-namespace Oberon {
-
+/* namespace Oberon {
+ */
 
 // string handling, wide character
 wchar_t* coco_string_create(const wchar_t *value);
@@ -287,8 +287,8 @@ public:
 
 }; // end Scanner
 
-} // namespace
-
+/* } // namespace
+ */
 
 #endif
 

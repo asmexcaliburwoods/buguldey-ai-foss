@@ -16,13 +16,11 @@ Distributed under the terms of GNU General Public License, v.3 or later
 
 #include "interpreter.h"
 
-using namespace Oberon;
-
 int main (const int argc, const char *argv[]) {
 	if (argc == 2) {
 		wchar_t *fileName = coco_string_create(argv[1]);
 		Errors *errors = new Errors(); abortIfNull(errors);
-		ModuleTable *modules = new ModuleTable(errors);	abortIfNull(modules);
+		ModTab::ModuleTable *modules = new ModTab::ModuleTable(errors);	abortIfNull(modules);
 		int errorsCount=run(modules, fileName);
 		if (errorsCount != 0) return 2;
 		return 0;

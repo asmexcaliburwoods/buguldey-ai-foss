@@ -1,11 +1,13 @@
 #include "CodeGenerator.h"
+#include "ModuleTable.h"
 #include "Parser.h"
+#include "Types.h"
 #include <assert.h>
-#include "interpreter.h"
 #include <stdio.h>
 #include <wchar.h>
 
-void Oberon::CodeGenerator::Disassemble(Parser* parser) {
+/*
+void CodeGenerator::Disassemble(Parser* parser) {
 	int maxPc = pc;
 	wprintf(L"TOP PC: %3d\n", pc);
 	wprintf(L"DISASSEMBLING:\n");
@@ -25,8 +27,8 @@ void Oberon::CodeGenerator::Disassemble(Parser* parser) {
 				wprintf(L"\n");
 	}
 }
-
-using namespace Oberon;
+*/
+//using namespace Oberon;
 
 /*void CodeGenerator::WriteObjFile(Oberon::Parser::ModuleRecord &moduleAST){
 	int len=wstrlen(moduleAST.moduleName);
@@ -38,178 +40,21 @@ using namespace Oberon;
 	fclose(objFile);
 }*/
 
-namespace Oberon {
 
-int wstrlen(const wchar_t* p){
-	int len = 0;
-	while(*p++)len++;
-	return len;
-}
+//void CodeGenerator::IMPORT(wchar_t* moduleName)
 
-void CodeGenerator::IMPORT(wchar_t* moduleName){
-	Module* m = modules->Find(moduleName);
-	if (m==0){
-		size_t len = wstrlen(moduleName);
-		wchar_t* fileName = (wchar_t*) malloc ((len+5)*sizeof(wchar_t));
-		swprintf(fileName, len+5, L"%ls%ls", moduleName, L".Mod");
-		run(modules, fileName);
-	}else{
-		wprintf(L"Imported %ls from a modcache.\n",moduleName);///TODO analyse updated files
-	}
-}
+//void CodeGenerator::InterpretImport(Parser::ImportListRecord* ip)
+//void CodeGenerator::InterpretModule(Parser::ModuleRecord *moduleASTPtr, SymbolTable &tab)
 
-void CodeGenerator::InterpretImport(Parser::ImportListRecord* ip){
-	const Parser::ModuleImportEntryRecord& mr = ip->moduleImportEntry;
-	if(mr.rhsPresent){
-		const Parser::identRec & modAlias = mr.lhs;
-		const Parser::identRec & modName = mr.rhs;
-		IMPORT(modName);
-	}else{
-		const Parser::identRec & modName = mr.lhs;
-		IMPORT(modName);
-	}
-}
-void CodeGenerator::InterpretModule(Parser::ModuleRecord *moduleASTPtr, Oberon::SymbolTable &tab){
-	assert(moduleASTPtr!=0);
-	Parser::ModuleRecord &moduleAST = *moduleASTPtr;
+//void CodeGenerator::InterpretModuleDeclSeq(Parser::DeclSeqRecord &declSeq, SymbolTable &tab)
+//void CodeGenerator::InterpretModuleInit(Parser::ModuleRecord *modAST, SymbolTable &tab)
 
-	if(moduleAST.initialized)return;
-	wprintf(L"\n(* %ls *)\n",moduleAST.moduleName);
-	Parser::ImportListRecord* ip = moduleAST.importListPtr;
-	while (ip!=0) {
-		InterpretImport(ip);
-		ip = ip->nullOrPtrToNextModuleImportEntriesList;
-	}
+//void CodeGenerator::InterpretStmtSeq(Parser::StatementSeqRecord& stmtSeq, SymbolTable &tab)
 
-	wprintf(L"\n(* %ls *)\n",moduleAST.moduleName);
-	tab.OpenScope();
-	/*
-	  "MODULE" Ident<r.moduleName> ";"
-	  ( 	(. r.importListPtr=0; .)
-	  |	(. r.importListPtr=new ImportListRecord(); abortIfNull(r.importListPtr); .)
-		ImportList<*(r.importListPtr)>
-	  )
-	  DeclSeq<r.declSeq>
-	  ["BEGIN" StatementSeq<r.stmtSeq>]
-	  "END" ident "."
-	 */
-	InterpretModuleDeclSeq(moduleAST.declSeq, tab);
+//CodeGenerator::CodeGenerator(ModuleTable *modules)
 
-	InterpretModuleInit(&moduleAST, tab);
 
-	tab.CloseScope();
-	//WriteObjFile(moduleAST);
-}
-
-void CodeGenerator::InterpretModuleDeclSeq(Parser::DeclSeqRecord &declSeq, Oberon::SymbolTable &tab){
-//	struct DeclSeqRecord{
-//		DeclSeqConstTypeVarListRecord ctvList;
-//		DeclSeqProcDeclFwdDeclListRecord pfList;
-//	};
-//	struct DeclSeqConstTypeVarListRecord{
-//		bool specified;
-//		DeclSeqConstTypeVarListMandatoryRecord* constTypeVarListPtr; // undefined if specified==false
-//	};
-	if(declSeq.ctvList.specified){
-		assert(declSeq.ctvList.constTypeVarListPtr!=0);
-		declSeq.ctvList.constTypeVarListPtr->interpret(*this, tab);
-	}
-	//	struct DeclSeqProcDeclFwdDeclListRecord{
-	//		bool specified;
-	//		DeclSeqProcDeclFwdDeclListMandatoryRecord* procDeclFwdDeclListPtr; // undefined if specified==false
-	//	};
-	if(declSeq.pfList.specified){
-		assert(declSeq.pfList.procDeclFwdDeclListPtr!=0);
-		declSeq.pfList.procDeclFwdDeclListPtr->interpret(*this, tab);
-	}
-}
-void CodeGenerator::InterpretModuleInit(Parser::ModuleRecord *modAST, Oberon::SymbolTable &tab){
-	assert(modAST!=0);
-//	StatementSeqRecord* stmtSeq; //may be null if there's no MODULE Init section
-	if(modAST->stmtSeq != 0){
-		wprintf(L"\nBEGIN ");
-		InterpretStmtSeq(*(modAST->stmtSeq), tab);
-	}
-	wprintf(L"END %ls.\n", modAST->moduleName);
-}
-
-void CodeGenerator::InterpretStmtSeq(Parser::StatementSeqRecord& stmtSeq, Oberon::SymbolTable &tab){
-//	StatementSeqRecord* stmtSeq; //may be null if there's no MODULE Init section
-//	struct StatementSeqRecord{
-//		StatementRecord *statementPtr;
-//		StatementSeqRecord* nullOrPtrToNextStatementSeq;
-//	};
-	if (stmtSeq.statementPtr!=0){
-		stmtSeq.statementPtr->interpret(tab);
-	}
-}
-
-CodeGenerator::CodeGenerator(ModuleTable *modules) {
-	this->modules = modules;
-
-		// opcodes
-		ADD  =  0; SUB   =  1; MUL   =  2; DIV   =  3; EQU   =  4; LSS = 5; GTR = 6; NEG = 7;
-		LOAD =  8; LOADG =  9; STO   = 10; STOG  = 11; CONST = 12;
-		CALL = 13; RET   = 14; ENTER = 15; LEAVE = 16;
-		JMP  = 17; FJMP  = 18; READ  = 19; WRITE = 20;
-
-		opcode[ 0] = coco_string_create("ADD  ");
-		opcode[ 1] = coco_string_create("SUB  ");
-		opcode[ 2] = coco_string_create("MUL  ");
-		opcode[ 3] = coco_string_create("DIV  ");
-		opcode[ 4] = coco_string_create("EQU  ");
-		opcode[ 5] = coco_string_create("LSS  ");
-		opcode[ 6] = coco_string_create("GTR  ");
-		opcode[ 7] = coco_string_create("NEG  ");
-		opcode[ 8] = coco_string_create("LOAD ");
-		opcode[ 9] = coco_string_create("LOADG");
-		opcode[10] = coco_string_create("STO  ");
-		opcode[11] = coco_string_create("STOG ");
-		opcode[12] = coco_string_create("CONST");
-		opcode[13] = coco_string_create("CALL ");
-		opcode[14] = coco_string_create("RET  ");
-		opcode[15] = coco_string_create("ENTER");
-		opcode[16] = coco_string_create("LEAVE");
-		opcode[17] = coco_string_create("JMP  ");
-		opcode[18] = coco_string_create("FJMP ");
-		opcode[19] = coco_string_create("READ ");
-		opcode[20] = coco_string_create("WRITE");
-
-		codeSize=32*1024;
-		code    = new char[codeSize];
-		globals = new int[100];
-		stack   = new int[100];
-
-		progStart = 0;
-
-		pc = 0;
-	}
-
-CodeGenerator::~CodeGenerator() {
-		coco_string_delete(opcode[ 0]);
-		coco_string_delete(opcode[ 1]);
-		coco_string_delete(opcode[ 2]);
-		coco_string_delete(opcode[ 3]);
-		coco_string_delete(opcode[ 4]);
-		coco_string_delete(opcode[ 5]);
-		coco_string_delete(opcode[ 6]);
-		coco_string_delete(opcode[ 7]);
-		coco_string_delete(opcode[ 8]);
-		coco_string_delete(opcode[ 9]);
-		coco_string_delete(opcode[10]);
-		coco_string_delete(opcode[11]);
-		coco_string_delete(opcode[12]);
-		coco_string_delete(opcode[13]);
-		coco_string_delete(opcode[14]);
-		coco_string_delete(opcode[15]);
-		coco_string_delete(opcode[16]);
-		coco_string_delete(opcode[17]);
-		coco_string_delete(opcode[18]);
-		coco_string_delete(opcode[19]);
-		coco_string_delete(opcode[20]);
-	}
-
-	//----- code generation methods -----
+/*	//----- code generation methods -----
 
 void CodeGenerator::Emit (char op) {
 		code[pc++] = op;
@@ -243,7 +88,7 @@ void CodeGenerator::Patch (int adr, int val) {
 
 //void CodeGenerator::InterpretModule(Parser::ModuleRecord *moduleASTPtr, Oberon::SymbolTable &tab);
 //void WriteObjFile(Oberon::ModuleRecord &moduleAST);
-
+*/
 /*
   //----- interpreter methods -----
 
@@ -340,4 +185,24 @@ void CodeGenerator::Patch (int adr, int val) {
 	}
 */
 
-} // namespace
+wchar_t* wstrconcat(const wchar_t* a, int alenchars, const wchar_t* b, const int blenchars){
+	wchar_t *buf = (wchar_t*)malloc((alenchars+blenchars+1)*sizeof(wchar_t));
+	abortIfNull(buf);
+	int len = 0;
+	while(*a){buf[len++]=*a++;}
+	while(*b){buf[len++]=*b++;}
+	buf[len]=(wchar_t)0;
+	return buf;
+}
+
+void CodeGenerator::IMPORT(wchar_t* moduleName){
+	ModTab::Module* m = modules->Find(moduleName);
+	if (m==0){
+		size_t len = mywstrlen(moduleName);
+		wchar_t* fileName = (wchar_t*) malloc ((len+5)*sizeof(wchar_t));
+		swprintf(fileName, len+5, L"%ls%ls", moduleName, L".Mod");
+		run(modules, fileName);
+	}else{
+		wprintf(L"Imported %ls from a modcache.\n",moduleName);///TODO analyse updated files
+	}
+}

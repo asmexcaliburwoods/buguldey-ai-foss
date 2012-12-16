@@ -35,8 +35,8 @@ Coco/R itself) does not fall under the GNU General Public License.
 #include <string.h>
 #include "Scanner.h"
 
-namespace Oberon {
-
+/* namespace Oberon {
+ */
 
 
 // string handling, wide character
@@ -846,5 +846,5 @@ void Scanner::ResetPeek() {
 	pt = tokens;
 }
 
-} // namespace
-
+/* } // namespace
+ */

@@ -68,7 +68,7 @@ Scanner.h Specification
 #define COCO_HEAP_BLOCK_SIZE (64*1024)
 #define COCO_CPP_NAMESPACE_SEPARATOR L':'
 
--->namespace_open
+/* -->namespace_open */
 
 // string handling, wide character
 wchar_t* coco_string_create(const wchar_t *value);
@@ -290,7 +290,7 @@ public:
 
 }; // end Scanner
 
--->namespace_close
+/* -->namespace_close */
 
 #endif
 
@@ -306,7 +306,7 @@ Scanner.cpp Specification
 #include <string.h>
 #include "Scanner.h"
 
--->namespace_open
+/* -->namespace_open */
 
 
 // string handling, wide character
@@ -898,4 +898,4 @@ void Scanner::ResetPeek() {
 	pt = tokens;
 }
 
--->namespace_close
+/* -->namespace_close */

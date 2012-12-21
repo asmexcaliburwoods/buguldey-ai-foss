@@ -50,19 +50,23 @@ class CodeGenerator {
 		assert(modAST!=0);
 	//	StatementSeqRecord* stmtSeq; //may be null if there's no MODULE Init section
 		if(modAST->stmtSeq != 0){
-			wprintf(L"\nBEGIN ");
-			InterpretStmtSeq(p, *(modAST->stmtSeq), tab);
+			wprintf(L"\nBEGIN (* %ls *)", modAST->moduleName);
+			InterpretStmtSeq(p, (modAST->stmtSeq), tab);
 		}
 		wprintf(L"END %ls.\n", modAST->moduleName);
 	}
-	void InterpretStmtSeq(Parser*p, Parser::StatementSeqRecord& stmtSeq, SymbolTable &tab){
+	void InterpretStmtSeq(Parser*p, Parser::StatementSeqRecord* stmtSeq, SymbolTable &tab){
 		//	StatementSeqRecord* stmtSeq; //may be null if there's no MODULE Init section
 		//	struct StatementSeqRecord{
 		//		StatementRecord *statementPtr;
 		//		StatementSeqRecord* nullOrPtrToNextStatementSeq;
 		//	};
-			if (stmtSeq.statementPtr!=0){
-				stmtSeq.statementPtr->interpret(p, tab);
+			for(;;){
+				if(stmtSeq==0)return;
+				if (stmtSeq->statementPtr!=0){
+					stmtSeq->statementPtr->interpret(p, tab);
+				}
+				stmtSeq=stmtSeq->nullOrPtrToNextStatementSeq;
 			}
 		}
 public:
@@ -80,7 +84,7 @@ public:
 //			Module* m = modtab->Find(modName);
 //			if(m==0){wprintf(L"module %ls not found",modName);exit(1);}
 			parser->tab->NewObj(modName, OKscope, tm, 0);
-			ModAliasRefDO* DO;
+			ModAliasRefDO* DO = new ModAliasRefDO(); abortIfNull(DO);
 			DO->modName = modName;
 			parser->tab->NewObj(modAlias, OKscope, tm, DO);
 			IMPORT(modName);

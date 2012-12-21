@@ -74,6 +74,10 @@ void abortIfNull(void* ptr){
 	struct QualidentOrOptionalExprListRecord{
 		boolean exprListPresent;
 		ExprListRecord exprList;
+		Value* calc(Parser* parser, identRecord ident, SymbolTable &tab){
+			wprintf(L"CALLING %ls.%ls(args)...", parser->modulePtr->moduleName, ident.ident_);
+			return 0;
+		}
 	};
 
 	struct FactorRecord_Expr: public FactorRecord{
@@ -132,8 +136,11 @@ void abortIfNull(void* ptr){
 	};
 
 	struct DesignatorMaybeWithExprListRepeatingPartRecordCL4 : public DesignatorMaybeWithExprListRepeatingPartRecord{
+		virtual ~DesignatorMaybeWithExprListRepeatingPartRecordCL4(){}
 		virtual ClauseEnum getClauseNumber() {return cl4;}
-		virtual Value* calc(Parser* parser, identRecord ident, SymbolTable &tab){return new ValueTBD();}
+		virtual Value* calc(Parser* parser, identRecord ident, SymbolTable &tab){
+			return clause4_qualidentOrOptionalExprList.calc(parser, ident, tab);
+		}
 		QualidentOrOptionalExprListRecord clause4_qualidentOrOptionalExprList;
 		//"(" QualidentOrOptionalExprList ")"
 	};
@@ -478,6 +485,8 @@ void abortIfNull(void* ptr){
 	  	virtual void interpret(Parser *parser, SymbolTable &tab){
 	  		if(assignment){
 		  		wprintf(L"ASSIGNMENT ");
+		  		Value * lvalue = lhsExpr.calculate(parser, tab);
+		  		Value * rvalue = rhsExpr.calculate(parser, tab);
 	  		}else{
 		  		lhsExpr.calculate(parser, tab);
 	  		}
@@ -901,12 +910,14 @@ FormalPars<FormalParsRecord &r>
 		":" Qualident<*(r.optionalQualidentPtr)>
 	).
 
-/* FPSection    = [VAR] ident {"," ident} ":" Type. */
+/* FPSection    = [VAR|CONST] ident {"," ident} ":" Type. */
 FPSection<FPSectionRecord &r>
-=
-	(	(. r.var=false; .)
+=     (. r.var=r.const_=false; .)
+	(	
 	|	(. r.var=true; .)
 		"VAR"
+	|	(. r.const_=true; .)
+		"CONST"
 	)
 	IdentList2<r.identList>
 	":" Type<r.typePtr>.
@@ -1034,8 +1045,11 @@ SimpleExprAddOpClause<SimpleExprAddOpRecord &r>
 
 /* SimpleExpr   = ["+" | "-"] Term {AddOp Term}.  */
 SimpleExpr<SimpleExprRecord &e>  
-= (	(|"+") 		(. e.minus=false; .)
-  | "-"			(. e.minus=true; .)
+= 				
+  (	( 	(. e.signum=false; .)
+    |"+" 		(. e.minus=false; e.signum=true; .)
+    )
+  | "-"			(. e.minus=true; e.signum=true; .)
   ) 
   Term<e.term> 
   (				(. e.nullOrNextSimpleExprAddOpRecord=0; .)

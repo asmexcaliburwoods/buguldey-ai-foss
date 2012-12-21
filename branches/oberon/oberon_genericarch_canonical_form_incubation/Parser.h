@@ -153,6 +153,10 @@ void abortIfNull(void* ptr){
 	struct QualidentOrOptionalExprListRecord{
 		boolean exprListPresent;
 		ExprListRecord exprList;
+		Value* calc(Parser* parser, identRecord ident, SymbolTable &tab){
+			wprintf(L"CALLING %ls.%ls(args)...", parser->modulePtr->moduleName, ident.ident_);
+			return 0;
+		}
 	};
 
 	struct FactorRecord_Expr: public FactorRecord{
@@ -211,8 +215,11 @@ void abortIfNull(void* ptr){
 	};
 
 	struct DesignatorMaybeWithExprListRepeatingPartRecordCL4 : public DesignatorMaybeWithExprListRepeatingPartRecord{
+		virtual ~DesignatorMaybeWithExprListRepeatingPartRecordCL4(){}
 		virtual ClauseEnum getClauseNumber() {return cl4;}
-		virtual Value* calc(Parser* parser, identRecord ident, SymbolTable &tab){return new ValueTBD();}
+		virtual Value* calc(Parser* parser, identRecord ident, SymbolTable &tab){
+			return clause4_qualidentOrOptionalExprList.calc(parser, ident, tab);
+		}
 		QualidentOrOptionalExprListRecord clause4_qualidentOrOptionalExprList;
 		//"(" QualidentOrOptionalExprList ")"
 	};
@@ -557,6 +564,8 @@ void abortIfNull(void* ptr){
 	  	virtual void interpret(Parser *parser, SymbolTable &tab){
 	  		if(assignment){
 		  		wprintf(L"ASSIGNMENT ");
+		  		Value * lvalue = lhsExpr.calculate(parser, tab);
+		  		Value * rvalue = rhsExpr.calculate(parser, tab);
 	  		}else{
 		  		lhsExpr.calculate(parser, tab);
 	  		}

@@ -212,13 +212,14 @@ void Parser::Expr(ExprRecord &expr) {
 void Parser::SimpleExpr(SimpleExprRecord &e) {
 		if (StartOf(3)) {
 			if (StartOf(4)) {
+				e.signum=false; 
 			} else {
 				Get();
+				e.minus=false; e.signum=true; 
 			}
-			e.minus=false; 
 		} else if (la->kind == 15 /* "-" */) {
 			Get();
-			e.minus=true; 
+			e.minus=true; e.signum=true; 
 		} else SynErr(72);
 		Term(e.term);
 		if (StartOf(5)) {
@@ -534,7 +535,7 @@ void Parser::FormalPars(FormalParsRecord &r) {
 		Expect(34 /* "(" */);
 		if (la->kind == 35 /* ")" */) {
 			r.optionalFPSectionsListPtr=0; 
-		} else if (la->kind == _ident || la->kind == 28 /* "VAR" */) {
+		} else if (la->kind == _ident || la->kind == 26 /* "CONST" */ || la->kind == 28 /* "VAR" */) {
 			r.optionalFPSectionsListPtr=new FPSectionsListMandatoryRecord(); abortIfNull(r.optionalFPSectionsListPtr); 
 			FPSectionsListMandatory(*(r.optionalFPSectionsListPtr));
 		} else SynErr(95);
@@ -572,10 +573,13 @@ void Parser::FPSectionsListMandatory(FPSectionsListMandatoryRecord &r) {
 }
 
 void Parser::FPSection(FPSectionRecord &r) {
+		r.var=r.const_=false; 
 		if (la->kind == _ident) {
-			r.var=false; 
 		} else if (la->kind == 28 /* "VAR" */) {
 			r.var=true; 
+			Get();
+		} else if (la->kind == 26 /* "CONST" */) {
+			r.const_=true; 
 			Get();
 		} else SynErr(99);
 		IdentList2(r.identList);

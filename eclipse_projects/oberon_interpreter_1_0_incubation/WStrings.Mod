@@ -1,5 +1,0 @@
-MODULE WStrings;
-
-TYPE WSTRING*=SYSTEM.WSTRING;
-
-END WStrings.

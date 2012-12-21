@@ -26,8 +26,9 @@ struct identRecord{
 	class ValueMultipliedBySignedInt;
 
 	struct Value{
-		virtual TypeRecord* getType()=0;
-		virtual ~Value(){}
+		Value(){};
+		virtual TypeRecord* getType(){return 0;};
+		virtual ~Value(){};
 		Value* multiply(signed int number);
 	};
 
@@ -36,12 +37,14 @@ struct identRecord{
 		Value* v1;
 		signed int number;
 	public:
-		virtual TypeRecord* getType(){return v1->getType();}
+		virtual TypeRecord* getType(){return v1==0?0:v1->getType();}
 		ValueMultipliedBySignedInt(Value* v1_, signed int number_):v1(v1_),number(number_){}
 		virtual ~ValueMultipliedBySignedInt(){if(v1!=0)delete v1;}
 	};
 
 	struct ValueTBD: public Value{
+		ValueTBD(){};
+		virtual ~ValueTBD(){};
 		virtual TypeRecord* getType(){return 0;}
 	};
 
@@ -201,13 +204,14 @@ static const int
 	  			SimpleExprAddOpClause<*e.nullOrNextSimpleExprAddOpRecord>
 	  ).
 	*/	struct SimpleExprRecord{
+			bool signum;
 			bool minus;
 			TermRecord term;
 		 	SimpleExprAddOpRecord* nullOrNextSimpleExprAddOpRecord;
 			virtual Value* calculate(Parser *parser, SymbolTable &tab){
-			    signed int sgn = minus?-1:+1;
-			    Value* v1 = term.calculate(parser, tab);
-			    Value* v1a = v1->multiply(sgn);
+				signed int sgn = minus?-1:+1;
+				Value* v1 = term.calculate(parser, tab);
+				Value* v1a = v1==0?0:!signum?v1:v1->multiply(sgn);
 			    if(nullOrNextSimpleExprAddOpRecord!=0){
 			      v1a = nullOrNextSimpleExprAddOpRecord->calculate(tab, v1a);
 			    }
@@ -292,6 +296,7 @@ static const int
 
 	struct FPSectionRecord{
 		bool var;
+		bool const_;
 		IdentList2Record identList;
 		TypeRecord *typePtr;
 	};

@@ -13,6 +13,7 @@ int run(ModTab::ModuleTable *modules, wchar_t* fileName){
     wprintf(L"Attempting to run %ls...\n",fileName);
 	Scanner *scanner = new Scanner(fileName); abortIfNull(scanner);
 	Parser *parser = new Parser(scanner, modules->errors); abortIfNull(parser);
+	int errorsCount2=parser->errors->count;
 	parser->modtab=modules;
 	//parser->addParserListener(ParserListener)
 	parser->tab = new SymbolTable(parser); abortIfNull(parser->tab);
@@ -26,8 +27,7 @@ int run(ModTab::ModuleTable *modules, wchar_t* fileName){
 	int errorsCount=parser->errors->count;
 	if (errorsCount == 0) {
 		wprintf(L"Parsed successfully! Interpreting %ls.\n", parser->modulePtr->moduleName);
-		parser->gen->InterpretModule(parser, parser->modulePtr, *(parser->tab), modules);
-		//parser->gen->Interpret();
+		errorsCount = parser->gen->InterpretModule(parser, parser->modulePtr, *(parser->tab), modules);
 	}else{
 		wprintf(L"Parsing of %ls failed: %d errors.\n",fileName, errorsCount);
 	}

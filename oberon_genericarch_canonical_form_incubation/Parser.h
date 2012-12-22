@@ -353,9 +353,30 @@ void abortIfNull(void* ptr){
 		TypeDeclRecord typeDecl;
 		DeclSeqTypeDeclListMandatoryRecord *nullOrPtrToNextDeclSeqTypeDeclListMandatory;
 	};
+	class VarDeclRecord;
+	
+	struct DeclVarDO: public DataObject{
+		DataObjectKind getKind(){return DeclVarDOK;}
+		VarDeclRecord *DeclVarPTR;
+	};
 	struct DeclSeqVarDeclListMandatoryRecord{
 		VarDeclRecord varDecl;
 		DeclSeqVarDeclListMandatoryRecord *nullOrPtrToNextDeclSeqVarDeclListMandatory;
+		virtual void interpret(CodeGenerator &codegen, SymbolTable &tab){
+			DeclSeqVarDeclListMandatoryRecord*cur = this;
+			while(cur!=0){
+				IdentListRecord* curIL = &(cur->varDecl.identList);
+				while(curIL!=0){
+					IdentDefRecord identDef = curIL->identDef;
+					wprintf(L"VAR %ls\n", identDef.ident_);
+					DeclVarDO* DO = new DeclVarDO; 
+					DO->DeclVarPTR=&(cur->varDecl);
+					tab.parser->tab->NewObj(identDef.ident_, OKvar, cur->varDecl.typePtr, DO);
+					curIL = curIL->nullOrCommaIdentList;
+				}
+				cur = cur->nullOrPtrToNextDeclSeqVarDeclListMandatory;
+			}
+		}
 	};
 	
 	struct DeclSeqConstDeclListRecord{
@@ -369,6 +390,10 @@ void abortIfNull(void* ptr){
 	struct DeclSeqVarDeclListRecord{
 		bool specified;
 		DeclSeqVarDeclListMandatoryRecord varDecls; // undefined if specified==false
+		virtual void interpret(CodeGenerator &codegen, SymbolTable &tab){
+			if(!specified)return;
+			varDecls.interpret(codegen,tab);
+		}
 	};
 
 	enum DeclEnum {decl_const,decl_type,decl_var};
@@ -403,7 +428,7 @@ void abortIfNull(void* ptr){
 	struct DeclSeqVar : public DeclSeqConstTypeVarListMandatoryRecord{
 		virtual DeclEnum get_decl_variant() {return decl_var;}
 		virtual void interpret(CodeGenerator &codegen, SymbolTable &tab){
-			wprintf(L"VAR ");
+			varDeclList.interpret(codegen,tab);
 		  	DeclSeqConstTypeVarListMandatoryRecord::interpret(codegen,tab);
 		}
 		DeclSeqVarDeclListRecord varDeclList;

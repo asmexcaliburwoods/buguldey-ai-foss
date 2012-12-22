@@ -195,14 +195,15 @@ wchar_t* wstrconcat(const wchar_t* a, int alenchars, const wchar_t* b, const int
 	return buf;
 }
 
-void CodeGenerator::IMPORT(wchar_t* moduleName){
+int CodeGenerator::IMPORT(wchar_t* moduleName){
 	ModTab::Module* m = modules->Find(moduleName);
 	if (m==0){
 		size_t len = mywstrlen(moduleName);
 		wchar_t* fileName = (wchar_t*) malloc ((len+5)*sizeof(wchar_t));
 		swprintf(fileName, len+5, L"%ls%ls", moduleName, L".Mod");
-		run(modules, fileName);
+		return run(modules, fileName);
 	}else{
 		wprintf(L"Imported %ls from a modcache.\n",moduleName);///TODO analyse updated files
+		return 0;
 	}
 }

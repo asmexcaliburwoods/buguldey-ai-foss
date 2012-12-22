@@ -8,13 +8,21 @@
 #ifndef TYPES_H_
 #define TYPES_H_
 
+#include "assert.h"
+#include "SymbolTable.h"
+
 struct TypeRecord{
 	virtual int getTypeNumber()=0;
 	virtual ~TypeRecord(){};
+	virtual void printToStdout(){
+			wprintf(L"(type:%d)",getTypeNumber());}
 };
 
-#include "SymbolTable.h"
-#include "assert.h"
+static void PRINT_TYPE_AS_STRING(TypeRecord *tp){
+	if (tp==0) wprintf(L"(TYPE:NULLPRTEXCEPTION)");
+	else tp->printToStdout();
+}
+
 
 
 typedef wchar_t* identRec;
@@ -237,7 +245,7 @@ static const int
 		SimpleExprRecord rhs;
 		virtual Value* calculate(Parser *parser, SymbolTable &tab){
 			if(opAndRhsPresent){
-			   wprintf(L"RELATION_CALC ");
+			   wprintf(L"BINARY_EXPR ");
 			   assert(0);
 			}else{
 				return lhs.calculate(parser, tab);
@@ -292,26 +300,6 @@ static const int
 	struct IdentList2Record{
 		identRec ident_;
 		IdentList2Record* nullOrCommaIdentList;
-	};
-
-	struct FPSectionRecord{
-		bool var;
-		bool const_;
-		IdentList2Record identList;
-		TypeRecord *typePtr;
-	};
-	struct FPSectionsListMandatoryRecord{
-		FPSectionRecord fpSection;
-		FPSectionsListMandatoryRecord *next;
-	};
-	struct FormalParsRecord{
-		FPSectionsListMandatoryRecord *optionalFPSectionsListPtr;
-		QualidentRecord *optionalQualidentPtr;
-	};
-
-	struct TypePROCEDURE: public TypeRecord{
-		int getTypeNumber(){return type_number_PROCEDURE;}
-		FormalParsRecord *optionalFormalParsPtr;
 	};
 
 	class TypeMODULE : public TypeRecord{

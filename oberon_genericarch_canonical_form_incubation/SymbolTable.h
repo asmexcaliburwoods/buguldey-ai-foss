@@ -9,7 +9,7 @@ Distributed under the terms of GNU General Public License, v.3 or later
 
 enum object_kinds {OKvar, OKproc, OKscope};
 
-enum DataObjectKind {DeclSeqProcDOK, ForwardDeclDOK, ModAliasRefDOK, DeclVarDOK};
+enum DataObjectKind {DeclSeqProcDOK, ModAliasRefDOK, DeclVarDOK};
 
 struct DataObject{
 	virtual DataObjectKind getKind()=0;
@@ -57,7 +57,7 @@ class SymbolTable
 public:
 
 	int curLevel;	// nesting level of current scope
-	Obj *undefObj;	// object node for erroneous symbols
+	//Obj *undefObj;	// object node for erroneous symbols
 	Obj *topScope;	// topmost procedure scope
 
 	Errors *errors;
@@ -67,7 +67,7 @@ public:
 	void Err(const wchar_t* msg);
 
 	// open a new scope and make it the current scope (topScope)
-	void OpenScope (wchar_t* scopeName);
+	Obj* OpenScope ();
 
 	// close the current scope
 	void CloseScope ();
@@ -78,8 +78,15 @@ public:
 	// search the name in all open scopes and return its object node
 	Obj* Find (wchar_t* name);
 
+	// search the name in all open scopes and return its object node
+	Obj* FindSilent (wchar_t* name);
+
 	// search the name in a given scopes and return its object node
 	Obj* Find2 (Obj* scope, wchar_t* name);
+
+private:
+	// search the name in all open scopes and return its object node
+	Obj* Find0 (wchar_t* name, bool silent);
 };
 
 #endif // !defined(ROD_SYMBOLTABLE_H)

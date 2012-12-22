@@ -13,9 +13,9 @@ SymbolTable::SymbolTable(Parser *parser) {
 	errors = parser->errors;
 	topScope = NULL;
 	curLevel = -1;
-	undefObj = new Obj();
-	undefObj->name  = coco_string_create("undef"); undefObj->type = 0; undefObj->kind = OKvar;
-	undefObj->adr = 0; undefObj->level = 0; undefObj->next = NULL;
+	//undefObj = new Obj();
+	//undefObj->name  = coco_string_create("undef"); undefObj->type = 0; undefObj->kind = OKvar;
+	//undefObj->adr = 0; undefObj->level = 0; undefObj->next = NULL;
 }
 
 void SymbolTable::Err(const wchar_t* msg) {
@@ -24,16 +24,17 @@ void SymbolTable::Err(const wchar_t* msg) {
 
 
 // open a new scope and make it the current scope (topScope)
-void SymbolTable::OpenScope (wchar_t* scopeName) {
+Obj* SymbolTable::OpenScope () {
 	Obj *scop = new Obj();
-	scop->name = coco_string_create(scopeName); scop->kind = OKscope;
+	scop->name = 0; scop->kind = OKscope;
 	scop->locals = NULL; scop->nextAdr = 0;
 	scop->next = topScope; topScope = scop;
 	curLevel++;
+	return scop;
 }
 
 
-// close the current scope
+// close the current scope //TODO destroy topScope->locals
 void SymbolTable::CloseScope () {
 	topScope = topScope->next; curLevel--;
 }
@@ -56,9 +57,13 @@ Obj* SymbolTable::NewObj (wchar_t* name, object_kinds kind, TypeRecord* type, Da
 	return obj;
 }
 
-
 // search the name in all open scopes and return its object node
 Obj* SymbolTable::Find (wchar_t* name) {
+	return Find0(name,false);
+}
+
+// search the name in all open scopes and return its object node
+Obj* SymbolTable::Find0 (wchar_t* name, bool silent) {
 	wprintf(L"\n    SYM FI1 %ls: %ls ", parser->modulePtr->moduleName, name);
 	Obj *obj, *scope;
 	scope = topScope;
@@ -70,12 +75,18 @@ Obj* SymbolTable::Find (wchar_t* name) {
 		}
 		scope = scope->next;
 	}
-	wchar_t str[100];
-	coco_swprintf(str, 100, L"%ls is undeclared", name);
-	Err(str);
-	return undefObj;
+	if(!silent){
+		wchar_t str[100];
+		coco_swprintf(str, 100, L"%ls is undeclared", name);
+		Err(str);
+	}
+	return 0;//undefObj;
 }
 
+// search the name in all open scopes and return its object node
+Obj* SymbolTable::FindSilent (wchar_t* name) {
+	return Find0(name, true);
+}
 
 // search the name in a given scope and return its object node
 Obj* SymbolTable::Find2 (Obj *scope_, wchar_t* name) {
@@ -90,5 +101,5 @@ Obj* SymbolTable::Find2 (Obj *scope_, wchar_t* name) {
 	wchar_t str[100];
 	coco_swprintf(str, 100, L"%ls is undeclared", name);
 	Err(str);
-	return undefObj;
+	return 0;//undefObj;
 }

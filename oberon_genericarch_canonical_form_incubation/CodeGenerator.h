@@ -22,6 +22,11 @@ Distributed under the terms of GNU General Public License, v.3 or later
 class SymbolTable;
 
 
+struct ModAliasRefDO: public DataObject{
+	DataObjectKind getKind(){return ModAliasRefDOK;}
+	wchar_t *modName;
+};
+
 class CodeGenerator {
 	ModTab::ModuleTable *modules;
 	void InterpretModuleDeclSeq(Parser::DeclSeqRecord &declSeq, SymbolTable &tab){
@@ -71,10 +76,6 @@ class CodeGenerator {
 		}
 public:
 	int IMPORT(wchar_t* moduleName);
-	struct ModAliasRefDO: public DataObject{
-		DataObjectKind getKind(){return ModAliasRefDOK;}
-		wchar_t *modName;
-	};
 	int InterpretImport(Parser::ImportListRecord* ip, Parser* parser, Parser::ModuleRecord* moduleRecord, ModTab::ModuleTable * modtab){
 		const Parser::ModuleImportEntryRecord& mr = ip->moduleImportEntry;
 		int errCnt=0;
@@ -119,7 +120,7 @@ public:
 	int InterpretModule(Parser* p, Parser::ModuleRecord *moduleASTPtr, SymbolTable &tab, ModTab::ModuleTable * modtab){
 		assert(moduleASTPtr!=0);
 		Parser::ModuleRecord &moduleAST = *moduleASTPtr;
-		tab.OpenScope(moduleAST.moduleName);
+		tab.OpenScope();
 
 		wprintf(L"\n(* %ls *)\n",moduleAST.moduleName);
 		Parser::ImportListRecord* ip = moduleAST.importListPtr;

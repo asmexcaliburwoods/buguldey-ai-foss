@@ -35,12 +35,11 @@ Coco/R itself) does not fall under the GNU General Public License.
 
 class CodeGenerator;
 
-#include "common.h"
-
 #include "stdio.h"
 #include "wchar.h"
 #include "assert.h"
 #include "Types.h"
+#include "common.h"
 
 #include "SymbolTable.h"
 //#include "CodeGenerator.h"
@@ -103,14 +102,7 @@ public:
 	Token *t;			// last recognized token
 	Token *la;			// lookahead token
 
-void abortIfNull(void* ptr){
-		if(ptr==0){
-			wprintf(L"No memory.\n"); 
-			exit(2);
-		}
-	}
-
-	typedef bool boolean;
+typedef bool boolean;
 	
 	static const int // operators
 	  illegal_operator=1, plus=2, minus=3, times=4, slash=5, equals=6, less=7, greater=8,
@@ -293,7 +285,7 @@ void abortIfNull(void* ptr){
 				if(cur->statementPtr!=0){
 					cur->statementPtr->interpret(parser, tab);
 				}
-				cur = nullOrPtrToNextStatementSeq;
+				cur = cur->nullOrPtrToNextStatementSeq;
 			}while(cur!=0);
 		}
 	};
@@ -334,9 +326,58 @@ void abortIfNull(void* ptr){
 		ReceiverRecord receiver;
 	};
 
+	struct FPSectionRecord{
+		bool var;
+		bool const_;
+		IdentList2Record identList;
+		TypeRecord *typePtr;
+		void addAllToScope(Parser* p){
+			IdentList2Record *cur = &identList;
+			do{
+				p->tab->NewObj(cur->ident_, OKvar, typePtr, 0);
+				cur=cur->nullOrCommaIdentList;
+			}while(cur!=0);
+		}
+	};
+
+	struct FPSectionsListMandatoryRecord{
+		FPSectionRecord fpSection;
+		FPSectionsListMandatoryRecord *next;
+		void addAllToScope(Parser*p){
+			FPSectionsListMandatoryRecord *cur=this;
+			do{
+				cur->fpSection.addAllToScope(p);
+				cur=cur->next;
+			}while(cur!=0);
+		}
+	};
+	
+	struct FormalParsRecord{
+		//formal params
+		FPSectionsListMandatoryRecord *optionalFPSectionsListPtr;
+
+		//return type Qualident
+		QualidentRecord *optionalQualidentPtr;
+		void addAllToScope(Parser*p){
+			if(optionalFPSectionsListPtr==0)return;
+			optionalFPSectionsListPtr->addAllToScope(p);
+		}
+	};
+
+	struct TypePROCEDURE: public TypeRecord{
+		int getTypeNumber(){return type_number_PROCEDURE;}
+		FormalParsRecord *optionalFormalParsPtr;
+	};
+
+
 	struct OptionalFormalParsRecord{
 		bool formalParsSpecified;
 		FormalParsRecord formalPars;
+		void addAllToScope(Parser*p){
+			if(formalParsSpecified){
+				formalPars.addAllToScope(p);
+			}
+		}
 	};
 
 	struct ForwardDeclRecord{
@@ -503,39 +544,62 @@ void abortIfNull(void* ptr){
 	struct DeclSeqProcDO: public DataObject{
 		DataObjectKind getKind(){return DeclSeqProcDOK;}
 		DeclSeqProc *DeclSeqProcPTR;
+		ForwardDeclRecord *ForwardDeclPTR;
 	};
 	struct DeclSeqProc : public DeclSeqProcDeclFwdDeclListMandatoryRecord{
 		virtual declTypePF decl_variant(){return decl_proc;};
 		virtual void interpret(CodeGenerator &codegen, SymbolTable &tab){
 		  wprintf(L"PROCEDURE %ls\n", procDecl.identDef.ident_);
-		  //tab.OpenScope(procDecl.identDef.ident_);
-		  DeclSeqProcDO* DO = new DeclSeqProcDO;
-		  DO->DeclSeqProcPTR=this;
-		  tab.parser->tab->NewObj(procDecl.identDef.ident_, OKproc, new TypePROCEDURE, DO);
-		  //tab.CloseScope();
+		  Obj* obj = tab.parser->tab->FindSilent(procDecl.identDef.ident_);
+		  DeclSeqProcDO* DO = 0;
+		  if (obj!=0 && obj->type!=0 && obj->kind==OKproc && obj->type->getTypeNumber()==type_number_PROCEDURE){
+			  DO = (DeclSeqProcDO*) obj->data;
+			  DO->DeclSeqProcPTR=this;
+		  }else{
+			  if(obj==0){
+				  DO = new DeclSeqProcDO; abortIfNull(DO);
+				  DO->DeclSeqProcPTR=this;
+				  DO->ForwardDeclPTR=0;
+	    		  tab.parser->tab->NewObj(procDecl.identDef.ident_, OKproc, new TypePROCEDURE, DO);
+			  }else{
+			    const int sz=512;
+				wchar_t str[sz];
+				coco_swprintf(str, sz, L"Cannot define procedure %ls: some object with a name %ls already declared", procDecl.identDef.ident_, procDecl.identDef.ident_);
+				tab.parser->tab->Err(str);
+			  }
+		  }
+		  /*
+		  Obj* scope = tab.OpenScope();
+		  if(DO!=0){
+			  DO->scope = scope;
+		  }
+		  tab.CloseScope();
+		  */
 		  DeclSeqProcDeclFwdDeclListMandatoryRecord::interpret(codegen,tab);
 		}
 		ProcDeclRecord procDecl;
 		virtual Value* callProcedure(Parser* parser){
-			wprintf(L"CALLING %ls.%ls.... ", parser->modulePtr->moduleName, procDecl.identDef.ident_);
+			wprintf(L"CALLING %ls.%ls... ", parser->modulePtr->moduleName, procDecl.identDef.ident_);
+  		    Obj* scope = parser->tab->OpenScope();
+  		    //OptionalFormalParsRecord optionalFormalPars
+  		    procDecl.optionalFormalPars.addAllToScope(parser);
 			if(procDecl.procBodySpecifiedHere){
 				if(procDecl.procBodyStmtSeq!=0){
 					procDecl.procBodyStmtSeq->perform(parser, *(parser->tab));
 				}
 			}
-			return new ValueTBD();
+			Value* v = new ValueTBD();
+			parser->tab->CloseScope();
+		    return v;
 		}
 	};
 	
-	struct ForwardDeclRecordDO: public DataObject{
-		DataObjectKind getKind(){return ForwardDeclDOK;}
-		ForwardDeclRecord *ForwardDeclPTR;
-	};
 	struct DeclSeqFwd : public DeclSeqProcDeclFwdDeclListMandatoryRecord{
 		virtual declTypePF decl_variant(){return decl_fwd;};
 		virtual void interpret(CodeGenerator &codegen, SymbolTable &tab){
-		  wprintf(L"FORWARD ");
-		  ForwardDeclRecordDO* DO = new ForwardDeclRecordDO;
+		  wprintf(L"FORWARD ^%ls\n",fwdDecl.identDef.ident_);
+		  DeclSeqProcDO* DO = new DeclSeqProcDO;
+		  DO->DeclSeqProcPTR=0;
 		  DO->ForwardDeclPTR=&fwdDecl;
 		  tab.parser->tab->NewObj(fwdDecl.identDef.ident_, OKproc, new TypePROCEDURE, DO);
 		  DeclSeqProcDeclFwdDeclListMandatoryRecord::interpret(codegen,tab);

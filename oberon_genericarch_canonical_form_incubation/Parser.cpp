@@ -34,6 +34,8 @@ Coco/R itself) does not fall under the GNU General Public License.
 #include "Parser.h"
 #include "Scanner.h"
 #include "ModuleTable.h"
+#include "SymbolTable.h"
+#include "CodeGenerator.h"
 
 
 /* namespace Oberon {
@@ -668,7 +670,7 @@ void Parser::TypeProcedure(TypePROCEDURE &r) {
 		if (la->kind == 25 /* ";" */ || la->kind == 32 /* "END" */ || la->kind == 35 /* ")" */) {
 			r.optionalFormalParsPtr=0; 
 		} else if (la->kind == 34 /* "(" */) {
-			r.optionalFormalParsPtr=new FormalParsRecord(); abortIfNull(r.optionalFormalParsPtr); 
+			r.optionalFormalParsPtr=new Parser::FormalParsRecord(); abortIfNull(r.optionalFormalParsPtr); 
 			FormalPars(*(r.optionalFormalParsPtr));
 		} else SynErr(107);
 }
@@ -1466,8 +1468,13 @@ Value* Parser::DesignatorMaybeWithExprListRepeatingPartRecordCL1::calc(Parser* p
 				return new ValueOfIdentDotIdent(id1, id2);
 			}else{
 				if(obj->kind==OKscope && obj->type!=0 && obj->type->getTypeNumber()==type_number_MODULE) {
-					wchar_t* dealiased=(wchar_t*)(obj->data);
-					if(dealiased == 0) dealiased = id1.ident_;
+					wchar_t* dealiased=0;
+					if(obj->data!=0){
+						ModAliasRefDO* DO = (ModAliasRefDO*)(obj->data);
+						dealiased=DO->modName;
+					}
+					else 
+						dealiased = id1.ident_;
 					ModTab::Module* m = parser->getmodtab()->Find(dealiased);
 					if(m==0){tab.Err(L"module not found");tab.Err(id1.ident_);}else{
 						SymbolTable * tab2 = m->parser->tab;
@@ -1479,9 +1486,14 @@ Value* Parser::DesignatorMaybeWithExprListRepeatingPartRecordCL1::calc(Parser* p
 						return new ValueOfIdentDotIdent(id1, id2);
 					}
 				}else{
-					tab.Err(L"Must be MODULE, but is unknown");
-					tab.Err(id1.ident_);
-					return new ValueOfIdentDotIdent(id1, id2);
+					if(obj->kind==OKvar) {
+						wprintf(L"\nVAR: %ls DOT %ls TYPE: ", id1.ident_, clause1_identRec); PRINT_TYPE_AS_STRING(obj->type);
+						return new ValueOfIdentDotIdent(id1, id2);
+					}else{
+						tab.Err(L"Must be OKMODULE or OKVAR, but is unknown");
+						tab.Err(id1.ident_);
+						return new ValueOfIdentDotIdent(id1, id2);
+					}
 				}
 		}
 }

@@ -9,7 +9,7 @@ Distributed under the terms of GNU General Public License, v.3 or later
 
 enum object_kinds {OKvar, OKproc, OKscope};
 
-enum DataObjectKind {DeclSeqProcDOK, ForwardDeclDOK, ModAliasRefDOK};
+enum DataObjectKind {DeclSeqProcDOK, ForwardDeclDOK, ModAliasRefDOK, DeclVarDOK};
 
 struct DataObject{
 	virtual DataObjectKind getKind()=0;

@@ -316,6 +316,7 @@ static const int
 
 	class TypeMODULE : public TypeRecord{
 	public:
+		TypeMODULE(){}
 		virtual int getTypeNumber(){return type_number_MODULE;}
 	};
 

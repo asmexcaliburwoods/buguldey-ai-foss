@@ -70,13 +70,14 @@ class CodeGenerator {
 			}
 		}
 public:
-	void IMPORT(wchar_t* moduleName);
+	int IMPORT(wchar_t* moduleName);
 	struct ModAliasRefDO: public DataObject{
 		DataObjectKind getKind(){return ModAliasRefDOK;}
 		wchar_t *modName;
 	};
-	void InterpretImport(Parser::ImportListRecord* ip, Parser* parser, Parser::ModuleRecord* moduleRecord, ModTab::ModuleTable * modtab){
+	int InterpretImport(Parser::ImportListRecord* ip, Parser* parser, Parser::ModuleRecord* moduleRecord, ModTab::ModuleTable * modtab){
 		const Parser::ModuleImportEntryRecord& mr = ip->moduleImportEntry;
+		int errCnt=0;
 		if(mr.rhsPresent){
 			const identRec & modAlias = mr.lhs;
 			const identRec & modName = mr.rhs;
@@ -87,7 +88,7 @@ public:
 			ModAliasRefDO* DO = new ModAliasRefDO(); abortIfNull(DO);
 			DO->modName = modName;
 			parser->tab->NewObj(modAlias, OKscope, tm, DO);
-			IMPORT(modName);
+			errCnt=IMPORT(modName);
 		}else{
 			const identRec & modName = mr.lhs;
 			TypeMODULE *tm = new TypeMODULE(); abortIfNull(tm);
@@ -95,8 +96,9 @@ public:
 //			if(m==0){wprintf(L"module %ls not found",modName);exit(1);}
 
 			parser->tab->NewObj(modName, OKscope, tm, 0);
-			IMPORT(modName);
+			errCnt=IMPORT(modName);
 		}
+		return errCnt;
 	}
 
 public:
@@ -114,7 +116,7 @@ public:
 //
 //	//void Disassemble(Oberon::Parser* parser);
 
-	void InterpretModule(Parser* p, Parser::ModuleRecord *moduleASTPtr, SymbolTable &tab, ModTab::ModuleTable * modtab){
+	int InterpretModule(Parser* p, Parser::ModuleRecord *moduleASTPtr, SymbolTable &tab, ModTab::ModuleTable * modtab){
 		assert(moduleASTPtr!=0);
 		Parser::ModuleRecord &moduleAST = *moduleASTPtr;
 		tab.OpenScope(moduleAST.moduleName);
@@ -122,7 +124,10 @@ public:
 		wprintf(L"\n(* %ls *)\n",moduleAST.moduleName);
 		Parser::ImportListRecord* ip = moduleAST.importListPtr;
 		while (ip!=0) {
-			InterpretImport(ip, p, moduleASTPtr, modtab);
+			int errCnt = InterpretImport(ip, p, moduleASTPtr, modtab);
+			if(errCnt !=0 ){
+				return errCnt;
+			}
 			ip = ip->nullOrPtrToNextModuleImportEntriesList;
 		}
 
@@ -145,6 +150,13 @@ public:
 		}
 		//tab.CloseScope();
 		//WriteObjFile(moduleAST);
+		int errorsCount=p->errors->count;
+		if (errorsCount == 0) {
+			wprintf(L"Interpreted %ls successfully!\n",p->modulePtr->moduleName);
+		}else{
+			wprintf(L"Interpreting of %ls failed: %d errors.\n",p->modulePtr->moduleName, errorsCount);
+		}
+		return errorsCount;
 	}
 	//void WriteObjFile(Oberon::ModuleRecord *moduleAST);
 

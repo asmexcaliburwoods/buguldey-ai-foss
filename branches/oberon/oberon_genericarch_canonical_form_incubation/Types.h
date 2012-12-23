@@ -11,18 +11,44 @@
 #include "assert.h"
 #include "SymbolTable.h"
 
+static const int
+	 type_number_Qualident=1
+	,type_number_ARRAY=2
+	,type_number_RECORD=3
+	,type_number_POINTER=4
+	,type_number_PROCEDURE=5
+	,type_number_MODULE=6
+	;
+
+static const wchar_t* getTypeName(int type){
+	switch(type){
+	case 0: return L"TBD_TYPE";
+	case 1: return L"QUALIDENT_TYPE";
+	case 2: return L"ARRAY_TYPE";
+	case 3: return L"RECORD_TYPE";
+	case 4: return L"POINTER_TYPE";
+	case 5: return L"PROCEDURE_TYPE";
+	case 6: return L"MODULE_TYPE";
+	default: return L"INVALID_TYPE";
+	}
+}
+
+
 struct TypeRecord{
 	virtual int getTypeNumber()=0;
 	virtual ~TypeRecord(){};
 	virtual void printToStdout(){
-			wprintf(L"(type:%d)",getTypeNumber());}
+			wprintf(L"%ls",getTypeName(getTypeNumber()));}
 };
 
-static void PRINT_TYPE_AS_STRING(TypeRecord *tp){
-	if (tp==0) wprintf(L"(TYPE:NULLPRTEXCEPTION)");
+static void PRINT_TYPE(TypeRecord *tp){
+	if (tp==0) wprintf(L"%ls", getTypeName(0));
 	else tp->printToStdout();
 }
 
+static void PRINT_TYPE_AS_STRING(TypeRecord *tp){
+	PRINT_TYPE(tp);
+}
 
 
 typedef wchar_t* identRec;
@@ -38,8 +64,15 @@ struct identRecord{
 		virtual TypeRecord* getType(){return 0;};
 		virtual ~Value(){};
 		Value* multiply(signed int number);
+		virtual void printToStdout(){wprintf(L"(abstract value of type:0)");}
 	};
 
+	static void PRINT_VALUE(Value* v){
+		if(v==0)wprintf(L"(value:nullpointerexception)");
+		else{
+			v->printToStdout();
+		}
+	}
 	struct ValueMultipliedBySignedInt: public Value{
 	private:
 		Value* v1;
@@ -48,12 +81,14 @@ struct identRecord{
 		virtual TypeRecord* getType(){return v1==0?0:v1->getType();}
 		ValueMultipliedBySignedInt(Value* v1_, signed int number_):v1(v1_),number(number_){}
 		virtual ~ValueMultipliedBySignedInt(){if(v1!=0)delete v1;}
+		virtual void printToStdout(){wprintf(L"(formula: number:%d mul-by value:",number);PRINT_VALUE(v1);wprintf(L"of the above type)");}
 	};
 
 	struct ValueTBD: public Value{
 		ValueTBD(){};
 		virtual ~ValueTBD(){};
 		virtual TypeRecord* getType(){return 0;}
+		virtual void printToStdout(){wprintf(L"(VALUETBD, type:(nullpointerexception))");}
 	};
 
 	class identRecord;
@@ -61,9 +96,14 @@ struct identRecord{
 	struct ValueOfIdent: public Value{
 	private:
 		identRecord identRec;
+		Obj* obj;
 	public:
 		virtual TypeRecord* getType(){return 0;}//TODO determine type from symbol table
-		ValueOfIdent(identRecord ident_):identRec(ident_){};
+		ValueOfIdent(identRecord ident_, Obj* obj_):identRec(ident_),obj(obj_){};
+		virtual void printToStdout(){
+			if(obj==0){wprintf(L"(BAD SYMBOL)");return;}
+			wprintf(L"(value ident %ls; type:",identRec); PRINT_TYPE(obj->type);wprintf(L")");
+		}
 	};
 
 	struct ValueOfIdentDotIdent: public Value{
@@ -73,22 +113,13 @@ struct identRecord{
 	public:
 		virtual TypeRecord* getType(){return 0;}//TODO determine type from symbol table
 		ValueOfIdentDotIdent(identRecord ident1_, identRecord ident2_):ident1(ident1_), ident2(ident2_){};
+		virtual void printToStdout(){wprintf(L"(value ident.ident %ls.%ls; type:(nullpointerexception))",ident1, ident2);}
 	};
 
 struct QualidentRecord{
 	identRec leftIdent;
 	identRec rightIdent; // rightIdent==0 if not specified
 };
-
-static const int
-	 type_number_Qualident=1
-	,type_number_ARRAY=2
-	,type_number_RECORD=3
-	,type_number_POINTER=4
-	,type_number_PROCEDURE=5
-	,type_number_MODULE=6
-	;
-
 
 
 	struct TypeQualident: public TypeRecord{

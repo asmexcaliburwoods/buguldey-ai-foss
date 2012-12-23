@@ -220,7 +220,9 @@ typedef bool boolean;
 		identRecord identRec;
 		DesignatorMaybeWithExprListRepeatingPartRecord* nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord;
 		Value* calc(Parser * parser, SymbolTable &tab){
-			if(nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord==0)return new ValueOfIdent(identRec);
+			if(nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord==0){
+				return new ValueOfIdent(identRec, tab.Find(identRec.ident_));
+			}
 			else return nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord->calc(parser, identRec, tab);
 		}
 	};
@@ -652,9 +654,13 @@ typedef bool boolean;
 	  	ExprRecord rhsExpr; //undefined iff !assignment 
 	  	virtual void interpret(Parser *parser, SymbolTable &tab){
 	  		if(assignment){
-		  		wprintf(L"ASSIGNMENT ");
+		  		wprintf(L"\nASSIGNMENT TO ");
 		  		Value * lvalue = lhsExpr.calculate(parser, tab);
+		  		PRINT_VALUE(lvalue);
 		  		Value * rvalue = rhsExpr.calculate(parser, tab);
+		  		wprintf(L" OF ");
+		  		PRINT_VALUE(rvalue);
+		  		wprintf(L"\n");
 	  		}else{
 		  		lhsExpr.calculate(parser, tab);
 	  		}

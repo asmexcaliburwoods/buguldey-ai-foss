@@ -64,7 +64,7 @@ Obj* SymbolTable::Find (wchar_t* name) {
 
 // search the name in all open scopes and return its object node
 Obj* SymbolTable::Find0 (wchar_t* name, bool silent) {
-	wprintf(L"\n    SYM FI1 %ls: %ls ", parser->modulePtr->moduleName, name);
+	wprintf(L"[[[ SYM FIND %ls: %ls ]]]", parser->modulePtr->moduleName, name);
 	Obj *obj, *scope;
 	scope = topScope;
 	while (scope != NULL) {  // for all open scopes

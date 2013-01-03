@@ -47,6 +47,18 @@ class CodeGenerator;
 
 namespace ModTab{class ModuleTable;}
 
+struct ExprListRecord{
+	ExprRecord expr;
+	ExprListRecord *nullOrCommaExprList;
+};
+
+enum NumTypeEnum {num_int, num_real};
+
+struct numberRecord{
+	NumTypeEnum numtype;
+	wchar_t* tokenString;
+};
+
 #include "Scanner.h"
 
 /* namespace Oberon {
@@ -102,7 +114,11 @@ public:
 	Token *t;			// last recognized token
 	Token *la;			// lookahead token
 
-typedef bool boolean;
+CodeGenerator* getCodeGenerator(){
+	  return gen;
+	}
+
+	typedef bool boolean;
 	
 	static const int // operators
 	  illegal_operator=1, plus=2, minus=3, times=4, slash=5, equals=6, less=7, greater=8,
@@ -115,15 +131,6 @@ typedef bool boolean;
 	typedef wchar_t* stringRecord; 
 
 
-	enum NumTypeEnum {num_int, num_real};
-	
-	struct numberRecord{
-		NumTypeEnum numtype;
-		wchar_t* tokenString;
-	};
-	  
-
-	
 		  
 	struct ElementRangeRecord{
 		ExprRecord expr1;
@@ -137,16 +144,12 @@ typedef bool boolean;
 		SetRecord* nullOrPtrToNextSet;
 	};
 
-	struct ExprListRecord{
-		ExprRecord expr;
-		ExprListRecord *nullOrCommaExprList;
-	};
 
 	struct QualidentOrOptionalExprListRecord{
 		boolean exprListPresent;
 		ExprListRecord exprList;
-		Value* calc(Parser* parser, identRecord ident, SymbolTable &tab){
-			wprintf(L"CALLING %ls.%ls(args)...", parser->modulePtr->moduleName, ident.ident_);
+		Value* calc(Parser* parser, identRecord* ident, SymbolTable &tab){
+			wprintf(L"CALLING %ls.%ls(args)...", parser->modulePtr->moduleName, ident->ident_);
 			return 0;
 		}
 	};
@@ -177,7 +180,7 @@ typedef bool boolean;
 	struct DesignatorMaybeWithExprListRepeatingPartRecord{
 		virtual ClauseEnum getClauseNumber()=0;
 		virtual ~DesignatorMaybeWithExprListRepeatingPartRecord(){}		
-		virtual Value* calc(Parser* parser, identRecord ident, SymbolTable &tab)=0;
+		virtual Value* calc(Parser* parser, identRecord* ident, SymbolTable &tab)=0;
 		DesignatorMaybeWithExprListRepeatingPartRecord* nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord;
 
 //	("." ident 			//clauseNumber==1
@@ -190,26 +193,27 @@ typedef bool boolean;
 
 	struct DesignatorMaybeWithExprListRepeatingPartRecordCL1 : public DesignatorMaybeWithExprListRepeatingPartRecord{
 		virtual ClauseEnum getClauseNumber() {return cl1;}
-		virtual Value* calc(Parser* parser, identRecord id1, SymbolTable &tab);
+		virtual Value* calc(Parser* parser, identRecord* id1, SymbolTable &tab);
 		identRec clause1_identRec;
 		//"." ident
 	};
 	struct DesignatorMaybeWithExprListRepeatingPartRecordCL2 : public DesignatorMaybeWithExprListRepeatingPartRecord{
 		virtual ClauseEnum getClauseNumber() {return cl2;}
-		virtual Value* calc(Parser* parser, identRecord ident, SymbolTable &tab){return new ValueTBD();}
+		virtual ~DesignatorMaybeWithExprListRepeatingPartRecordCL2(){}
+		virtual Value* calc(Parser* parser, identRecord* ident, SymbolTable &tab){return new ValueIdentAndSquareBracketedExprList(parser, tab, ident, &clause2_exprList);}
 		ExprListRecord clause2_exprList;
 		//"[" ExprList "]"
 	};
 	struct DesignatorMaybeWithExprListRepeatingPartRecordCL3 : public DesignatorMaybeWithExprListRepeatingPartRecord{
 		virtual ClauseEnum getClauseNumber() {return cl3;}
-		virtual Value* calc(Parser* parser, identRecord ident, SymbolTable &tab){return new ValueTBD();}
+		virtual Value* calc(Parser* parser, identRecord* ident, SymbolTable &tab){return new ValueIdentAndCaret(parser, tab, ident);}
 	    //"^"
 	};
 
 	struct DesignatorMaybeWithExprListRepeatingPartRecordCL4 : public DesignatorMaybeWithExprListRepeatingPartRecord{
 		virtual ~DesignatorMaybeWithExprListRepeatingPartRecordCL4(){}
 		virtual ClauseEnum getClauseNumber() {return cl4;}
-		virtual Value* calc(Parser* parser, identRecord ident, SymbolTable &tab){
+		virtual Value* calc(Parser* parser, identRecord* ident, SymbolTable &tab){
 			return clause4_qualidentOrOptionalExprList.calc(parser, ident, tab);
 		}
 		QualidentOrOptionalExprListRecord clause4_qualidentOrOptionalExprList;
@@ -223,7 +227,7 @@ typedef bool boolean;
 			if(nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord==0){
 				return new ValueOfIdent(identRec, tab.Find(identRec.ident_));
 			}
-			else return nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord->calc(parser, identRec, tab);
+			else return nullOrPtrToNextDesignatorMaybeWithExprListRepeatingPartRecord->calc(parser, &identRec, tab);
 		}
 	};
 
@@ -238,7 +242,7 @@ typedef bool boolean;
 	struct FactorRecord_number: public FactorRecord{
 		virtual int getFactorType(){return ft_number;}
 		numberRecord num; 
-		virtual Value* calculate(Parser* parser, SymbolTable& tab){return new ValueTBD();}
+		virtual Value* calculate(Parser* parser, SymbolTable& tab){return new ValueNumber(&num);}
 	};
   
 	struct FactorRecord_character: public FactorRecord{
@@ -388,9 +392,29 @@ typedef bool boolean;
 		OptionalFormalParsRecord optionalFormalPars;
 	};
 
+	class ConstDeclRecord;
+	
+	struct DeclConstDO: public DataObject{
+		DataObjectKind getKind(){return DeclConstDOK;}
+		ConstDeclRecord *DeclConstPTR;
+	};
+	
 	struct DeclSeqConstDeclListMandatoryRecord{
 		ConstDeclRecord constDecl;
 		DeclSeqConstDeclListMandatoryRecord *nullOrPtrToNextDeclSeqConstDeclListMandatory;
+		void interpret(CodeGenerator &codegen, SymbolTable &tab){
+			DeclSeqConstDeclListMandatoryRecord*cur = this;
+			while(cur!=0){
+				IdentDefRecord* curIL = &(cur->constDecl.identDef);
+				IdentDefRecord* identDefPtr = curIL;
+				wprintf(L"CONST %ls\n", identDefPtr->ident_);
+				DeclConstDO* DO = new DeclConstDO; 
+				DO->DeclConstPTR=&(cur->constDecl);
+				tab.parser->tab->NewObj(identDefPtr->ident_, OKconst, 0, DO);
+
+				cur = cur->nullOrPtrToNextDeclSeqConstDeclListMandatory;
+			}
+		}
 	};
 	struct DeclSeqTypeDeclListMandatoryRecord{
 		TypeDeclRecord typeDecl;
@@ -405,16 +429,17 @@ typedef bool boolean;
 	struct DeclSeqVarDeclListMandatoryRecord{
 		VarDeclRecord varDecl;
 		DeclSeqVarDeclListMandatoryRecord *nullOrPtrToNextDeclSeqVarDeclListMandatory;
+		virtual ~DeclSeqVarDeclListMandatoryRecord(){}
 		virtual void interpret(CodeGenerator &codegen, SymbolTable &tab){
 			DeclSeqVarDeclListMandatoryRecord*cur = this;
 			while(cur!=0){
 				IdentListRecord* curIL = &(cur->varDecl.identList);
 				while(curIL!=0){
-					IdentDefRecord identDef = curIL->identDef;
-					wprintf(L"VAR %ls\n", identDef.ident_);
+					IdentDefRecord* identDefPtr = &(curIL->identDef);
+					wprintf(L"VAR %ls\n", identDefPtr->ident_);
 					DeclVarDO* DO = new DeclVarDO; 
 					DO->DeclVarPTR=&(cur->varDecl);
-					tab.parser->tab->NewObj(identDef.ident_, OKvar, cur->varDecl.typePtr, DO);
+					tab.parser->tab->NewObj(identDefPtr->ident_, OKvar, cur->varDecl.typePtr, DO);
 					curIL = curIL->nullOrCommaIdentList;
 				}
 				cur = cur->nullOrPtrToNextDeclSeqVarDeclListMandatory;
@@ -425,6 +450,10 @@ typedef bool boolean;
 	struct DeclSeqConstDeclListRecord{
 		bool specified;
 		DeclSeqConstDeclListMandatoryRecord constDecls; // undefined if specified==false
+		void interpret(CodeGenerator &codegen, SymbolTable &tab){
+			if(!specified)return;
+			constDecls.interpret(codegen,tab);
+		}
 	};
 	struct DeclSeqTypeDeclListRecord{
 		bool specified;
@@ -433,7 +462,7 @@ typedef bool boolean;
 	struct DeclSeqVarDeclListRecord{
 		bool specified;
 		DeclSeqVarDeclListMandatoryRecord varDecls; // undefined if specified==false
-		virtual void interpret(CodeGenerator &codegen, SymbolTable &tab){
+		void interpret(CodeGenerator &codegen, SymbolTable &tab){
 			if(!specified)return;
 			varDecls.interpret(codegen,tab);
 		}
@@ -453,7 +482,7 @@ typedef bool boolean;
 	struct DeclSeqConst : public DeclSeqConstTypeVarListMandatoryRecord{
 		virtual DeclEnum get_decl_variant() {return decl_const;}
 		virtual void interpret(CodeGenerator &codegen, SymbolTable &tab){
-			wprintf(L"CONST ");
+			constDeclList.interpret(codegen,tab);
 		  	DeclSeqConstTypeVarListMandatoryRecord::interpret(codegen,tab);
 		}
 		DeclSeqConstDeclListRecord constDeclList; 
@@ -515,7 +544,13 @@ typedef bool boolean;
 	*/
 	struct DeclSeqConstTypeVarListRecord{
 		bool specified;
-		DeclSeqConstTypeVarListMandatoryRecord* constTypeVarListPtr; // undefined if specified==false 
+		DeclSeqConstTypeVarListMandatoryRecord* constTypeVarListPtr; // undefined if specified==false
+		~DeclSeqConstTypeVarListRecord(){}
+		virtual void interpret(CodeGenerator &codegen, SymbolTable &tab){
+			if(specified){
+				constTypeVarListPtr->interpret(codegen, tab);
+			} 
+		}
 	};
 
 	struct DeclSeqRecord;
@@ -585,6 +620,7 @@ typedef bool boolean;
   		    Obj* scope = parser->tab->OpenScope();
   		    //OptionalFormalParsRecord optionalFormalPars
   		    procDecl.optionalFormalPars.addAllToScope(parser);
+  		    procDecl.declSeqPtr->interpret(*parser->getCodeGenerator(),*(parser->tab));
 			if(procDecl.procBodySpecifiedHere){
 				if(procDecl.procBodyStmtSeq!=0){
 					procDecl.procBodyStmtSeq->perform(parser, *(parser->tab));
@@ -614,12 +650,23 @@ typedef bool boolean;
 	
 	struct DeclSeqProcDeclFwdDeclListRecord{
 		bool specified;
-		DeclSeqProcDeclFwdDeclListMandatoryRecord* procDeclFwdDeclListPtr; // undefined if specified==false 
+		DeclSeqProcDeclFwdDeclListMandatoryRecord* procDeclFwdDeclListPtr; // undefined if specified==false
+		virtual ~DeclSeqProcDeclFwdDeclListRecord(){}
+		virtual void interpret(CodeGenerator& cg, SymbolTable& tab){
+		  	if(specified){
+		  		procDeclFwdDeclListPtr->interpret(cg,tab);
+		  	}
+		}
 	};
 	
 	struct DeclSeqRecord{
 		DeclSeqConstTypeVarListRecord ctvList;
 		DeclSeqProcDeclFwdDeclListRecord pfList;
+		virtual ~DeclSeqRecord(){}
+		virtual void interpret(CodeGenerator &codegen, SymbolTable &tab){
+			ctvList.interpret(codegen, tab);
+			pfList.interpret(codegen, tab);
+		}
 	};
 
 	static const int

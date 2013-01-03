@@ -17,6 +17,7 @@ private:
 	Module *next; // to next object in same scope //TODO reimplement as HashTable<wchar_t*,ModuleRecord*> name2moduleAST.
 public:
 	Parser* parser;
+	//virtual AbstractBackend::TYPE getType()=0;
 	Module(Parser* parser_):parser(parser_),next(0){}
 	Parser::ModuleRecord *getAST(){return parser->modulePtr;}
 	void addNext(Module* m){
@@ -25,6 +26,17 @@ public:
 	}
 	Module *getnext(){return next;}
 };
+
+/*
+struct InterpreterBackendModule: public Module{
+	InterpreterBackendModule():memory(){}
+	virtual ~InterpreterBackendModule(){}
+	InterpreterBackendMemory getMemory(){return memory;}
+	virtual AbstractBackend::TYPE getType(){return AbstractBackend::TYPE::interpreter;}
+private:
+	InterpreterBackendMemory memory;
+};
+*/
 
 struct ModuleTable
 {

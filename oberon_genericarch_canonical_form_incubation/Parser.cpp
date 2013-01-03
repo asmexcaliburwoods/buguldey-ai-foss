@@ -1459,13 +1459,13 @@ void Errors::Exception(const wchar_t* s) {
 
 namespace ModTab{class Module;}
 
-Value* Parser::DesignatorMaybeWithExprListRepeatingPartRecordCL1::calc(Parser* parser, identRecord id1, SymbolTable &tab){
+Value* Parser::DesignatorMaybeWithExprListRepeatingPartRecordCL1::calc(Parser* parser, identRecord* id1Ptr, SymbolTable &tab){
 			identRecord id2; id2.ident_=clause1_identRec;
-			struct Obj* obj = tab.Find(id1.ident_);
+			struct Obj* obj = tab.Find(id1Ptr->ident_);
 			if (obj==0) {
 				tab.Err(L"Object not found");
-				tab.Err(id1.ident_);
-				return new ValueOfIdentDotIdent(id1, id2);
+				tab.Err(id1Ptr->ident_);
+				return new ValueOfIdentDotIdent(*id1Ptr, id2);
 			}else{
 				if(obj->kind==OKscope && obj->type!=0 && obj->type->getTypeNumber()==type_number_MODULE) {
 					wchar_t* dealiased=0;
@@ -1474,25 +1474,25 @@ Value* Parser::DesignatorMaybeWithExprListRepeatingPartRecordCL1::calc(Parser* p
 						dealiased=DO->modName;
 					}
 					else 
-						dealiased = id1.ident_;
+						dealiased = id1Ptr->ident_;
 					ModTab::Module* m = parser->getmodtab()->Find(dealiased);
-					if(m==0){tab.Err(L"module not found");tab.Err(id1.ident_);}else{
+					if(m==0){tab.Err(L"module not found");tab.Err(id1Ptr->ident_);}else{
 						SymbolTable * tab2 = m->parser->tab;
 						Obj* obj2 = tab2->Find(id2.ident_);
 						if(obj2->kind==OKproc && obj2->type!=0 && obj2->type->getTypeNumber()==type_number_PROCEDURE &&
 						 		((obj2->data) != 0) && obj2->data->getKind()==DeclSeqProcDOK){
 								((DeclSeqProcDO*)(obj2->data))->DeclSeqProcPTR->callProcedure(m->parser);
 						}
-						return new ValueOfIdentDotIdent(id1, id2);
+						return new ValueOfIdentDotIdent(*id1Ptr, id2);
 					}
 				}else{
 					if(obj->kind==OKvar) {
-						wprintf(L"\nVAR: %ls DOT %ls TYPE: ", id1.ident_, clause1_identRec); PRINT_TYPE_AS_STRING(obj->type);
-						return new ValueOfIdentDotIdent(id1, id2);
+						wprintf(L"\nVAR: %ls DOT %ls TYPE: ", id1Ptr->ident_, clause1_identRec); PRINT_TYPE_AS_STRING(obj->type);
+						return new ValueOfIdentDotIdent(*id1Ptr, id2);
 					}else{
 						tab.Err(L"Must be OKMODULE or OKVAR, but is unknown");
-						tab.Err(id1.ident_);
-						return new ValueOfIdentDotIdent(id1, id2);
+						tab.Err(id1Ptr->ident_);
+						return new ValueOfIdentDotIdent(*id1Ptr, id2);
 					}
 				}
 		}

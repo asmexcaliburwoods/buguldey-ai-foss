@@ -38,7 +38,8 @@ struct TypeRecord{
 	virtual int getTypeNumber()=0;
 	virtual ~TypeRecord(){};
 	virtual void printToStdout(){
-			wprintf(L"%ls",getTypeName(getTypeNumber()));}
+			wprintf(L"%ls",getTypeName(getTypeNumber()));
+	}
 };
 
 static void PRINT_TYPE(TypeRecord *tp){
@@ -106,6 +107,19 @@ struct identRecord{
 		}
 	};
 
+	class numberRecord;
+
+	struct ValueNumber: public Value{
+	private:
+		numberRecord* num;
+	public:
+		virtual TypeRecord* getType(){return 0;}//TODO determine type from symbol table
+		ValueNumber(numberRecord* num_):num(num_){};
+		virtual ~ValueNumber(){}
+		virtual void printToStdout();
+	};
+
+
 	struct ValueOfIdentDotIdent: public Value{
 	private:
 		identRecord ident1;
@@ -116,6 +130,30 @@ struct identRecord{
 		virtual void printToStdout(){wprintf(L"(value ident.ident %ls.%ls; type:(nullpointerexception))",ident1, ident2);}
 	};
 
+	class ExprListRecord;
+
+	struct ValueIdentAndSquareBracketedExprList: public Value{
+	private:
+		identRecord* ident;
+		ExprListRecord *exprList;
+	public:
+		virtual TypeRecord* getType(){return 0;}//TODO determine type from symbol table
+		virtual ~ValueIdentAndSquareBracketedExprList(){}
+		ValueIdentAndSquareBracketedExprList(Parser* parser, SymbolTable &tab, identRecord* ident_, ExprListRecord *exprList_):ident(ident_), exprList(exprList_){};
+		virtual void printToStdout(){wprintf(L"(value ident[...] %ls[...]; type:(nullpointerexception))",ident->ident_);}
+	};
+
+	struct ValueIdentAndCaret: public Value{
+	private:
+		identRecord* ident;
+	public:
+		virtual TypeRecord* getType(){return 0;}//TODO determine type from symbol table
+		virtual ~ValueIdentAndCaret(){}
+		ValueIdentAndCaret(Parser* parser, SymbolTable &tab, identRecord* ident_):ident(ident_){};
+		virtual void printToStdout(){wprintf(L"(value ident^ %ls^; type:(nullpointerexception))",ident->ident_);}
+	};
+
+
 struct QualidentRecord{
 	identRec leftIdent;
 	identRec rightIdent; // rightIdent==0 if not specified
@@ -125,6 +163,12 @@ struct QualidentRecord{
 	struct TypeQualident: public TypeRecord{
 		int getTypeNumber(){return type_number_Qualident;}
 		QualidentRecord qualident;
+		virtual void printToStdout(){
+				if(qualident.rightIdent!=0)
+					wprintf(L"[TypeQUALIDENT]%ls.%ls",qualident.leftIdent, qualident.rightIdent);
+				else
+					wprintf(L"[TypeQUALIDENT, r=0]%ls",qualident.leftIdent);
+		}
 	};
 	struct ValuePlaceholder{
 		virtual int getValueType()=0;

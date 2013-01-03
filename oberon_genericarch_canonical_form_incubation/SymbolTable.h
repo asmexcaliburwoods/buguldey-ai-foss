@@ -7,9 +7,9 @@ Distributed under the terms of GNU General Public License, v.3 or later
 */
 #include <wchar.h>
 
-enum object_kinds {OKvar, OKproc, OKscope};
+enum object_kinds {OKvar, OKconst, OKproc, OKscope, OKtype};
 
-enum DataObjectKind {DeclSeqProcDOK, ModAliasRefDOK, DeclVarDOK};
+enum DataObjectKind {DeclSeqProcDOK, ModAliasRefDOK, DeclVarDOK, DeclConstDOK, DeclTypeDOK};
 
 struct DataObject{
 	virtual DataObjectKind getKind()=0;
@@ -28,7 +28,8 @@ public:
 	int level;		// nesting level; 0=global, 1=local
 	Obj *locals;		// scopes: to locally declared objects
 	int nextAdr;	// scopes: next free address in this scope
-	DataObject* data;
+	DataObject* data; //declaration data
+	void* value; //for interpreter backend
 
 	Obj() {
 		name    = NULL;
@@ -39,7 +40,8 @@ public:
 		level   = 0;
 		locals  = NULL;
 		nextAdr = 0;
-		data = 0;
+		data    = 0;
+		value   = 0;
 	}
 
 	~Obj() {

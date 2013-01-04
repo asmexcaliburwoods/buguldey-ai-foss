@@ -52,11 +52,12 @@ struct ExprListRecord{
 	ExprListRecord *nullOrCommaExprList;
 };
 
-enum NumTypeEnum {num_int, num_real};
+enum LiteralNumberTypeEnum {literal_int, literal_real};
 
-struct numberRecord{
-	NumTypeEnum numtype;
+struct literalNumberRecord{
+	LiteralNumberTypeEnum literal_type;
 	wchar_t* tokenString;
+	Value* calculate_numberValue_from_literal();
 };
 
 #include "Scanner.h"
@@ -239,10 +240,12 @@ CodeGenerator* getCodeGenerator(){
 	};
   
 
-	struct FactorRecord_number: public FactorRecord{
+	struct FactorRecord_numberLiteral: public FactorRecord{
 		virtual int getFactorType(){return ft_number;}
-		numberRecord num; 
-		virtual Value* calculate(Parser* parser, SymbolTable& tab){return new ValueNumber(&num);}
+		literalNumberRecord numLiteral; 
+		
+		//type is not yet known, assume RandomPrecisionNumber, so we just store a string
+		virtual Value* calculate(Parser* parser, SymbolTable& tab){return new ValueNumber(&numLiteral);}
 	};
   
 	struct FactorRecord_character: public FactorRecord{
@@ -373,6 +376,7 @@ CodeGenerator* getCodeGenerator(){
 	struct TypePROCEDURE: public TypeRecord{
 		int getTypeNumber(){return type_number_PROCEDURE;}
 		FormalParsRecord *optionalFormalParsPtr;
+		virtual size_t getTypeSizeInBits(){ return sizeof(void*); }
 	};
 
 
@@ -841,7 +845,7 @@ public:
 	void SemErr(const wchar_t* msg);
 
 	void character();
-	void number(numberRecord &r);
+	void number(literalNumberRecord &r);
 	void IntegerRec(wchar_t* &tok);
 	void RealRec(wchar_t* &tok);
 	void Relation(int &op);

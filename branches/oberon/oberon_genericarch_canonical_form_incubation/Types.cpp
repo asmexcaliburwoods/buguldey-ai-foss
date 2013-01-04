@@ -16,9 +16,9 @@ Value* Value::multiply(signed int number){
 }
 
 void ValueNumber::printToStdout(){
-	const wchar_t* numtypestr=L"UNKNOWN_NUM";
-	if(num->numtype==num_int)numtypestr=L"INT_NUM";
+	const wchar_t* numtypestr=L"UNKNOWN_LITERAL_NUM";
+	if(numLiteral->literal_type==literal_int)numtypestr=L"LITERAL_INT";
 	else
-		if(num->numtype==num_real)numtypestr=L"REAL_NUM";
-	wprintf(L"(value number %ls; type:%ls)",num->tokenString, numtypestr);
+		if(numLiteral->literal_type==literal_real)numtypestr=L"LITERAL_REAL";
+	wprintf(L"(value number %ls; type:%ls)",numLiteral->tokenString, numtypestr);
 }

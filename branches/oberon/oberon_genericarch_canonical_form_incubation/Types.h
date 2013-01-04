@@ -40,6 +40,7 @@ struct TypeRecord{
 	virtual void printToStdout(){
 			wprintf(L"%ls",getTypeName(getTypeNumber()));
 	}
+	virtual size_t getTypeSizeInBits()=0;
 };
 
 static void PRINT_TYPE(TypeRecord *tp){
@@ -107,14 +108,14 @@ struct identRecord{
 		}
 	};
 
-	class numberRecord;
+	class literalNumberRecord;
 
 	struct ValueNumber: public Value{
 	private:
-		numberRecord* num;
+		literalNumberRecord* numLiteral;
 	public:
-		virtual TypeRecord* getType(){return 0;}//TODO determine type from symbol table
-		ValueNumber(numberRecord* num_):num(num_){};
+		virtual TypeRecord* getType(){return 0;}//type is unknown here, needs to be determined from outside type declarations
+		ValueNumber(literalNumberRecord* numLiteral_):numLiteral(numLiteral_){};
 		virtual ~ValueNumber(){}
 		virtual void printToStdout();
 	};
@@ -169,6 +170,7 @@ struct QualidentRecord{
 				else
 					wprintf(L"[TypeQUALIDENT, r=0]%ls",qualident.leftIdent);
 		}
+		virtual size_t getTypeSizeInBits(){ return 0; }//TODO
 	};
 	struct ValuePlaceholder{
 		virtual int getValueType()=0;
@@ -342,6 +344,7 @@ struct QualidentRecord{
 		int getTypeNumber(){return type_number_ARRAY;}
 		TypeArrayConstExprListMandatoryRecord *dimensionsConstExprsListPtr;
 		TypeRecord *arrayElementTypePtr;
+		virtual size_t getTypeSizeInBits(){return 0;}//TODO
 	};
 	struct IdentDefRecord{
 		identRec ident_;
@@ -367,10 +370,12 @@ struct QualidentRecord{
 		int getTypeNumber(){return type_number_RECORD;}
 		QualidentRecord *optionalQualidentPtr;
 		MandatoryFieldsListRecord fieldsList;
+		virtual size_t getTypeSizeInBits(){return 0;}//TODO
 	};
 	struct TypePOINTER: public TypeRecord{
 		int getTypeNumber(){return type_number_POINTER;}
 		TypeRecord *pointedTypePtr;
+		virtual size_t getTypeSizeInBits(){return sizeof(void*);}
 	};
 	struct IdentList2Record{
 		identRec ident_;
@@ -381,6 +386,7 @@ struct QualidentRecord{
 	public:
 		TypeMODULE(){}
 		virtual int getTypeNumber(){return type_number_MODULE;}
+		virtual size_t getTypeSizeInBits(){return 0;}
 	};
 
 

@@ -337,6 +337,10 @@ void Errors::Exception(const wchar_t* s) {
 	exit(1);
 }
 
+Value* literalNumberRecord::calculate_numberValue_from_literal(){
+	return new ValueTBD();
+}
+
 namespace ModTab{class Module;}
 
 Value* Parser::DesignatorMaybeWithExprListRepeatingPartRecordCL1::calc(Parser* parser, identRecord* id1Ptr, SymbolTable &tab){

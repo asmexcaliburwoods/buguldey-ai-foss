@@ -29,7 +29,8 @@ public:
 	Obj *locals;		// scopes: to locally declared objects
 	int nextAdr;	// scopes: next free address in this scope
 	DataObject* data; //declaration data
-	void* value; //for interpreter backend
+	void* valuePtr; //for interpreter backend
+	size_t valueTypeSizeInBits; //for interpreter backend
 
 	Obj() {
 		name    = NULL;
@@ -41,7 +42,7 @@ public:
 		locals  = NULL;
 		nextAdr = 0;
 		data    = 0;
-		value   = 0;
+		valuePtr   = 0;
 	}
 
 	~Obj() {

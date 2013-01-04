@@ -101,13 +101,13 @@ void Parser::character() {
 		Expect(_string);
 }
 
-void Parser::number(numberRecord &r) {
+void Parser::number(literalNumberRecord &r) {
 		if (la->kind == _integer) {
 			IntegerRec(r.tokenString);
-			r.numtype=num_int; 
+			r.literal_type=literal_int; 
 		} else if (la->kind == _real) {
 			RealRec(r.tokenString);
-			r.numtype=num_real; 
+			r.literal_type=literal_real; 
 		} else SynErr(67);
 }
 
@@ -902,7 +902,7 @@ void Parser::TermMulOpClause(TermMulOpRecord &r) {
 
 void Parser::Factor(FactorRecord *&factorPtr) {
 		FactorRecord_DesignatorMaybeWithExprList *fd;
-		FactorRecord_number *fn;
+		FactorRecord_numberLiteral *fn;
 		FactorRecord_character *fc;
 		FactorRecord_string *fs;
 		FactorRecord_Set *fset;
@@ -913,8 +913,8 @@ void Parser::Factor(FactorRecord *&factorPtr) {
 			factorPtr=fd=new FactorRecord_DesignatorMaybeWithExprList(); abortIfNull(factorPtr); 
 			DesignatorMaybeWithExprList((*fd).r);
 		} else if (la->kind == _integer || la->kind == _real) {
-			factorPtr=fn=new FactorRecord_number(); abortIfNull(factorPtr); 
-			number((*fn).num);
+			factorPtr=fn=new FactorRecord_numberLiteral(); abortIfNull(factorPtr); 
+			number((*fn).numLiteral);
 		} else if (la->kind == _string) {
 			factorPtr=fc=new FactorRecord_character(); abortIfNull(factorPtr); 
 			Character((*fc).ch);
@@ -1455,6 +1455,10 @@ void Errors::Warning(const wchar_t *s) {
 void Errors::Exception(const wchar_t* s) {
 	wprintf(L"%ls", s); 
 	exit(1);
+}
+
+Value* literalNumberRecord::calculate_numberValue_from_literal(){
+	return new ValueTBD();
 }
 
 namespace ModTab{class Module;}

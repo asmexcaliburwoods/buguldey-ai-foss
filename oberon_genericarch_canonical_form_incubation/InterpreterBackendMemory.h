@@ -11,7 +11,7 @@
 class InterpreterBackendMemory {
 public:
 	InterpreterBackendMemory();
-	InterpreterBackendSymbol GetExistingSymbol(wchar_t* symbolName){}
+//	InterpreterBackendSymbol GetExistingSymbol(wchar_t* symbolName){}
 	virtual ~InterpreterBackendMemory();
 };
 

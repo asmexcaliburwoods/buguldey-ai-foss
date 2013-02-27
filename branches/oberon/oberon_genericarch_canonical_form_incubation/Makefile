@@ -9,7 +9,7 @@ coco:	coco_build
 	Coco/Coco Oberon.atg -namespace Oberon
 
 oberon_exec:	clean coco Parser.cpp Scanner.cpp Scanner.h Parser.h
-	g++ -g *.cpp -o test1/oberon $(CFLAGS)
+	g++ -std=c++0x -g *.cpp -o test1/oberon $(CFLAGS)
 	
 all:	oberon_exec
 

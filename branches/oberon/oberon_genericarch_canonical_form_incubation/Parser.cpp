@@ -467,8 +467,9 @@ void Parser::IdentDef(IdentDefRecord &r) {
 void Parser::Type(TypeRecord *&ptrToTypeRecord) {
 		TypeQualident* ptq;  TypeARRAY* pta; TypeRECORD* ptrec; TypePOINTER* ptp; TypePROCEDURE *ptproc; 
 		if (la->kind == _ident) {
-			ptrToTypeRecord=ptq=new TypeQualident(); abortIfNull(ptrToTypeRecord); 
-			Qualident((*ptq).qualident);
+			QualidentRecord qr;  
+			Qualident(qr);
+			ptrToTypeRecord=ptq=new TypeQualident(qr); abortIfNull(ptrToTypeRecord);
 		} else if (la->kind == 37 /* "ARRAY" */) {
 			ptrToTypeRecord=pta=new TypeARRAY(); abortIfNull(ptrToTypeRecord); 
 			Get();

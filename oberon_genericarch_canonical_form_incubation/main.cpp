@@ -13,11 +13,13 @@ Distributed under the terms of GNU General Public License, v.3 or later
 #include "Scanner.h"
 #include <sys/timeb.h>
 #include "ModuleTable.h"
+#include "Types.h"
 
 #include "interpreter.h"
 
 int main (const int argc, const char *argv[]) {
 	if (argc == 2) {
+		TypeQualidentVariants_static_init();
 		wchar_t *fileName = coco_string_create(argv[1]);
 		Errors *errors = new Errors(); abortIfNull(errors);
 		ModTab::ModuleTable *modules = new ModTab::ModuleTable(errors);	abortIfNull(modules);

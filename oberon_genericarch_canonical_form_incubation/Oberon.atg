@@ -1122,8 +1122,8 @@ Type<TypeRecord *&ptrToTypeRecord>
 						(. TypeQualident* ptq;  TypeARRAY* pta; TypeRECORD* ptrec; TypePOINTER* ptp; TypePROCEDURE *ptproc; .)
 = 
 (
-					(. ptrToTypeRecord=ptq=new TypeQualident(); abortIfNull(ptrToTypeRecord); .)
-	Qualident<(*ptq).qualident>
+					(. QualidentRecord qr;  .)
+	Qualident<qr> (.ptrToTypeRecord=ptq=new TypeQualident(qr); abortIfNull(ptrToTypeRecord);.)
 |
 					(. ptrToTypeRecord=pta=new TypeARRAY(); abortIfNull(ptrToTypeRecord); .)
  	"ARRAY" TypeArray<*pta>

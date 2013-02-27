@@ -10,6 +10,9 @@
 
 #include "assert.h"
 #include "SymbolTable.h"
+#include <unordered_map>
+#include <string>
+#include <sstream>
 
 static const int
 	 type_number_Qualident=1
@@ -160,15 +163,50 @@ struct QualidentRecord{
 	identRec rightIdent; // rightIdent==0 if not specified
 };
 
+using namespace std;
 
-	struct TypeQualident: public TypeRecord{
+static size_t my_wstr_hash(wstring a)
+{
+	int h = 42;
+	const wchar_t* s = a.c_str();
+	if(s!=0) {
+		for (int i=0; ; ++i) {
+			wchar_t c=s[i];
+			if(0==(int)c)break;
+			h=h%(int)c;
+		}
+	}
+    return h;
+}
+
+enum TypeVariant {UNKNOWN_TYPE, LONGINT};
+
+typedef unordered_map<wstring,int,decltype(&my_wstr_hash)> hashmap1Type;
+typedef unordered_map<int,wstring> hashmap2Type;
+
+void TypeQualidentVariants_init_add(wstring name, TypeVariant ty);
+TypeVariant TypeQualidentVariants_diagnoseType(const wchar_t * typeName);
+void TypeQualidentVariants_static_init();
+wstring TypeVariant2wstr(TypeVariant ty);
+
+struct TypeQualident: public TypeRecord{
 		int getTypeNumber(){return type_number_Qualident;}
+	private:
 		QualidentRecord qualident;
+		TypeVariant typeVariant;
+	public:
+		TypeQualident(QualidentRecord q_): qualident(q_){
+			if(qualident.rightIdent!=0)
+				typeVariant = TypeVariant::UNKNOWN_TYPE;
+			else
+				typeVariant = TypeQualidentVariants_diagnoseType(qualident.leftIdent);
+			//wprintf(L"CONSTR TypeQualident q1=%ls q2=%ls tv=%ld ")
+		};
 		virtual void printToStdout(){
 				if(qualident.rightIdent!=0)
-					wprintf(L"[TypeQUALIDENT]%ls.%ls",qualident.leftIdent, qualident.rightIdent);
+					wprintf(L"[TypeQUALIDENT variant=%ls]%ls.%ls", TypeVariant2wstr(typeVariant).c_str(), qualident.leftIdent, qualident.rightIdent);
 				else
-					wprintf(L"[TypeQUALIDENT, r=0]%ls",qualident.leftIdent);
+					wprintf(L"[TypeQUALIDENT variant=%ls, r=0]%ls", TypeVariant2wstr(typeVariant).c_str(), qualident.leftIdent);
 		}
 		virtual size_t getTypeSizeInBits(){ return 0; }//TODO
 	};
@@ -176,15 +214,15 @@ struct QualidentRecord{
 		virtual int getValueType()=0;
 		virtual ~ValuePlaceholder(){}
 	};
-	static const int ft_undef=0;
-	static const int ft_DesignatorMaybeWithExprList=1;
-	static const int ft_number=2;
-	static const int ft_character=3;
-	static const int ft_string=4;
-	static const int ft_NIL=5;
-	static const int ft_Set=6;
-	static const int ft_Expr=7;
-	static const int ft_tildeFactor=8;
+	const int ft_undef=0;
+	const int ft_DesignatorMaybeWithExprList=1;
+	const int ft_number=2;
+	const int ft_character=3;
+	const int ft_string=4;
+	const int ft_NIL=5;
+	const int ft_Set=6;
+	const int ft_Expr=7;
+	const int ft_tildeFactor=8;
 
 	struct FactorRecord{
 		virtual int getFactorType()=0; //ft_*

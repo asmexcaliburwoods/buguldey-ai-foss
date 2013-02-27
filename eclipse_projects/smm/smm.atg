@@ -1,0 +1,43 @@
+/* tab width 8 */
+
+$checkEOF=true /*Coco/r's directive, see Coco/r's Tab.cpp*/
+
+COMPILER smm
+
+	typedef bool boolean;
+	
+CHARACTERS
+  letter = 'a'..'z' + 'A'..'Z' + "()->._".
+  digit = '0'..'9'.
+  fileNameChar = 'a'..'z' + 'A'..'Z' + '0'..'9' + '_' + '\\'..'/'.
+  cr  = '\r'.
+  lf  = '\n'.
+  tab = '\t'.
+  feap="feap".
+
+TOKENS
+  symbol	= letter {digit|letter}.
+  index		= digit {digit}.
+  fileName	= '\"' fileNameChar {fileNameChar} '\"'. 
+  
+COMMENTS FROM "$(" TO "$)" NESTED
+
+IGNORE cr + lf + tab
+
+PRODUCTIONS
+
+smm = SOURCE.
+SOURCE = {CONSTANT | ASSERTION | INCLUSION}.
+INCLUSION = "$[" fileName "$]".
+CONSTANT = "$c" symbol {symbol} "$.".
+ASSERTION = "${" {VARIABLE} {DISJOINTED} {ESSENTIAL} {FLOATING} (AXIOMATIC | PROVABLE) "$}". 
+VARIABLE = "$v" symbol {symbol} "$.".
+DISJOINTED = "$d" symbol symbol {symbol} "$.".
+FLOATING = "f" index "$f" symbol symbol "$.".
+ESSENTIAL = ("e" index|symbol) "$e" symbol {symbol} "$.".
+AXIOMATIC = "a" index "$a" symbol {symbol} "$.".
+PROVABLE = "p" index "$p" symbol {symbol} "$=" PROOF.
+PREFIX = "f" | "e" | "a" | "p".
+PROOF = (PREFIX index|symbol) {(PREFIX index|symbol)} "$.".
+
+END smm.

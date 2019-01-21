@@ -1,0 +1,5 @@
+<egp_> i reanimate my old east project with modern available ontology engines. porting from opencyc 0.7.0b_win32
+<egp_> east_project
+<egp_> aka gandalf aka Autocoder
+<egp_> not much there - some rigid nl parsing with ontologies, tree transformations, flexible engine
+<egp_> would like to also insert code from my god_and_adam project as a toy behaviour source

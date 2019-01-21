@@ -1,0 +1,19 @@
+
+1.0.4 09.Nov.2001
+- The icq server changed its protocol (several days ago), it does no more
+  send a MOTD packet (containing "http://www.aol.com") during login.
+  This fatally breaks jcq functionality.  To workaround this,
+  the line 1207 in src/org/jcq2k/icq2k/Session.java is commented out.
+
+    //loginSequence_50waitForWwwAolComPacket(ctx);
+
+  No other code changes.
+- packaging cosmetic changes
+- now, the buglist is a bit more long
+- added small FAQ.txt
+
+1.0.3 31.Oct.2001
+- added run.bat
+
+1.0.1 07.Oct.2001
+- initial upload

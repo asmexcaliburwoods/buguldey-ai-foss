@@ -1,0 +1,11 @@
+Q  I get error: "cannot find org.jcq2k.test.ICQMessagingTest.properties"
+   I get error: "log4j system cannot initialize"
+
+A  You should add the src/ directory to the classpath. It contains
+   .properties files that should be available in the classpath
+
+
+Q  Should I create several org.jcq2k.icq2k.ICQ2KMessagingNetwork instances?
+
+A  No.  Create single instance, it will be shared between many user sessions.
+   jcq is tested with 25 simultaneous users.

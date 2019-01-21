@@ -1,0 +1,1 @@
+take jsync.zip and log4j.jar from jcq2k-1.0.6-src.zip

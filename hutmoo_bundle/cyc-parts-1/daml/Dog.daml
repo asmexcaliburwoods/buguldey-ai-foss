@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns="http://www.cyc.com/2002/04/08/cyc#"
+    xmlns:daml="http://www.daml.org/2001/03/daml+oil#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <daml:Ontology about="">
+        <daml:versionInfo>$Id: ExportDaml.java,v 1.15 2002/05/13
+            17:39:06 stephenreed Exp $</daml:versionInfo>
+        <rdfs:comment>Dog</rdfs:comment>
+    </daml:Ontology>
+    <daml:UniqueProperty rdf:ID="guid">
+        <rdfs:label xml:lang="en">guid</rdfs:label>
+        <rdfs:comment>Permanent Global Unique ID for the associated concept.</rdfs:comment>
+        <daml:domain rdf:resource="http://www.daml.org/2001/03/daml+oil#Thing"/>
+        <daml:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </daml:UniqueProperty>
+</rdf:RDF>

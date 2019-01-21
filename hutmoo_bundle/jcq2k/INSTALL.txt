@@ -1,0 +1,16 @@
+
+
+- you may change src/org/jcq2k/test/ICQMessagingTest.properties.
+  They are already ok (default login uin, password, and contact list
+  are specified there).
+
+- you may change src/org/jcq2k/icq2k/ICQ2KMessagingNetwork.properties.
+  They are already ok (these are network, connection, protocol, and
+  plugin tuning properties.)
+
+- change the JDK_HOME variable in the run.bat 
+  (jdk1.2+ should be ok.  Myself, I use jdk1.3.x AKA Java2 version 1.3.x.)
+
+- run the run.bat
+
+- enjoy.

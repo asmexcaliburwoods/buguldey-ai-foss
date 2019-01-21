@@ -1,0 +1,8 @@
+
+- does not receive all of incoming offline msgs at login
+- interoperability with older icq clients (micq alike) is not checked
+- sendmsg should use msgtype4 instead of msgtype2.  msgtype2 sometimes
+  causes messages to be never delivered and/or causes a sendmsg timeout
+  when waiting for an msgack.
+- get user info sometimes fails.  needs to be updated according to
+  massimo's spec.

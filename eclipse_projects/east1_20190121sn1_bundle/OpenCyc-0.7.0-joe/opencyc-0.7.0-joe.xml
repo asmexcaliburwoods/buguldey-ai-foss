@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="opencyc-0.7.0-joe" default="jar">
+  
+  
+  <property file="opencyc-0.7.0-joe.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="128m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/SCCS/**"/>
+    <exclude name="**/RCS/**"/>
+    <exclude name="**/rcs/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.svn/**"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <include name="**/?*.properties"/>
+    <include name="**/?*.xml"/>
+    <include name="**/?*.gif"/>
+    <include name="**/?*.png"/>
+    <include name="**/?*.jpeg"/>
+    <include name="**/?*.jpg"/>
+    <include name="**/?*.html"/>
+    <include name="**/?*.dtd"/>
+    <include name="**/?*.tld"/>
+  </patternset>
+  
+  <!-- JDK definitions -->
+  <path id="jdk.classpath.1.4.2_06">
+    <fileset dir="${jdk.home.1.4.2_06}">
+      <include name="jre/lib/charsets.jar"/>
+      <include name="jre/lib/jce.jar"/>
+      <include name="jre/lib/jsse.jar"/>
+      <include name="jre/lib/plugin.jar"/>
+      <include name="jre/lib/rt.jar"/>
+      <include name="jre/lib/sunrsasign.jar"/>
+      <include name="jre/lib/ext/dnsns.jar"/>
+      <include name="jre/lib/ext/ldapsec.jar"/>
+      <include name="jre/lib/ext/localedata.jar"/>
+      <include name="jre/lib/ext/sunjce_provider.jar"/>
+    </fileset>
+  </path>
+  
+  <property name="project.jdk.home" value="${jdk.home.1.4.2_06}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.4.2_06"/>
+  
+  
+  <!-- Project Libraries -->
+  
+  <path id="library.lib.classpath">
+    <pathelement location="${basedir}/lib/commons-collections.jar"/>
+    <pathelement location="${basedir}/lib/dynamicjava.jar"/>
+    <pathelement location="${basedir}/lib/FIPA_OSv2_1_0.jar"/>
+    <pathelement location="${basedir}/lib/icu4j.jar"/>
+    <pathelement location="${basedir}/lib/jakarta-oro-2.0.3.jar"/>
+    <pathelement location="${basedir}/lib/jdom.jar"/>
+    <pathelement location="${basedir}/lib/jena.jar"/>
+    <pathelement location="${basedir}/lib/jug.jar"/>
+    <pathelement location="${basedir}/lib/junit.jar"/>
+    <pathelement location="${basedir}/lib/rdf-api-2001-01-19.jar"/>
+    <pathelement location="${basedir}/lib/ViolinStrings.jar"/>
+    <pathelement location="${basedir}/lib/xerces.jar"/>
+  </path>
+  
+  
+  <!-- Global Libraries -->
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module OpenCyc-0.7.0-joe -->
+  
+  <dirname property="module.opencyc-0.7.0-joe.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.opencyc-0.7.0-joe" value="${project.jdk.home}"/>
+  <property name="module.jdk.classpath.opencyc-0.7.0-joe" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.opencyc-0.7.0-joe" value="${compiler.args}"/>
+  
+  <property name="opencyc-0.7.0-joe.output.dir" value="${module.opencyc-0.7.0-joe.basedir}/../../tmp/OpenCyc-0.7.0-joe_classes"/>
+  <property name="opencyc-0.7.0-joe.testoutput.dir" value="${module.opencyc-0.7.0-joe.basedir}/../../tmp/OpenCyc-0.7.0-joe_classes"/>
+  
+  <path id="opencyc-0.7.0-joe.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="opencyc-0.7.0-joe.module.classpath">
+    <path refid="${module.jdk.classpath.opencyc-0.7.0-joe}"/>
+    <path refid="library.lib.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.opencyc-0.7.0-joe">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.opencyc-0.7.0-joe">
+    <patternset refid="excluded.from.module.opencyc-0.7.0-joe"/>
+  </patternset>
+  
+  <path id="opencyc-0.7.0-joe.module.sourcepath">
+    <dirset dir="${module.opencyc-0.7.0-joe.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.opencyc-0.7.0-joe" depends="compile.module.opencyc-0.7.0-joe.production,compile.module.opencyc-0.7.0-joe.tests" description="compile module(s) OpenCyc-0.7.0-joe"/>
+  
+  <target name="compile.module.opencyc-0.7.0-joe.production" description="compile module(s) OpenCyc-0.7.0-joe production classes">
+    <mkdir dir="${opencyc-0.7.0-joe.output.dir}"/>
+    <javac destdir="${opencyc-0.7.0-joe.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memoryMaximumSize="${compiler.max.memory}" fork="true" executable="${module.jdk.home.opencyc-0.7.0-joe}/bin/javac">
+      <compilerarg line="${compiler.args.opencyc-0.7.0-joe}"/>
+      <bootclasspath refid="opencyc-0.7.0-joe.module.bootclasspath"/>
+      <classpath refid="opencyc-0.7.0-joe.module.classpath"/>
+      <src refid="opencyc-0.7.0-joe.module.sourcepath"/>
+    </javac>
+    <copy todir="${opencyc-0.7.0-joe.output.dir}">
+      <fileset dir="${module.opencyc-0.7.0-joe.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.opencyc-0.7.0-joe.tests" depends="compile.module.opencyc-0.7.0-joe.production" description="compile module(s) OpenCyc-0.7.0-joe test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.opencyc-0.7.0-joe" description="cleanup module">
+    <delete dir="${opencyc-0.7.0-joe.output.dir}"/>
+    <delete dir="${opencyc-0.7.0-joe.testoutput.dir}"/>
+  </target>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.opencyc-0.7.0-joe" description="cleanup all"/>
+  
+  <target name="jar" depends="clean,compile.module.opencyc-0.7.0-joe">
+    <jar manifest="${module.opencyc-0.7.0-joe.basedir}/MANIFEST.MF"
+      basedir="${opencyc-0.7.0-joe.output.dir}"
+      destfile="opencyc-0.7.0-joe.jar"/>
+  </target>
+</project>

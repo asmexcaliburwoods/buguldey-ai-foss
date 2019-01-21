@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="lib/opencyc-0.7.0-joe.jar"/>
+	<classpathentry kind="lib" path="lib/opencyc-0.7.0b/commons-collections.jar"/>
+	<classpathentry kind="lib" path="lib/opencyc-0.7.0b/dynamicjava.jar"/>
+	<classpathentry kind="lib" path="lib/opencyc-0.7.0b/FIPA_OSv2_1_0.jar"/>
+	<classpathentry kind="lib" path="lib/opencyc-0.7.0b/icu4j.jar"/>
+	<classpathentry kind="lib" path="lib/opencyc-0.7.0b/jakarta-oro-2.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/opencyc-0.7.0b/jdom.jar"/>
+	<classpathentry kind="lib" path="lib/opencyc-0.7.0b/jug.jar"/>
+	<classpathentry kind="lib" path="lib/opencyc-0.7.0b/junit.jar"/>
+	<classpathentry kind="lib" path="lib/opencyc-0.7.0b/rdf-api-2001-01-19.jar"/>
+	<classpathentry kind="lib" path="lib/opencyc-0.7.0b/ViolinStrings.jar"/>
+	<classpathentry kind="lib" path="lib/opencyc-0.7.0b/xerces.jar"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>
